@@ -127,13 +127,13 @@ struct StreamContext {
     uint64_t last_ts_ns = 0;
 };
 
-struct NvMotContext {
+}  // namespace
+
+struct NvMOTContext {
     vema3d::Config cfg;
     std::mutex mu;
     std::unordered_map<NvMOTStreamId, StreamContext> streams;
 };
-
-}  // namespace
 
 extern "C" {
 
@@ -167,7 +167,7 @@ NvMOTStatus NvMOT_Init(
         return NvMOTStatus_Error;
     }
 
-    auto* ctx = new NvMotContext();
+    auto* ctx = new NvMOTContext();
     if (pConfigIn->customConfigFilePathSize > 0 && pConfigIn->customConfigFilePath != nullptr &&
         pConfigIn->customConfigFilePath[0] != '\0') {
         ctx->cfg = vema3d::Config::from_yaml_file(std::string(pConfigIn->customConfigFilePath));
@@ -187,7 +187,7 @@ NvMOTStatus NvMOT_Init(
     pConfigResponse->miscConfigStatus = NvMOTConfigStatus_OK;
     pConfigResponse->customConfigStatus = NvMOTConfigStatus_OK;
 
-    *pContextHandle = static_cast<NvMOTContextHandle>(ctx);
+    *pContextHandle = ctx;
     return NvMOTStatus_OK;
 }
 
@@ -199,7 +199,7 @@ NvMOTStatus NvMOT_Process(
         return NvMOTStatus_Error;
     }
 
-    auto* ctx = static_cast<NvMotContext*>(contextHandle);
+    auto* ctx = contextHandle;
     std::lock_guard<std::mutex> lock(ctx->mu);
 
     const uint32_t num_frames = pParams->numFrames;
@@ -317,14 +317,14 @@ NvMOTStatus NvMOT_RemoveStreams(
     if (contextHandle == nullptr) {
         return NvMOTStatus_Error;
     }
-    auto* ctx = static_cast<NvMotContext*>(contextHandle);
+    auto* ctx = contextHandle;
     std::lock_guard<std::mutex> lock(ctx->mu);
     ctx->streams.erase(streamIdMask);
     return NvMOTStatus_OK;
 }
 
 void NvMOT_DeInit(NvMOTContextHandle contextHandle) {
-    delete static_cast<NvMotContext*>(contextHandle);
+    delete contextHandle;
 }
 
 }  // extern "C"

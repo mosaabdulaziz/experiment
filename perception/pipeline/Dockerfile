@@ -56,14 +56,14 @@ RUN cd /opt/nvidia/deepstream/deepstream/sources \
 ENV CUDA_VER=13.1
 COPY --parents perception/models/*/nvdsinfer_custom_impl_*/ /src/
 COPY perception/models/build_parsers.sh perception/models/parser_flags /src/perception/models/
-RUN /src/perception/models/build_parsers.sh /src/perception/models && rm -rf /src
+RUN chmod +x /src/perception/models/build_parsers.sh && /src/perception/models/build_parsers.sh /src/perception/models && rm -rf /src
 # `just barber-up` rebuilds the image when this label is missing (an image from before the segmentation parser).
 LABEL iris.seg-parser="1"
 
 # ── Build every custom nvtracker .so ──────────────────────────────────────────
 COPY perception/trackers/ /src/perception/trackers/
 COPY perception/pipeline/build_trackers.sh /src/perception/pipeline/
-RUN /src/perception/pipeline/build_trackers.sh /src/perception/trackers && rm -rf /src
+RUN chmod +x /src/perception/pipeline/build_trackers.sh && /src/perception/pipeline/build_trackers.sh /src/perception/trackers && rm -rf /src
 
 # ── Install uv, pinned by version and digest (DEPENDENCIES.md, "uv") ─────────
 COPY --from=ghcr.io/astral-sh/uv:0.13.6@sha256:af22a52f5eafef3d78e551599d405c02df61919d18028f0cea8eda93bc9986d0 /uv /uvx /usr/local/bin/
@@ -87,7 +87,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 # generated from stops the build (install_locked.sh), since the locked group could not honour it.
 ARG BASE_MODULES="face_recognition customer_faces appearance proximity"
 COPY perception/pyproject.toml perception/uv.lock perception/pipeline/install_locked.sh /req/
-RUN /req/install_locked.sh /req slim BASE_MODULES "$BASE_MODULES"
+RUN chmod +x /req/install_locked.sh && /req/install_locked.sh /req slim BASE_MODULES "$BASE_MODULES"
 
 # The InsightFace buffalo_l pack is NOT in the image: face_recognition, customer_faces and the enrollment CLIs load the
 # repo's DVC copy, perception/models/insightface/models/buffalo_l, from the mounted repo (perception/insightface_pack.py).
