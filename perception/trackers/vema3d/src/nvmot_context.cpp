@@ -55,11 +55,6 @@ struct has_time_stamp_valid : std::false_type {};
 template <typename T>
 struct has_time_stamp_valid<T, std::void_t<decltype(std::declval<T>().timeStampValid), decltype(std::declval<T>().timeStamp)>> : std::true_type {};
 
-template <typename T, typename = void>
-struct has_src_dims : std::false_type {};
-template <typename T>
-struct has_src_dims<T, std::void_t<decltype(std::declval<T>().srcFrameWidth), decltype(std::declval<T>().srcFrameHeight)>> : std::true_type {};
-
 template <typename Q>
 void set_query_batch_mode(Q* q) {
     if constexpr (has_batch_mode<Q>::value) {
@@ -106,13 +101,6 @@ bool extract_frame_pts_ns(const F& frame, uint64_t& out_ns) {
 
 template <typename F>
 void extract_frame_dims(const F& frame, int& out_w, int& out_h) {
-    if constexpr (has_src_dims<F>::value) {
-        if (frame.srcFrameWidth > 0 && frame.srcFrameHeight > 0) {
-            out_w = static_cast<int>(frame.srcFrameWidth);
-            out_h = static_cast<int>(frame.srcFrameHeight);
-            return;
-        }
-    }
     if (frame.numBuffers > 0 && frame.bufferList != nullptr && frame.bufferList[0] != nullptr) {
         if (frame.bufferList[0]->width > 0 && frame.bufferList[0]->height > 0) {
             out_w = static_cast<int>(frame.bufferList[0]->width);

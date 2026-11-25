@@ -41,7 +41,7 @@ early_term_lost: 2
 min_iou_diff_new: 0.70
 check_class_match: true
 emit_shadow_tracks: true
-border_exit_lost: 8
+border_exit_lost: 4
 border_exit_margin_px: 24.0
 min_visible_frac: 0.25
 max_shadow_emit_lost: 12

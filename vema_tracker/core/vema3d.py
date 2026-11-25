@@ -311,7 +311,8 @@ class VEMA3DTrack:
             else:
                 cos_sim = 1.0
 
-            gated = cfg.enable_truncation_gate and (
+            unoccluding = (obs_pole_h > 1.25 * self.pole_h) and (area_ratio >= 1.15)
+            gated = cfg.enable_truncation_gate and (not unoccluding) and (
                 area_ratio < cfg.area_ratio_min or cos_sim < cfg.cos_min
             )
             if gated:
@@ -814,7 +815,7 @@ class VEMA3DTracker:
             elif cfg.emit_shadow_tracks and trk.state == "lost":
                 if cfg.max_shadow_emit_lost <= 0 or trk.k_lost <= cfg.max_shadow_emit_lost:
                     out_box = trk.get_bbox(buffered=False)
-                    if cfg.border_exit_lost > 0 and img_w > 0.0 and img_h > 0.0:
+                    if cfg.border_exit_lost > 0 and trk.k_lost > 2.0 and img_w > 0.0 and img_h > 0.0:
                         m = cfg.border_exit_margin_px
                         if out_box[0] <= m or out_box[1] <= m or out_box[2] >= (img_w - m) or out_box[3] >= (img_h - m):
                             continue

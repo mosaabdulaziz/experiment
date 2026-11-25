@@ -843,7 +843,9 @@ void VEMA3DTrack::update(const BBox& obs_box, double obs_conf, int64_t new_cls_i
             cos_sim = (v_obs_raw[0] * v_3d[0] + v_obs_raw[1] * v_3d[1]) / (norm_obs_raw * norm_v_ema);
         }
 
-        bool gated = cfg_->enable_truncation_gate && (area_ratio < cfg_->area_ratio_min || cos_sim < cfg_->cos_min);
+        const bool unoccluding = (obs_pole_h > 1.25 * pole_h) && (area_ratio >= 1.15);
+        bool gated = cfg_->enable_truncation_gate && !unoccluding &&
+                     (area_ratio < cfg_->area_ratio_min || cos_sim < cfg_->cos_min);
         double beta = 0.0;
         if (gated) {
             beta = 0.0;
@@ -1433,7 +1435,7 @@ std::vector<TrackOutput> VEMA3DTracker::update(
             if (cfg_.max_shadow_emit_lost <= 0 ||
                 trk.k_lost <= static_cast<double>(cfg_.max_shadow_emit_lost)) {
                 BBox out_box = trk.get_bbox(false);
-                if (cfg_.border_exit_lost > 0 && img_w > 0.0 && img_h > 0.0) {
+                if (cfg_.border_exit_lost > 0 && trk.k_lost > 2.0 && img_w > 0.0 && img_h > 0.0) {
                     const double m = cfg_.border_exit_margin_px;
                     const bool at_border = (out_box.x1 <= m) || (out_box.y1 <= m) ||
                                            (out_box.x2 >= img_w - m) || (out_box.y2 >= img_h - m);
