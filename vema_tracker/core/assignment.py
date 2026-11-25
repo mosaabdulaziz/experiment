@@ -91,7 +91,7 @@ def linear_assignment(
         return [], list(range(n_rows)), list(range(n_cols))
 
     sentinel = max(float(cost_limit) * 100.0 + 1e4, 1e6)
-    safe_cost = np.where(np.isfinite(cost), cost, sentinel)
+    safe_cost = np.where(np.isfinite(cost) & (cost <= cost_limit), cost, sentinel)
 
     if _scipy_lsa is not None:
         row_ind, col_ind = _scipy_lsa(safe_cost)

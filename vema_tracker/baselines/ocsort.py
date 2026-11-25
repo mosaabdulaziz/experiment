@@ -108,6 +108,7 @@ class OCSORTBaseline(BaseTracker):
         det_thresh: float = 0.60,
         low_thresh: float = 0.15,
         iou_thresh: float = 0.25,
+        low_iou_thresh: float = 0.30,
         max_age: int = 30,
         min_hits: int = 2,
         delta_t: int = 3,
@@ -120,6 +121,7 @@ class OCSORTBaseline(BaseTracker):
         self.det_thresh = det_thresh
         self.low_thresh = low_thresh
         self.iou_thresh = iou_thresh
+        self.low_iou_thresh = low_iou_thresh
         self.max_age = max_age
         self.min_hits = min_hits
         self.delta_t = delta_t
@@ -205,7 +207,7 @@ class OCSORTBaseline(BaseTracker):
                 tc = np.array([t.cls_id for t in rem_trks])[:, None]
                 dc = np.array([d.cls_id for d in low_dets])[None, :]
                 cost2 = np.where(tc != dc, np.inf, cost2)
-            m2, u_local2, _ = linear_assignment(cost2, 1.0 - 0.30)
+            m2, u_local2, _ = linear_assignment(cost2, 1.0 - self.low_iou_thresh)
             for lti, di in m2:
                 ti = u_trks[lti]
                 self.tracks[ti].update(low_dets[di])

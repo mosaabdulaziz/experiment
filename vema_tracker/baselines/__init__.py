@@ -11,9 +11,10 @@ from .bytetrack import ByteTrackBaseline
 from .ocsort import OCSORTBaseline
 from .sort_kalman import SORTTracker
 from .vema_adapter import VEMABaselineAdapter
+from .vema2_adapter import VEMA2BaselineAdapter
 from .vema3d_adapter import VEMA3DBaselineAdapter
 
-TRACKER_NAMES = ("vema3d", "vema", "bytetrack", "ocsort", "sort")
+TRACKER_NAMES = ("vema2", "vema3d", "vema", "bytetrack", "ocsort", "sort")
 
 
 def get_tracker(
@@ -21,10 +22,12 @@ def get_tracker(
     config: VEMAConfig | None = None,
     **kwargs: Any,
 ) -> BaseTracker:
-    """Instantiate a tracker by name ('vema3d', 'vema', 'bytetrack', 'ocsort', 'sort')."""
+    """Instantiate a tracker by name ('vema2', 'vema3d', 'vema', 'bytetrack', 'ocsort', 'sort')."""
     key = name.strip().lower()
     cfg = config or VEMAConfig()
 
+    if key == "vema2":
+        return VEMA2BaselineAdapter(config=cfg)
     if key == "vema3d":
         return VEMA3DBaselineAdapter(config=cfg, **kwargs)
     if key == "vema":
@@ -34,6 +37,8 @@ def get_tracker(
             high_thresh=cfg.tau_high,
             low_thresh=cfg.tau_low,
             new_track_thresh=cfg.tau_high,
+            match_thresh_high=cfg.iou_thresh_high,
+            match_thresh_low=cfg.iou_thresh_low,
             track_buffer=cfg.max_lost_frames,
             check_class_match=cfg.check_class_match,
             dt_aware=cfg.dt_aware,
@@ -44,6 +49,8 @@ def get_tracker(
         return OCSORTBaseline(
             det_thresh=cfg.tau_high,
             low_thresh=cfg.tau_low,
+            iou_thresh=cfg.iou_thresh_high,
+            low_iou_thresh=cfg.iou_thresh_low,
             max_age=cfg.max_lost_frames,
             min_hits=cfg.probation_frames,
             check_class_match=cfg.check_class_match,
@@ -69,6 +76,7 @@ __all__ = [
     "BaseTracker",
     "Detection",
     "TrackOutput",
+    "VEMA2BaselineAdapter",
     "VEMA3DBaselineAdapter",
     "VEMABaselineAdapter",
     "ByteTrackBaseline",

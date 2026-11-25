@@ -230,12 +230,171 @@ def _scenario_variable_fps_drops(rng: np.random.Generator) -> SequenceData:
     )
 
 
+def _scenario_high_conf_crossing_swap(rng: np.random.Generator) -> SequenceData:
+    """Two identical-size pedestrians cross in opposite directions with high-conf overlap."""
+    num_frames = 70
+    fps = 30.0
+    dets: dict[int, list[Detection]] = {}
+    gt: dict[int, list[tuple[int, np.ndarray]]] = {}
+
+    w, h = 60.0, 150.0
+    # Cross at t=30 (frame 31), x=700
+    specs = [
+        (1, 400.0, 500.0, 10.0, 0.0),
+        (2, 1000.0, 500.0, -10.0, 0.0),
+    ]
+
+    for f in range(1, num_frames + 1):
+        f_dets: list[Detection] = []
+        f_gt: list[tuple[int, np.ndarray]] = []
+        t = f - 1
+        for tid, x0, y0, vx, vy in specs:
+            cx = x0 + vx * t
+            cy = y0 + vy * t
+            f_gt.append((tid, _cxcywh_to_xyxy(cx, cy, w, h)))
+
+            # During crossing frames 30..33, Ped 2 is occluded behind Ped 1 while Ped 1
+            # keeps high detector confidence (0.80..0.90) with slight merged box jitter
+            if tid == 2 and 30 <= f <= 33:
+                continue
+            jitter = rng.normal(0.0, 1.0, size=2)
+            cx_obs = cx + jitter[0]
+            if tid == 1 and 29 <= f <= 33:
+                cx_obs -= 6.0  # slight merged-box center pull toward center
+            conf = float(rng.uniform(0.80, 0.92))
+            f_dets.append(Detection(_cxcywh_to_xyxy(cx_obs, cy + jitter[1], w, h), conf, 0))
+        dets[f] = f_dets
+        gt[f] = f_gt
+
+    return SequenceData(
+        name="high_conf_crossing_swap",
+        fps=fps,
+        width=1920,
+        height=1080,
+        num_frames=num_frames,
+        detections=dets,
+        gt=gt,
+    )
+
+
+def _scenario_overtaking_same_direction(rng: np.random.Generator) -> SequenceData:
+    """Slow walker overtaken along same line by fast runner with overlap/occlusion."""
+    num_frames = 80
+    fps = 30.0
+    dets: dict[int, list[Detection]] = {}
+    gt: dict[int, list[tuple[int, np.ndarray]]] = {}
+
+    w, h = 58.0, 148.0
+    # Meet around t=33.3 (frame 34, x=533.3)
+    specs = [
+        (1, 450.0, 500.0, 2.5, 0.0),   # slow walker
+        (2, 200.0, 500.0, 10.0, 0.0),  # fast runner
+    ]
+
+    for f in range(1, num_frames + 1):
+        f_dets: list[Detection] = []
+        f_gt: list[tuple[int, np.ndarray]] = []
+        t = f - 1
+        for tid, x0, y0, vx, vy in specs:
+            cx = x0 + vx * t
+            cy = y0 + vy * t
+            f_gt.append((tid, _cxcywh_to_xyxy(cx, cy, w, h)))
+            if tid == 1 and 33 <= f <= 36:
+                continue
+            jitter = rng.normal(0.0, 0.8, size=2)
+            conf = float(rng.uniform(0.80, 0.92))
+            f_dets.append(Detection(_cxcywh_to_xyxy(cx + jitter[0], cy + jitter[1], w, h), conf, 0))
+        dets[f] = f_dets
+        gt[f] = f_gt
+
+    return SequenceData(
+        name="overtaking_same_direction",
+        fps=fps,
+        width=1920,
+        height=1080,
+        num_frames=num_frames,
+        detections=dets,
+        gt=gt,
+    )
+
+
+def _scenario_unoccluded_uturn(rng: np.random.Generator) -> SequenceData:
+    """Unoccluded pedestrian decelerates smoothly and reverses direction (U-turn)."""
+    num_frames = 90
+    fps = 30.0
+    dets: dict[int, list[Detection]] = {}
+    gt: dict[int, list[tuple[int, np.ndarray]]] = {}
+
+    w, h = 65.0, 160.0
+    cx = 300.0
+    cy = 500.0
+
+    for f in range(1, num_frames + 1):
+        if f <= 35:
+            vx = 9.0
+        elif f <= 45:
+            frac = (f - 35) / 10.0
+            vx = 9.0 * (1.0 - 2.0 * frac)
+        else:
+            vx = -9.0
+        if f > 1:
+            cx += vx
+        gt_box = _cxcywh_to_xyxy(cx, cy, w, h)
+        gt[f] = [(1, gt_box)]
+        jitter = rng.normal(0.0, 1.0, size=2)
+        conf = float(rng.uniform(0.82, 0.94))
+        dets[f] = [Detection(_cxcywh_to_xyxy(cx + jitter[0], cy + jitter[1], w, h), conf, 0)]
+
+    return SequenceData(
+        name="unoccluded_uturn",
+        fps=fps,
+        width=1920,
+        height=1080,
+        num_frames=num_frames,
+        detections=dets,
+        gt=gt,
+    )
+
+
+def _scenario_standing_to_seated_posture(rng: np.random.Generator) -> SequenceData:
+    """Pedestrian stands then sits permanently at high confidence (AreaRatio ~ 0.50)."""
+    num_frames = 110
+    fps = 30.0
+    dets: dict[int, list[Detection]] = {}
+    gt: dict[int, list[tuple[int, np.ndarray]]] = {}
+
+    cx, cy_stand = 600.0, 500.0
+    for f in range(1, num_frames + 1):
+        if f <= 30:
+            w, h, cy = 70.0, 170.0, cy_stand
+        else:
+            w, h, cy = 75.0, 80.0, cy_stand + 45.0
+        gt[f] = [(1, _cxcywh_to_xyxy(cx, cy, w, h))]
+        jitter = rng.normal(0.0, 1.2, size=2)
+        conf = float(rng.uniform(0.82, 0.92))
+        dets[f] = [Detection(_cxcywh_to_xyxy(cx + jitter[0], cy + jitter[1], w, h), conf, 0)]
+
+    return SequenceData(
+        name="standing_to_seated_posture",
+        fps=fps,
+        width=1920,
+        height=1080,
+        num_frames=num_frames,
+        detections=dets,
+        gt=gt,
+    )
+
+
 def generate_synthetic_suite(seed: int = 42) -> list[SequenceData]:
-    """Generate all 4 deterministic synthetic stress-test sequences."""
+    """Generate all 8 deterministic synthetic stress-test sequences."""
     rng = np.random.default_rng(seed)
     return [
         _scenario_partial_occlusion_truncation(rng),
         _scenario_crossing_crowds(rng),
         _scenario_stationary_jitter(rng),
         _scenario_variable_fps_drops(rng),
+        _scenario_high_conf_crossing_swap(rng),
+        _scenario_overtaking_same_direction(rng),
+        _scenario_unoccluded_uturn(rng),
+        _scenario_standing_to_seated_posture(rng),
     ]

@@ -1,0 +1,29 @@
+%YAML:1.0
+# VEMA v2 (Derived Polar-EMA + Scalar NSA/NIS) tracker config for attendance, zones, and person tracking.
+
+# Shared detector & association contract
+tau_high: 0.60
+tau_low: 0.15
+iou_thresh_high: 0.25
+iou_thresh_low: 0.15
+ref_fps: 30.0
+dt_aware: true
+
+# Single intrinsic physical time constant (seconds)
+tau_mem: 0.15
+
+# Track lifecycle (600 frames = ~20s at 30fps for seated attendance dropouts;
+# cap shadow emission and border-exit linger so exited people don't ghost)
+probation_frames: 2
+max_lost_frames: 600
+early_term_lost: 2
+min_iou_diff_new: 0.70
+check_class_match: true
+emit_shadow_tracks: true
+border_exit_lost: 4
+border_exit_margin_px: 24.0
+min_visible_frac: 0.25
+max_shadow_emit_lost: 4
+max_targets_per_stream: 120
+img_width: 1080
+img_height: 720
