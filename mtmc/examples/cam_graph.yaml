@@ -1,0 +1,185 @@
+# ============================================================
+# Camera Graph: per-edge association gates for MTMC
+# ============================================================
+#
+# Instead of a single global `--sim 0.55` for all camera pairs,
+# each edge gets its own timing mode, similarity threshold, and
+# camera-model opt-in.  Edges not listed here fall back to the
+# [defaults] section.
+#
+# Schema reference:
+#   defaults   — fallback for every edge not explicitly listed
+#   cameras    — optional per-camera metadata (currently just fps)
+#   edges      — per-pair overrides (order-independent)
+#
+# Usage:
+#   python -m mtmc.run_pipeline --cam-graph mtmc/examples/cam_graph.yaml
+#   python -m mtmc.visualize     --cam-graph mtmc/examples/cam_graph.yaml
+#   python -m mtmc.diagnose      --cam-graph mtmc/examples/cam_graph.yaml
+#
+# CLI flags (--sim, --time-tol, etc.) override the YAML defaults
+# when explicitly passed.
+# ============================================================
+
+# ── Global defaults (applied to every edge unless overridden) ──────────────
+defaults:
+  # Timing: how many seconds of gap are acceptable between tracklets
+  # that might be the same vehicle in different cameras.
+  time_tolerance_s: 1.5
+
+  # Timing mode: near_synchronous | sequential | either
+  #   near_synchronous — cameras see the scene at roughly the same wall
+  #                      time; tracklets should overlap (gap ≤ tolerance).
+  #   sequential       — camera B's view starts after camera A's ends;
+  #                      use max_transit_s for mid→mid transit window.
+  #   either           — no timing assumption; rely on appearance alone.
+  timing: near_synchronous
+
+  # Appearance: cosine similarity threshold for Re-ID merging.
+  # True-pair sims on the VeRi model average ~0.54, so values above
+  # 0.6 lose recall fast.  0.55 is the tuned default for appearance-only.
+  reid_sim: 0.55
+
+  # Camera model (homography): off by default for most pairs.
+  #   — On opposite-view pairs (front vs back of a car), the homography
+  #     is unreliable (507px median error on true pairs in S01).
+  #   — On same-angle pairs (both cameras see the same side), it can
+  #     add a strong geometric signal.
+  use_camera_model: false
+
+  # Spatial gates (only active when use_camera_model: true)
+  spatial_gate_px: 400.0     # hard reject above this projected distance
+  spatial_merge_px: 120.0    # auto-merge below this (spatial proof)
+
+  # Transition windows (opt-in, sequential timing)
+  use_transition_windows: false
+  max_transit_s: null        # sequential-only: upper bound on mid→mid travel
+
+
+# ── Per-camera metadata (optional) ────────────────────────────────────────
+cameras:
+  c001:
+    fps: 10.0
+  c002:
+    fps: 10.0
+  c003:
+    fps: 10.0
+  c004:
+    fps: 10.0
+  c005:
+    fps: 10.0
+
+
+# ── Per-edge overrides ────────────────────────────────────────────────────
+# Each entry has a `pair` key + optional override fields.
+# Order doesn't matter: (c001, c002) and (c002, c001) are the same edge.
+# Edges not listed here fall back to [defaults].
+
+edges:
+
+  # ── S01 square layout: c001 and c002 face each other ──
+  # Measured: homography gives 507px median error on true same-car pairs
+  # because the cameras see front vs back of the car (different ground
+  # points on the box bottom-center).  Camera model OFF, rely on time + Re-ID.
+  - pair: [c001, c002]
+    timing: near_synchronous
+    time_tolerance_s: 1.5
+    reid_sim: 0.55
+    use_camera_model: false
+
+  # ── Adjacent corners: c001→c003 ──
+  # Same side of the square, tighter geometry.  If verified, can enable
+  # the camera model for a spatial proof boost.
+  - pair: [c001, c003]
+    timing: near_synchronous
+    time_tolerance_s: 1.5
+    reid_sim: 0.55
+    # use_camera_model: true         # uncomment after verifying the homography
+    # spatial_merge_px: 80.0
+    # spatial_gate_px: 300.0
+
+  # ── Opposite side: c001→c004 ──
+  # Same problem as c001↔c002 (front vs back view).  Tighter time gate
+  # since cars traverse the square in ~3-8s.
+  - pair: [c001, c004]
+    timing: near_synchronous
+    time_tolerance_s: 2.0         # slightly more lenient (longer transit)
+    reid_sim: 0.50                # lower bar: same-car appearance is noisier
+    use_camera_model: false
+
+  # ── Diagonal: c001→c005 ──
+  - pair: [c001, c005]
+    timing: near_synchronous
+    time_tolerance_s: 1.5
+    reid_sim: 0.55
+
+  # ── Adjacent: c002→c003 ──
+  - pair: [c002, c003]
+    timing: near_synchronous
+    time_tolerance_s: 1.5
+    reid_sim: 0.55
+
+  # ── Adjacent: c002→c004 ──
+  - pair: [c002, c004]
+    timing: near_synchronous
+    time_tolerance_s: 1.5
+    reid_sim: 0.55
+
+  # ── Adjacent: c002→c005 ──
+  - pair: [c002, c005]
+    timing: near_synchronous
+    time_tolerance_s: 1.5
+    reid_sim: 0.55
+
+  # ── Adjacent: c003→c004 ──
+  - pair: [c003, c004]
+    timing: near_synchronous
+    time_tolerance_s: 1.5
+    reid_sim: 0.55
+
+  # ── Adjacent: c003→c005 ──
+  - pair: [c003, c005]
+    timing: near_synchronous
+    time_tolerance_s: 1.5
+    reid_sim: 0.55
+
+  # ── Adjacent: c004→c005 ──
+  - pair: [c004, c005]
+    timing: near_synchronous
+    time_tolerance_s: 1.5
+    reid_sim: 0.55
+
+
+# ── Quick-reference: what each field controls ──────────────────────────────
+#
+# time_tolerance_s
+#   Max gap (seconds) between two tracklets to consider merging.
+#   For near-synchronous cameras, overlapping tracklets are preferred.
+#   Default 1.5s allows ~15 frames of gap at 10fps.
+#
+# reid_sim
+#   Cosine similarity threshold.  Lower = more merges (more recall,
+#   more false merges).  Higher = fewer merges (less false merges,
+#   more missed).  True-pair sims on VeRi average ~0.54.
+#
+# use_camera_model
+#   true = enable the homography spatial proof for this pair.
+#   Only use after verifying the homography is tight (low residual
+#   on same-car, same-time box bottom-centers).
+#
+# spatial_merge_px
+#   Pairs below this projected distance at the same wall-time merge
+#   unconditionally (spatial proof, no appearance needed).
+#
+# spatial_gate_px
+#   Pairs above this projected distance are rejected without computing
+#   similarity (spatially impossible).
+#
+# timing
+#   near_synchronous — same wall-time overlap (default for AICity22)
+#   sequential       — camera B starts after A ends (use max_transit_s)
+#   either           — no timing constraint, appearance only
+#
+# max_transit_s
+#   Sequential-only: maximum mid→mid transit time (seconds) for a
+#   vehicle to travel between the two camera views.

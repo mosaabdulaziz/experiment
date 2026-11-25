@@ -1,0 +1,10 @@
+# Barber sidecar for the 16 Oct recording run (2026-10-18; barber.palm-hills-16oct.yaml): the live site's six sources
+# (no ph-4; the same b6 TensorRT engine), with that run's own crops root -- each service sweeps the crops its own DB
+# does not reference, so two DBs must never share one.
+extends: sidecar.palm-hills-live.yaml
+
+modules:
+  appearance:
+    crops_dir: "/workspace/iris/data/barber/crops-palm-hills-16oct"
+  customer_faces:
+    crops_dir: "/workspace/iris/data/barber/crops-palm-hills-16oct"

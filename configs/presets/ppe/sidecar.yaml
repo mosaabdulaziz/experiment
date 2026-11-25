@@ -1,0 +1,15 @@
+# Preset: the shared IRIS pipeline with PPE detection switched on -- an overlay on the shared pipeline file, which
+# itself starts no module (modules: {}). Opt-in, one camera set, nothing else changed:
+#
+#   SIDECAR_CONFIG=configs/presets/ppe/sidecar.yaml just up
+#
+# The PPE detector runs on each tracked YOLO11x person's crop (the module's default detector config,
+# perception/models/DeepStream-Yolo-PPE/config_infer_ppe.txt); perception/modules/ppe/README.md says why.
+# Pipeline only: there is no config.yaml here, so it is not a `just switch` preset; the app runs as configured.
+# To add PPE to a product instead, add the one line `ppe: {}` under that product's `modules:`
+# (perception/modules/ppe/README.md). The PPE model is versioned with DVC (`just data-pull models-ppe`) and is licensed for non-commercial
+# use only: see perception/models/DeepStream-Yolo-PPE/README.md ("Getting the model", "Licence").
+extends: ../../../perception/pipeline/sidecar.yaml
+
+modules:
+  ppe: {}

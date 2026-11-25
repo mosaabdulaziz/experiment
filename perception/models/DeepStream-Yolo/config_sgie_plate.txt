@@ -1,0 +1,41 @@
+[property]
+gpu-id=0
+net-scale-factor=0.0039215697906911373
+model-color-format=0
+# Licence-plate detector (products/el-mohandes/models/finetuned/best.pt, YOLO fine-tuned on the site's CCTV),
+# exported at 640 with the DeepStream-Yolo head and a dynamic batch:
+#   python -m mtmc.export_vehicle_onnx --weights <best.pt> --size 640 --out-dir products/el-mohandes/models/plate_640 --no-simplify
+# It runs on each VEHICLE crop (secondary GIE), not on the full frame: a vehicle crop is rescaled
+# to 640 so the plate is several times bigger than in the full 1280 frame (measured on real
+# crops: 53% found a plate at 640, 34% at 1280).
+onnx-file=/workspace/iris/products/el-mohandes/models/plate_640/best.onnx
+# Probe path only. nvinfer serializes beside the ONNX under <onnx>_b<batch>_gpu<id>_<mode>.engine
+# (sidecar.py sets the same value from sgie_plate_engine) so the engine is built once, not on
+# every start. No engine-create-func-name: it would put the engine at a model-less cwd path.
+model-engine-file=/workspace/iris/products/el-mohandes/models/plate_640/best.onnx_b16_gpu0_fp16.engine
+labelfile-path=/workspace/iris/products/el-mohandes/models/plate_640/labels.txt
+batch-size=16
+network-mode=2
+num-detected-classes=1
+interval=0
+gie-unique-id=3
+process-mode=2
+network-type=0
+cluster-mode=2
+maintain-aspect-ratio=1
+symmetric-padding=1
+parse-bbox-func-name=NvDsInferParseYolo
+custom-lib-path=/opt/nvidia/deepstream/deepstream/custom_parsers/libnvdsinfer_custom_impl_Yolo.so
+# Run on the pgie's (vehicle) objects only.
+operate-on-gie-id=1
+operate-on-class-ids=0
+# Look at a tracked vehicle again every 5 inferred frames (default 90 would see each vehicle once,
+# usually while it is still small or half in view) and skip vehicles too small to hold a plate.
+secondary-reinfer-interval=3
+input-object-min-width=96
+input-object-min-height=96
+
+[class-attrs-all]
+nms-iou-threshold=0.45
+pre-cluster-threshold=0.25
+topk=20

@@ -1,0 +1,382 @@
+{
+ "_about": "Path rules for `regress plan` (tools/regress/plan.py). First match wins per file. tier 0: unit + build only; 1: golden replay and 1-camera ceiling of `configs`; 2: everything; 3: tier 2 plus a soak smoke. A file no rule matches counts as a shared change (tier 2).",
+ "rules": [
+  {
+   "match": [
+    "tests/configs/golden-attendance*",
+    "tests/baselines/golden-attendance*"
+   ],
+   "tier": 1,
+   "configs": [
+    "attendance"
+   ],
+   "why": "attendance golden"
+  },
+  {
+   "match": [
+    "tests/configs/golden-barber-faces*",
+    "tests/baselines/golden-barber-faces*"
+   ],
+   "tier": 1,
+   "configs": [
+    "barber-faces"
+   ],
+   "why": "barber-faces golden"
+  },
+  {
+   "match": [
+    "tests/configs/golden-barber.*",
+    "tests/baselines/golden-barber.*"
+   ],
+   "tier": 1,
+   "configs": [
+    "barber"
+   ],
+   "why": "barber golden"
+  },
+  {
+   "match": [
+    "tests/configs/golden-zones*",
+    "tests/configs/golden_zones*",
+    "tests/configs/golden_filter_zones*",
+    "tests/baselines/golden-zones*"
+   ],
+   "tier": 1,
+   "configs": [
+    "zones"
+   ],
+   "why": "zones golden"
+  },
+  {
+   "match": [
+    "tests/configs/golden-fire*",
+    "tests/baselines/golden-fire*"
+   ],
+   "tier": 1,
+   "configs": [
+    "fire"
+   ],
+   "why": "fire golden"
+  },
+  {
+   "match": [
+    "tests/configs/golden-multicam*",
+    "tests/baselines/golden-multicam*"
+   ],
+   "tier": 1,
+   "configs": [
+    "multicam"
+   ],
+   "why": "multicam golden"
+  },
+  {
+   "match": [
+    "tests/configs/golden-ppe*"
+   ],
+   "tier": 1,
+   "configs": [
+    "ppe"
+   ],
+   "why": "ppe golden"
+  },
+  {
+   "match": [
+    "tests/configs/golden-fall_detection*"
+   ],
+   "tier": 1,
+   "configs": [
+    "fall_detection"
+   ],
+   "why": "fall golden"
+  },
+  {
+   "match": [
+    "tests/configs/golden-shelf*"
+   ],
+   "tier": 1,
+   "configs": [
+    "shelf"
+   ],
+   "why": "shelf golden"
+  },
+  {
+   "match": [
+    "tests/configs/golden-proximity*",
+    "tests/configs/golden_proximity*",
+    "tests/baselines/golden-proximity*"
+   ],
+   "tier": 1,
+   "why": "proximity golden",
+   "configs": [
+    "proximity"
+   ]
+  },
+  {
+   "match": [
+    "docker-compose.yml"
+   ],
+   "tier": 2,
+   "configs": "all",
+   "why": "the sidecar service every replay starts"
+  },
+  {
+   "match": [
+    "docker-compose*.yml",
+    "docker-compose*.yaml",
+    ".gitignore",
+    ".env.example",
+    ".dockerignore",
+    "data/*",
+    "models/*",
+    "analysis/*",
+    "helper-repos/*",
+    "scratch/*",
+    "temp/*",
+    "output/*",
+    "docs-site/*"
+   ],
+   "tier": 0,
+   "why": "not used by a golden replay"
+  },
+  {
+   "match": [
+    "mtmc/*"
+   ],
+   "tier": 1,
+   "configs": [
+    "multicam"
+   ],
+   "why": "mtmc code and tools: the multicam replay"
+  },
+  {
+   "match": [
+    "docs/*",
+    "design/*",
+    "*.md",
+    "frontend/*",
+    "monitoring/*",
+    "justfile",
+    ".gitlab-ci.yml",
+    "scripts/*",
+    "tools/regress/*",
+    "benchmarks/*",
+    "static/*"
+   ],
+   "tier": 0,
+   "why": "not run by a golden replay"
+  },
+  {
+   "match": [
+    "tools/*"
+   ],
+   "tier": 0,
+   "why": "tooling scripts, not the pipeline"
+  },
+  {
+   "match": [
+    "tests/*"
+   ],
+   "tier": 0,
+   "why": "tests: the unit suites run them"
+  },
+  {
+   "match": [
+    "perception/modules/ppe/*",
+    "configs/presets/ppe/*"
+   ],
+   "tier": 1,
+   "configs": [
+    "ppe"
+   ],
+   "why": "PPE role"
+  },
+  {
+   "match": [
+    "perception/modules/shelf_void/*",
+    "configs/presets/shelf/*",
+    "configs/presets/shelf40/*"
+   ],
+   "tier": 1,
+   "configs": [
+    "shelf"
+   ],
+   "why": "shelf role"
+  },
+  {
+   "match": [
+    "perception/modules/pose/*",
+    "products/fall_detection/*",
+    "configs/presets/fall_3cam/*"
+   ],
+   "tier": 1,
+   "configs": [
+    "fall_detection"
+   ],
+   "why": "fall role"
+  },
+  {
+   "match": [
+    "perception/modules/zones/*",
+    "perception/modules/box_stabilizer/*",
+    "perception/modules/person_boxes/*"
+   ],
+   "tier": 1,
+   "configs": [
+    "zones",
+    "attendance"
+   ],
+   "why": "zones and person boxes"
+  },
+  {
+   "match": [
+    "perception/modules/fire_alerts/*"
+   ],
+   "tier": 1,
+   "configs": [
+    "fire"
+   ],
+   "why": "fire role"
+  },
+  {
+   "match": [
+    "perception/modules/face_detect/*",
+    "perception/modules/face_recognition/*",
+    "perception/modules/customer_faces/*",
+    "perception/modules/appearance/*"
+   ],
+   "tier": 1,
+   "configs": [
+    "attendance",
+    "barber",
+    "barber-faces"
+   ],
+   "why": "face and appearance modules"
+  },
+  {
+   "match": [
+    "perception/modules/plates/*",
+    "perception/modules/mtmc/*",
+    "perception/modules/person_masks/*",
+    "products/multicam/*",
+    "products/el-mohandes/*",
+    "configs/presets/multicam/*"
+   ],
+   "tier": 1,
+   "configs": [
+    "multicam"
+   ],
+   "why": "plates, mtmc and masks"
+  },
+  {
+   "match": [
+    "perception/modules/proximity/*",
+    "products/proximity/*"
+   ],
+   "tier": 1,
+   "why": "proximity role",
+   "note": "the proximity replay needs its clip and baseline (`just data-pull golden`) and its segmentation model (`just proximity-models`)",
+   "configs": [
+    "proximity"
+   ]
+  },
+  {
+   "match": [
+    "perception/modules/_template/*",
+    "perception/modules/README.md"
+   ],
+   "tier": 0,
+   "why": "module template and docs"
+  },
+  {
+   "match": [
+    "perception/modules/__init__.py"
+   ],
+   "tier": 2,
+   "configs": "all",
+   "why": "the module loader is shared"
+  },
+  {
+   "match": [
+    "products/attendance/*"
+   ],
+   "tier": 1,
+   "configs": [
+    "attendance",
+    "zones",
+    "fire"
+   ],
+   "why": "the attendance product sidecar is extended by zones and fire"
+  },
+  {
+   "match": [
+    "products/barber/*"
+   ],
+   "tier": 1,
+   "configs": [
+    "barber",
+    "barber-faces"
+   ],
+   "why": "barber product"
+  },
+  {
+   "match": [
+    "products/safety/*",
+    "perception/engine/recording*",
+    "perception/engine/svr*",
+    "app/alert_clips.py",
+    "app/usecases/*",
+    "app/safety*",
+    "app/events*",
+    "app/incidents*"
+   ],
+   "tier": 3,
+   "configs": "all",
+   "why": "recording, alert clips and incidents: a long-run effect (disk, memory) the replays cannot show"
+  },
+  {
+   "match": [
+    "products/shelf_iris_bridge/*",
+    "products/concealment_detection/*",
+    "products/othaim/*",
+    "configs/presets/vlm/*",
+    "configs/presets/scale13/*"
+   ],
+   "tier": 0,
+   "why": "no golden for this product",
+   "note": "this product has no golden in the reference (accepted risk, see benchmarks/SCORECARD.md): only the unit suites run"
+  },
+  {
+   "match": [
+    "app/*"
+   ],
+   "tier": 0,
+   "why": "app code: the unit suites; the replays do not run it"
+  },
+  {
+   "match": [
+    "Dockerfile*",
+    "perception/pipeline/Dockerfile*",
+    "deps/*",
+    "*uv.lock",
+    "*pyproject.toml",
+    "perception/pipeline/sidecar.yaml"
+   ],
+   "tier": 2,
+   "configs": "all",
+   "why": "image, dependencies or the base pipeline config",
+   "note": "an image or dependency changed: TensorRT engines may rebuild (a changed output after a rebuild only warns); a new DeepStream, TensorRT or driver version means re-recording the baseline (benchmarks/README.md)"
+  },
+  {
+   "match": [
+    "perception/engine/*",
+    "perception/pipeline/*",
+    "perception/lib/*",
+    "perception/models/*",
+    "perception/*.py"
+   ],
+   "tier": 2,
+   "configs": "all",
+   "why": "shared engine, pipeline or models"
+  }
+ ]
+}

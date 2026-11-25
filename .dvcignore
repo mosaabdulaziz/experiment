@@ -1,0 +1,10 @@
+# TensorRT engines are built per machine by nvinfer next to the ONNX; never data we version
+*.engine
+*.engine.*
+*.engine.src
+
+# rclone mount of the shared data store (see docs/DATA.md); never scan it
+.data-remote/
+
+# ultralytics rebuilds these label caches on every training run
+*.cache

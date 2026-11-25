@@ -1,0 +1,167 @@
+/* ─── Buttons ─────────────────────────────────── */
+.iris-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 7px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  transition: opacity 0.2s, background 0.2s, border-color 0.2s, transform 0.1s, box-shadow 0.2s;
+  white-space: nowrap;
+  line-height: 1;
+  font-family: inherit;
+  position: relative;
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  background: var(--glass-bg);
+  color: var(--text-soft);
+}
+.iris-btn:hover:not(:disabled) {
+  border-color: var(--glass-border-hi);
+  background: var(--glass-bg-strong);
+  color: var(--text);
+}
+.iris-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.iris-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.iris-btn svg {
+  flex-shrink: 0;
+}
+
+.iris-btn-danger {
+  background: rgba(255, 94, 98, 0.1);
+  color: #ff8a8d;
+  border-color: rgba(255, 94, 98, 0.28);
+}
+.iris-btn-danger:hover:not(:disabled) {
+  background: rgba(255, 94, 98, 0.18);
+  color: #ffadaf;
+  border-color: rgba(255, 94, 98, 0.42);
+  box-shadow: 0 4px 18px rgba(255, 94, 98, 0.22);
+}
+
+.iris-btn-success {
+  background: rgba(107, 242, 168, 0.08);
+  color: var(--green);
+  border-color: rgba(107, 242, 168, 0.22);
+}
+.iris-btn-success:hover:not(:disabled) {
+  background: rgba(107, 242, 168, 0.16);
+  border-color: rgba(107, 242, 168, 0.4);
+  box-shadow: 0 4px 18px rgba(107, 242, 168, 0.18);
+}
+
+.iris-btn-ghost {
+  /* Inherits glass defaults */
+}
+
+.iris-btn-accent {
+  background: linear-gradient(180deg, var(--accent-soft), var(--accent));
+  color: #1b0a02;
+  border-color: rgba(255, 255, 255, 0.18);
+  font-weight: 800;
+  box-shadow: var(--elev-accent);
+}
+.iris-btn-accent:hover:not(:disabled) {
+  background: linear-gradient(180deg, #ffc4ac, var(--accent-soft));
+  box-shadow: 0 10px 36px var(--accent-glow-2), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  color: #1b0a02;
+}
+
+.iris-btn-sm {
+  padding: 5px 11px;
+  font-size: 11px;
+  border-radius: 8px;
+}
+
+/* button-dot indicator (used in camera start/stop) */
+.iris-btn-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.iris-btn-dot-stop {
+  background: var(--alert-color);
+  box-shadow: 0 0 8px var(--alert-glow);
+  animation: pulse-dot 1.5s ease infinite;
+}
+.iris-btn-dot-start {
+  background: var(--green);
+  box-shadow: 0 0 8px rgba(107, 242, 168, 0.5);
+}
+
+/* ─── Selects ─────────────────────────────────── */
+.iris-select {
+  appearance: none;
+  background:
+    var(--glass-bg)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat right 10px center;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  color: var(--text-soft);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 6px 28px 6px 12px;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+}
+.iris-select:hover {
+  border-color: var(--glass-border-hi);
+  color: var(--text);
+}
+.iris-select:focus {
+  outline: none;
+  border-color: var(--accent-glow-2);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+.iris-select option {
+  background: #181820;
+  color: var(--text);
+}
+.iris-select-accent {
+  color: var(--accent);
+}
+.iris-select-accent:hover {
+  color: var(--accent-soft);
+}
+
+/* ─── Camera controls layout ─────────────────── */
+.iris-cam-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ─── Reusable glass surface ─────────────────── */
+.iris-glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elev-2);
+  position: relative;
+}
+.iris-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--glass-highlight);
+  pointer-events: none;
+  opacity: 0.8;
+}

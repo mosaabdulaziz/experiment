@@ -1,0 +1,64 @@
+__pycache__
+**/__pycache__
+*.pyc
+*.pyo
+.env
+data/
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+*.md
+CLAUDE.md
+
+# Local Python virtualenvs (~10 GB combined) — not part of any image build
+.venv/
+.venv-face/
+
+# Untracked WIP
+AuraFace/
+
+# Heavy binaries, datasets, zips, logs, engines, and video outputs
+*.engine
+*.pt
+*.zip
+*.log
+*.mp4
+*.avi
+*.mkv
+
+# Run outputs and barber dev data (~17 GB: recordings, replay streams) -- no Dockerfile COPYs them;
+# without this every image build ships them to the daemon (barber-up may rebuild the sidecar image).
+.run/
+products/barber/dev/
+
+# 269 MB of GPU/TRT-specific engine binaries — not part of any image build
+engine-files/
+DeepStream-Yolo/*.onnx
+mtmc/datasets/
+mtmc/output/
+mtmc/models/*
+# the client's data and models (products/el-mohandes) are not part of an image build either
+products/el-mohandes/datasets/
+products/el-mohandes/videos/
+products/el-mohandes/runs/
+products/el-mohandes/models/*
+
+# Stale compiled artifacts in the parser source dirs — never part of a build;
+# ignoring them keeps the COPY layers' hash stable across local `make` runs.
+# NOTE: dockerignore patterns are matched against the full relative path and `*`
+# does NOT cross directory boundaries — per-directory patterns are required.
+perception/models/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/*.o
+perception/models/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/*.so
+perception/models/DeepStream-Yolo-Face/nvdsinfer_custom_impl_Yolo_face/*.o
+perception/models/DeepStream-Yolo-Face/nvdsinfer_custom_impl_Yolo_face/*.so
+perception/models/DeepStream-Yolo-Seg/nvdsinfer_custom_impl_Yolo_seg/*.o
+perception/models/DeepStream-Yolo-Seg/nvdsinfer_custom_impl_Yolo_seg/*.so
+perception/models/DeepStream-Yolo-Seg/nvdsinfer_custom_impl_Yolo_seg/trt_plugins/*.o
+perception/models/DeepStream-Yolo-Seg/nvdsinfer_custom_impl_Yolo_seg/trt_plugins/*/*.o
+
+# Frontend — only the source is needed; node_modules and built static/ are produced inside the image
+frontend/node_modules
+frontend/dist
+frontend/.eslintcache
+static

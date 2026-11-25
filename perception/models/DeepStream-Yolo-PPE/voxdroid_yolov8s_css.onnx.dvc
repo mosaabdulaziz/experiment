@@ -1,0 +1,5 @@
+outs:
+- md5: d6c0da75ff828561be455d1023e15011
+  size: 44598110
+  hash: md5
+  path: voxdroid_yolov8s_css.onnx

@@ -1,0 +1,5 @@
+outs:
+- md5: 323cd21778010ae954a080ca13759727
+  size: 9627478
+  hash: md5
+  path: fire_smoke_box.onnx

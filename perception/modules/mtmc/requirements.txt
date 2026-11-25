@@ -1,0 +1,13 @@
+# torch/torchvision come from the CUDA index in the Dockerfile's mtmc target.
+# fast-ReID's helpers: yacs (config), tabulate/termcolor (logging), fvcore/iopath (model registration), scikit-learn.
+yacs
+tabulate
+termcolor
+fvcore
+iopath
+scikit-learn
+# VLM crop arbiter: the native Ollama client and the OpenAI-compatible one.
+ollama
+openai
+# The plate reader runs through ONNX Runtime (the base image already has the GPU build; this keeps the module honest).
+onnxruntime-gpu>=1.19

@@ -1,0 +1,8 @@
+# What the engine imports (the image installs this first). pyds and GStreamer come from the DeepStream base image.
+# prometheus-client: optional /metrics exporter for telemetry (telemetry.py imports it lazily, so its absence only
+# disables the exporter, never the sidecar).
+redis
+opencv-python-headless
+pyyaml
+minio
+prometheus-client

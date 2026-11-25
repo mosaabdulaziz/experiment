@@ -1,0 +1,5 @@
+outs:
+- md5: 7ac112ec21fb8940f6454278f30218e1
+  size: 5459290
+  hash: md5
+  path: detect_product_empty_space.pt

@@ -1,0 +1,37 @@
+# The sidecar's slim target as it runs today: `uv pip freeze` of /opt/iris-venv in
+# km-deepstream-sidecar:latest (image sha256:0ae29b17360b, built 2026-10-04). Python 3.12.3, uv 0.12.5.
+# Packages from the DeepStream base's system site-packages (pyds, gi) are not in the venv and not listed. See README.md.
+argon2-cffi==25.1.0
+argon2-cffi-bindings==25.1.0
+certifi==2026.7.22
+cffi==2.1.1
+charset-normalizer==3.5.1
+flatbuffers==25.12.19
+idna==3.18
+imageio==2.37.4
+insightface==1.0.1
+lazy-loader==0.5
+minio==7.2.20
+ml-dtypes==0.6.0
+networkx==3.6.1
+numpy==2.5.2
+onnx==1.22.0
+onnxruntime==1.28.0
+onnxruntime-gpu==1.28.0
+opencv-python==5.0.0.93
+opencv-python-headless==5.0.0.93
+packaging==26.3
+pillow==12.3.0
+prometheus-client==0.26.0
+protobuf==7.35.1
+pycparser==3.0
+pycryptodome==3.23.0
+pyyaml==6.0.3
+redis==8.1.0
+requests==2.34.2
+scikit-image==0.26.0
+scipy==1.18.0
+tifffile==2026.8.16
+tqdm==4.70.0
+typing-extensions==4.16.0
+urllib3==2.7.0

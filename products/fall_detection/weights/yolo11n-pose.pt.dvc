@@ -1,0 +1,5 @@
+outs:
+- md5: 475cd7f66ff9f02e47cf6546bcab42a7
+  size: 6255593
+  hash: md5
+  path: yolo11n-pose.pt

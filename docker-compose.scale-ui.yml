@@ -1,0 +1,80 @@
+# truck-tracking web UI beside the scale13 stack, in the same compose project ("scale"): it shares
+# that network, so its API reaches redis:6379 where the feed bridge publishes (db 1).
+#   docker compose -p scale -f docker-compose.yml -f docker-compose.scale.yml \
+#                  -f docker-compose.scale-ui.yml up -d ui-postgres ui
+# The UI's source is a checkout at $TRUCK_UI_DIR (scripts/scale13_deploy.sh ui).
+services:
+  ui-postgres:
+    # PostgreSQL 16.15 + TimescaleDB 2.30.2, the build that runs here (2026-09-30); the tag has been rebuilt since, the
+    # digest is what counts.
+    image: timescale/timescaledb-ha:pg16.15-ts2.30.2@sha256:e9f34d8dd27621ec3933386eb07b70021d15b8116247362e0537bbff94ef0769
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: iris
+      POSTGRES_PASSWORD: iris
+      POSTGRES_DB: iris
+    volumes:
+      - ui-pgdata:/home/postgres/pgdata/data
+      - ${TRUCK_UI_DIR:?set TRUCK_UI_DIR}/infra/docker/init-db.sql:/docker-entrypoint-initdb.d/01-init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U iris -d iris"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  ui:
+    # Node 22.23.2, the build that runs here (2026-08-25); the tag has been rebuilt since, the digest is what counts.
+    image: node:22.23.2-slim@sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafdd95eaf7767a7e5
+    restart: unless-stopped
+    working_dir: /app
+    # The UI's .env as real environment variables: its migration and seed scripts read them from
+    # the environment (they fall back to localhost otherwise), not from the file.
+    env_file:
+      - ${TRUCK_UI_DIR}/.env
+    depends_on:
+      ui-postgres:
+        condition: service_healthy
+    environment:
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+      VITE_DEV_HOST: 0.0.0.0
+      # where the browser fetches vehicle crops / annotated frames / players from
+      # (same origin through https-proxy, so an https page loads no http content)
+      VITE_VEHICLE_CROPS_URL: ${SCALE_PUBLIC_URL:-https://10.2.0.60:35443/iris}
+      VITE_LIVE_STREAM_URL: ${SCALE_GO2RTC_URL:-https://10.2.0.60:35443/go2rtc}
+    volumes:
+      - ${TRUCK_UI_DIR}:/app
+    ports:
+      # plain HTTP only from the server itself; the LAN reaches the UI through https-proxy
+      - "127.0.0.1:${UI_WEB_PORT:-35173}:5173"
+    command:
+      - bash
+      - -lc
+      - |
+        set -e
+        corepack enable
+        [ -d node_modules ] || pnpm install --frozen-lockfile
+        [ -f packages/shared/dist/index.js ] || pnpm turbo run build --filter='./packages/*'
+        pnpm db:migrate
+        [ -f .iris-seeded ] || { pnpm db:seed && touch .iris-seeded; }
+        exec pnpm dev
+
+  https-proxy:
+    image: caddy:2.11.4@sha256:0c994536bddb66445885237f1a5dcc1916bccea922661c76b4e9fc24061f9b52
+    restart: unless-stopped
+    depends_on: [ui]
+    environment:
+      PUBLIC_HOST: ${PUBLIC_HOST:-10.2.0.60}
+      ALT_HOST: ${ALT_HOST:-127.0.0.1}
+      IRIS_UI_PORT: ${IRIS_UI_PORT:-35445}
+      HTTPS_PORT: ${UI_HTTPS_PORT:-35443}
+    volumes:
+      - ./configs/presets/scale13/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    ports:
+      - "${UI_HTTPS_PORT:-35443}:${UI_HTTPS_PORT:-35443}"
+      - "${IRIS_UI_PORT:-35445}:${IRIS_UI_PORT:-35445}"      # the camera system's own UI (Hazard Detection, ...)
+
+volumes:
+  ui-pgdata:
+  caddy-data:

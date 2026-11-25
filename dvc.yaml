@@ -1,0 +1,23 @@
+# Provenance of the golden-replay clips (tests/configs/golden-*.yaml replay them).
+# The clips are pulled with `just data-pull`; `dvc repro golden_clips` re-cuts them from the sources below,
+# but the fire clip is re-encoded, so a different ffmpeg build can change its bytes -- the pulled files are the reference.
+stages:
+  golden_clips:
+    cmd: tools/make_golden_clips.sh
+    deps:
+      - tools/make_golden_clips.sh
+      - data/uploads/fire/part1/bucketfire.mp4
+      - data/uploads/barber/9Hwju1yZBAM.mp4
+      - products/el-mohandes/videos/5-CH23-enter.mp4
+    outs:
+      - data/uploads/golden/fire.mp4
+      - data/uploads/golden/barber.mp4
+      - data/uploads/golden/vehicles.mp4
+  # its own stage, so adding it did not re-hash the clips above
+  golden_proximity_clip:
+    cmd: tools/make_golden_proximity_clip.sh
+    deps:
+      - tools/make_golden_proximity_clip.sh
+      - data/uploads/proximity/procimity_placement_combined.mp4
+    outs:
+      - data/uploads/golden/proximity.mp4

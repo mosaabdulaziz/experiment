@@ -1,0 +1,9 @@
+# TEST CONFIG (not a product): the barber clip with the door register's face regions covering the whole frame, so the
+# face stage (tracked owner, landmarks, customer faces) actually has faces to work on. golden-barber leaves the regions
+# key empty and so only exercises the gate. The key is set before the sidecar starts, from golden-barber-faces.redis
+# beside this file (tools/engine_golden_run.sh).
+extends: ../../products/barber/sidecar.yaml
+
+file_loop: false
+sources:
+  - {id: barber-c, uri: "file:///workspace/iris/data/uploads/golden/barber.mp4", roles: [barber]}

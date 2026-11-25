@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "product": "proximity",
+  "site": null,
+  "generated_at": "2026-11-15T12:25:30+00:00",
+  "generated_from_commit": "a7a036afd2dbd1caab0897a14534305fba1bcfcc",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "models": [
+    {
+      "path": "perception/models/DeepStream-Yolo-Seg/labels.txt",
+      "registered_model": "person-segmenter",
+      "version": "2",
+      "alias": "production-proximity",
+      "run_id": "4ae642860df5422fa3086344d3d2fbf4",
+      "sha256": "bd17f1ee35d5f3c862a4894605855abbb9dda4b0621fdb0ac4c2c8c7bb7e730a",
+      "size_bytes": 621,
+      "loaded_by": "pgie_config -> labelfile-path"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-736x1280.onnx",
+      "registered_model": "person-segmenter",
+      "version": "2",
+      "alias": "production-proximity",
+      "run_id": "4ae642860df5422fa3086344d3d2fbf4",
+      "sha256": "872d9f83a05632337bcea8cdf2e25dc3a49ef824469f165dece489c211de35ba",
+      "size_bytes": 112231285,
+      "loaded_by": "pgie_config -> onnx-file"
+    },
+    {
+      "path": "perception/models/depth/yolo26m-depth-736x1280.onnx",
+      "registered_model": "depth-estimator",
+      "version": "1",
+      "alias": "production-proximity",
+      "run_id": "f57065e71fd84dcab261e04f687c380b",
+      "sha256": "f57a0fb3878bba912e387918c1c0e9f9fd247742362cc7968ae4cd8bee558638",
+      "size_bytes": 88431641,
+      "loaded_by": "modules.proximity.depth_model"
+    }
+  ]
+}

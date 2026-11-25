@@ -1,0 +1,5 @@
+outs:
+- md5: f7622e8db205bc8567c80e0f4789d495
+  size: 7652257
+  hash: md5
+  path: plate_rec.onnx

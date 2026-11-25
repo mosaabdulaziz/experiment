@@ -1,0 +1,68 @@
+// Renovate: the weekly dependency-update merge requests (DEPENDENCIES.md, "Updates"). The bot runs self-hosted, from a
+// scheduled pipeline in a separate GitLab project (deps/renovate-runner.gitlab-ci.yml); it reads this file from the
+// default branch. CI validates it (the renovate-config job).
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended"],
+  timezone: "Africa/Cairo",
+  schedule: ["before 6am on monday"],
+  dependencyDashboard: true,
+
+  // The Python locks (pep621: each pyproject.toml + uv.lock), the Dockerfiles and the compose files. Not the frontend's
+  // npm packages, nor CI's images: neither is part of this policy yet.
+  enabledManagers: ["pep621", "dockerfile", "docker-compose"],
+
+  // One uv everywhere (DEPENDENCIES.md, "uv"). Each pyproject.toml's tool.uv.required-version accepts any 0.13.x; the
+  // bot, like CI and the Dockerfiles, installs exactly 0.13.6. The PyTorch indexes need nothing here: each pyproject.toml names
+  // its own ([[tool.uv.index]], explicit), and uv reads them itself.
+  constraints: { uv: "==0.13.6" },
+
+  // Move the lock while the pyproject range allows it; never rewrite a range (a range change is a deliberate edit).
+  rangeStrategy: "update-lockfile",
+
+  // `uv lock --upgrade` per lock, weekly: the transitive updates. One merge request per group, by branch prefix
+  // (verify on the first run, see DEPENDENCIES.md).
+  lockFileMaintenance: {
+    enabled: true,
+    schedule: ["before 6am on monday"],
+    additionalBranchPrefix: "{{#if (containsString packageFileDir 'products/')}}products-{{else}}{{#if (containsString packageFileDir 'tools/')}}tools-{{else}}{{#if (equals packageFileDir 'perception')}}sidecar-{{else}}root-{{/if}}{{/if}}{{/if}}",
+  },
+
+  // After every update, in every branch: hold back any package that crossed a major version, and torch, in all seven
+  // locks (a lock upgrade moves transitive packages too, which packageRules cannot see); then rewrite the root's
+  // requirements*.txt exports from its lock. The runner allows exactly these two commands (allowedCommands).
+  postUpgradeTasks: {
+    commands: [
+      "python3 tools/deps/hold_majors.py --base {{{baseBranch}}}",
+      "python3 tools/deps/root_exports.py",
+    ],
+    fileFilters: ["**/uv.lock", "requirements*.txt"],
+    executionMode: "branch",
+  },
+
+  prBodyNotes: [
+    "**Before merging** (DEPENDENCIES.md, \"Updates\"): CI ran the CPU suite and the lock checks. `just deps-diff origin/main` lists every package that moved. If the sidecar's lock or an image the sidecar uses changed, rebuild the sidecar and run the golden replay by hand on the GPU server (`tools/engine_golden_check.sh attendance zones fire multicam barber`): CI cannot run it until #86.",
+  ],
+
+  // Later rules override earlier ones: groups first, then what is held or needs approval.
+  packageRules: [
+    { matchManagers: ["pep621"], matchFileNames: ["pyproject.toml", "uv.lock"], groupName: "root lock" },
+    { matchManagers: ["pep621"], matchFileNames: ["perception/**"], groupName: "sidecar lock" },
+    { matchManagers: ["pep621"], matchFileNames: ["tools/**"], groupName: "tool locks" },
+    { matchManagers: ["pep621"], matchFileNames: ["products/**"], groupName: "product locks" },
+    { matchManagers: ["dockerfile", "docker-compose"], groupName: "images" },
+
+    // No major version in an automated merge request (direct dependencies and images; locks: hold_majors.py).
+    { matchUpdateTypes: ["major"], enabled: false },
+    // A new Python is not an automated update (python:3.11-slim -> 3.12 counts as "minor" for a Docker tag).
+    { matchDatasources: ["docker"], matchPackageNames: ["python"], matchUpdateTypes: ["minor"], enabled: false },
+    // Held: the sidecar's CUDA torch and the app Dockerfile's CPU pin move by hand (hold_majors.py holds them too).
+    { matchPackageNames: ["torch", "torchvision"], enabled: false },
+    // uv moves everywhere at once, by hand (required-version, Dockerfiles, CI).
+    { matchPackageNames: ["ghcr.io/astral-sh/uv"], enabled: false },
+    // MinIO: Docker Hub no longer serves minio/minio (DEPENDENCIES.md, "Compose images").
+    { matchPackageNames: ["minio/minio"], enabled: false },
+    // Approve on the Dependency Dashboard first: the scale UI's database, and the sidecar's DeepStream base.
+    { matchPackageNames: ["timescale/timescaledb-ha", "nvcr.io/nvidia/deepstream"], dependencyDashboardApproval: true },
+  ],
+}

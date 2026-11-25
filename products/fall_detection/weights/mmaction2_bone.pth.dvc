@@ -1,0 +1,5 @@
+outs:
+- md5: 0c2193d3c3487bee8eb66a904011d28d
+  size: 12479895
+  hash: md5
+  path: mmaction2_bone.pth

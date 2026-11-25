@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "resnet50-11ad3fa6.pth",
+  "sha256": "11ad3fa62ca79e40addfd354a8ec4b7c75143b3038b8d2a807fbc68deab379ca",
+  "size_bytes": 102540417,
+  "created_at": "2026-11-05T09:10:54+00:00",
+  "run_id": "15e0ef8c944b49578b2799e0853eea80",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "vehicle-reid",
+  "version": "1"
+}

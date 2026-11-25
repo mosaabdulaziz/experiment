@@ -1,0 +1,7 @@
+# Extra `make` variables for a parser directory, one line per parser that needs any: <directory name> VAR=VALUE ...
+# (A parser with no line builds with CUDA_VER alone. This file is tracked on purpose: some model directories under
+# perception/models/ are git-ignored, so a flag kept inside them would be lost on a fresh clone.)
+#
+# The YOLO parser's INT8 calibrator (calibrator.cpp, Int8EntropyCalibrator2) needs OpenCV; without it yolo.cpp asserts
+# "OpenCV is required to run INT8 calibrator". Needs libopencv-dev (the image installs it).
+nvdsinfer_custom_impl_Yolo OPENCV=1

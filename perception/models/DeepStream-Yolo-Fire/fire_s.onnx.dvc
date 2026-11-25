@@ -1,0 +1,5 @@
+outs:
+- md5: da4ca51d03d7a58588a454eea1538ec5
+  size: 44661425
+  hash: md5
+  path: fire_s.onnx

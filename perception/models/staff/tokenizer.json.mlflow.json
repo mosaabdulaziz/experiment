@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "tokenizer.json",
+  "sha256": "f7f3b7af117d467b58374797691a6438d3e6b9e9cef800dfd5dced7f697a90cd",
+  "size_bytes": 2224119,
+  "created_at": "2026-11-05T09:11:27+00:00",
+  "run_id": "ee666793f82749f2907091b510f85846",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "staff-clip",
+  "version": "1"
+}

@@ -1,0 +1,5 @@
+outs:
+- md5: 137c70c9db206636c73572833ccc2899
+  size: 86511772
+  hash: md5
+  path: staff_dinov2_s.onnx

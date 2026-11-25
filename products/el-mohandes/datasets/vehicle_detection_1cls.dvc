@@ -1,0 +1,6 @@
+outs:
+- md5: ad5ed68445f31c338d2c5fdf8c8f4283.dir
+  size: 3553166105
+  nfiles: 4819
+  hash: md5
+  path: vehicle_detection_1cls

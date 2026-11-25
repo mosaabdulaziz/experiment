@@ -1,0 +1,5 @@
+outs:
+- md5: 5d6fc4d9a0cb048c1366ff03a662017a
+  size: 60285539
+  hash: md5
+  path: last.pt

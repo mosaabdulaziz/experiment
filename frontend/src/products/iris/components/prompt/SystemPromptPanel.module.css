@@ -1,0 +1,142 @@
+.panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elev-2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 0;
+  flex: 1;
+  height: auto;
+  min-height: var(--prompt-h);
+  max-height: 1200px;
+  position: relative;
+  transition: max-height 0.25s ease;
+}
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--glass-highlight);
+  pointer-events: none;
+  z-index: 1;
+}
+.panel.collapsed {
+  flex: 0 0 auto;
+  height: auto;
+  min-height: 0;
+  max-height: 88px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--glass-border);
+  cursor: pointer;
+  user-select: none;
+  gap: 10px;
+  transition: background 0.15s;
+  position: relative;
+  z-index: 2;
+}
+.title:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+.panel.collapsed .title {
+  border-bottom: none;
+}
+
+.titleLeft {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.collapseBtn {
+  background: var(--glass-bg-soft);
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  color: var(--text-soft);
+  padding: 4px 5px;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  flex-shrink: 0;
+  transition: border-color 0.2s, color 0.2s;
+}
+.collapseBtn:hover {
+  border-color: var(--glass-border-hi);
+  color: var(--accent);
+}
+.collapseBtn svg {
+  transition: transform 0.25s ease;
+}
+.panel.collapsed .collapseBtn svg {
+  transform: rotate(180deg);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+.selectGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.selectGroupLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.textarea {
+  flex: 1;
+  width: 100%;
+  resize: none;
+  background: transparent;
+  border: none;
+  padding: 14px 18px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.7;
+  outline: none;
+  color: var(--text-soft);
+  position: relative;
+  z-index: 2;
+}
+.textarea::placeholder {
+  color: var(--text-muted);
+}
+.panel.collapsed .textarea {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .panel {
+    min-height: 168px;
+    margin: 0;
+  }
+  .panel.collapsed {
+    height: auto;
+    min-height: 0;
+    max-height: 88px;
+  }
+}

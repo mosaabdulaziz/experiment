@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "det_10g.onnx",
+  "sha256": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91",
+  "size_bytes": 16923827,
+  "created_at": "2026-11-05T09:54:59+00:00",
+  "run_id": "ac25fd34826e4543ba72239d627e981e",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "957b7e4fb9959dd2c651a7c2256933b66a853e0f",
+  "registered_model": "face-recognizer",
+  "version": "1"
+}

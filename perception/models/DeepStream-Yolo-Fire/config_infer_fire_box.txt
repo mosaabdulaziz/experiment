@@ -1,0 +1,37 @@
+[property]
+gpu-id=0
+net-scale-factor=0.0039215697906911373
+model-color-format=0
+onnx-file=fire_smoke_box.onnx
+# NOTE: model-engine-file is deliberately absent. build_pipeline sets it from
+# gie_engine_path(), which derives the name nvinfer's ONNX branch actually uses
+# (<onnx>_b<batch>_gpu0_<mode>.engine, beside this file). Writing a fixed name
+# here would desynchronise from the mux batch and rebuild the engine every boot.
+#
+# NOTE: engine-create-func-name is deliberately absent too. Adding it selects
+# nvinfer's custom-engine branch, whose <cwd>-based engine name COLLIDES with the
+# pgie's -- this GIE would then silently deserialize the DAMO-YOLO engine.
+# build_pipeline asserts against that, so adding it here fails the boot.
+labelfile-path=labels_fire_smoke_box.txt
+# batch-size is overridden at runtime with the nvstreammux batch, exactly as the
+# pgie's is. Do not "correct" it to the source count.
+batch-size=1
+network-mode=2
+num-detected-classes=2
+interval=0
+gie-unique-id=3
+process-mode=1
+network-type=0
+cluster-mode=2
+maintain-aspect-ratio=1
+symmetric-padding=1
+parse-bbox-func-name=NvDsInferParseYolo
+custom-lib-path=/opt/nvidia/deepstream/deepstream/custom_parsers/libnvdsinfer_custom_impl_Yolo.so
+
+[class-attrs-all]
+nms-iou-threshold=0.45
+# Higher than the pgie's 0.25: fire/smoke boxes are ill-defined (smoke has no
+# canonical extent), so low-confidence detections flicker badly. Fewer, confident
+# boxes are both a better demo and a lower false-positive rate.
+pre-cluster-threshold=0.3
+topk=100

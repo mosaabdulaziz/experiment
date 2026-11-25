@@ -1,0 +1,49 @@
+# IRIS monitoring stack — Prometheus config.
+#
+# Scrapes:
+#   - deepstream-sidecar (:9100) — per-stage telemetry exported by
+#     perception/engine/telemetry.py (iris_stage_*, iris_gauge) when telemetry is enabled
+#     (sidecar.yaml telemetry_enabled: true). Host port 9101 mirrors the base
+#     service for debugging; the scrape goes over the compose network.
+#   - dcgm-exporter (:9400)   — GPU hardware metrics (util, decode util, FB,
+#     temp, power) from the NVIDIA DCGM exporter.
+#   - node-exporter (:9100)   — host machine metrics.
+#
+# The shard replicas only exist under `docker compose --profile shards up`, and
+# the fire/attendance role replicas only under `--profile roles up -d
+# deepstream-sidecar-fire deepstream-sidecar-attendance`; unreachable targets
+# are reported as DOWN without failing other scrapes.
+global:
+  scrape_interval: 10s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "iris-sidecar"
+    static_configs:
+      - targets: ["deepstream-sidecar:9100"]
+        labels:
+          shard: "0"
+      - targets: ["deepstream-sidecar-1:9100"]
+        labels:
+          shard: "1"
+      - targets: ["deepstream-sidecar-2:9100"]
+        labels:
+          shard: "2"
+      - targets: ["deepstream-sidecar-fire:9100"]
+        labels:
+          shard: "0"
+          role: "fire"
+      - targets: ["deepstream-sidecar-attendance:9100"]
+        labels:
+          shard: "0"
+          role: "attendance"
+
+  - job_name: "dcgm"
+    static_configs:
+      - targets: ["dcgm-exporter:9400"]
+        labels:
+          gpu: "host"
+
+  - job_name: "node"
+    static_configs:
+      - targets: ["node-exporter:9100"]

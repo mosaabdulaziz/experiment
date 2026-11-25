@@ -1,0 +1,131 @@
+cameras:
+  cam-1:
+    zone_free: true
+    zones:
+    - id: proposed_shelf_1
+      kind: shelf_front
+      facing:
+      - 0.7275
+      - 0.6861
+      points:
+      - - 0.0
+        - 0.075
+      - - 0.625
+        - 0.075
+      - - 0.625
+        - 1.0
+      - - 0.0
+        - 1.0
+    - id: proposed_shelf_2
+      kind: shelf_front
+      facing:
+      - -0.7689
+      - 0.6393
+      points:
+      - - 0.475
+        - 0.275
+      - - 1.0
+        - 0.275
+      - - 1.0
+        - 1.0
+      - - 0.475
+        - 1.0
+  cam-2:
+    zone_free: true
+    zones:
+    - id: proposed_shelf_1
+      kind: shelf_front
+      facing:
+      - 0.6535
+      - 0.7569
+      points:
+      - - 0.0
+        - 0.175
+      - - 1.0
+        - 0.175
+      - - 1.0
+        - 1.0
+      - - 0.0
+        - 1.0
+  cam-3:
+    zone_free: true
+    zones:
+    - id: proposed_shelf_1
+      kind: shelf_front
+      facing:
+      - 0.9879
+      - 0.1548
+      points:
+      - - 0.075
+        - 0.0
+      - - 1.0
+        - 0.0
+      - - 1.0
+        - 1.0
+      - - 0.075
+        - 1.0
+    - id: proposed_shelf_2
+      kind: shelf_front
+      facing:
+      - 0.9834
+      - 0.1813
+      points:
+      - - 0.0
+        - 0.675
+      - - 0.325
+        - 0.675
+      - - 0.325
+        - 1.0
+      - - 0.0
+        - 1.0
+  cam-4:
+    zone_free: true
+    zones:
+    - id: proposed_shelf_1
+      kind: shelf_front
+      facing:
+      - 0.9311
+      - 0.3647
+      points:
+      - - 0.075
+        - 0.075
+      - - 1.0
+        - 0.075
+      - - 1.0
+        - 1.0
+      - - 0.075
+        - 1.0
+  cam-5:
+    zone_free: true
+    zones:
+    - id: proposed_shelf_1
+      kind: shelf_front
+      facing:
+      - 0.3205
+      - 0.9472
+      points:
+      - - 0.0
+        - 0.075
+      - - 1.0
+        - 0.075
+      - - 1.0
+        - 1.0
+      - - 0.0
+        - 1.0
+  cam-6:
+    zone_free: true
+    zones:
+    - id: proposed_shelf_1
+      kind: shelf_front
+      facing:
+      - -0.8799
+      - 0.4752
+      points:
+      - - 0.175
+        - 0.0
+      - - 1.0
+        - 0.0
+      - - 1.0
+        - 1.0
+      - - 0.175
+        - 1.0

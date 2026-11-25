@@ -1,0 +1,1523 @@
+/* نظام الحضور والانصراف الذكي — standalone attendance dashboard.
+   Theme matched to the reference mock (image-3): dark-green rail + accents,
+   white cards on a light-gray ground, fully RTL, Cairo typeface. */
+
+:root {
+  --green-900: #0c3527;
+  --green-800: #114633;
+  --green-700: #16593f;
+  --green-600: #1b7a52;
+  --green-500: #14a05e;
+  --green-50: #e8f5ee;
+  --ground: #eef1ef;
+  --card: #ffffff;
+  --ink: #17251f;
+  --ink-soft: #5c6b63;
+  --line: #e4e9e5;
+  --red-500: #d64550;
+  --red-50: #fdecee;
+  --amber-600: #b97c10;
+  --amber-50: #fdf3e0;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(12, 53, 39, 0.08);
+}
+
+/* Settings page "نوع العرض" toggle (prompt.md image-6, 2026-09-04): the rail
+   was already dark in both modes, so only the content ground/cards need a
+   second set of values here -- everything below already reads these tokens,
+   so this is the whole theme, not a per-component rewrite. Applied via
+   data-theme on <html>, set from App's useTheme()/localStorage. Brand greens
+   stay the same in both modes on purpose (they're identity, not surface). */
+:root[data-theme="dark"] {
+  --green-50: #1c3327;
+  --ground: #0f1512;
+  --card: #1a2420;
+  --ink: #eaf2ee;
+  --ink-soft: #9fb0a7;
+  --line: #2b362f;
+  --red-50: #3a2024;
+  --amber-600: #d99a2b;
+  --amber-50: #3a2e16;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--green-900);
+  font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+  color: var(--ink);
+}
+
+#root { min-height: 100vh; }
+
+/* ── shell: rail + page ─────────────────────────────────────────── */
+
+.shell {
+  display: flex;
+  min-height: 100vh;
+  padding: 10px;
+  gap: 10px;
+}
+
+.rail {
+  width: 56px;
+  flex: 0 0 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 0;
+  position: sticky;
+  top: 10px;
+  align-self: flex-start;
+  height: calc(100vh - 20px);
+}
+
+.railLogo {
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+}
+.railLogo svg { display: block; border-radius: 9px; }
+
+.railBtn {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cfe6da;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.railBtn:hover { background: rgba(255, 255, 255, 0.16); }
+.railActive { background: #fff; color: var(--green-800); }
+.railBottom { margin-top: auto; }
+
+/* Monitoring nav item (prompt.md: "Monitoring[In progress]") -- a small
+   amber dot marking the feature as still being built, not a functional
+   difference from any other nav item. */
+.railInProgress { position: relative; }
+.railBadge {
+  position: absolute;
+  top: 4px;
+  inset-inline-end: 4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--amber-600);
+  border: 1.5px solid var(--green-900);
+}
+
+.page {
+  flex: 1;
+  background: var(--ground);
+  border-radius: 20px;
+  padding: 18px 22px 28px;
+  min-width: 0;
+}
+
+/* ── topbar ─────────────────────────────────────────────────────── */
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 10px 16px;
+  margin-bottom: 18px;
+}
+
+.userBox { display: flex; align-items: center; gap: 10px; }
+.userBox strong { display: block; font-size: 14px; }
+.userBox small { color: var(--ink-soft); font-size: 12px; }
+
+.userAvatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--green-50);
+  color: var(--green-700);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.liveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: var(--ground);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-inline-start: 10px;
+}
+.liveOn { color: var(--green-600); background: var(--green-50); }
+.liveDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.liveOn .liveDot { animation: pulse 1.6s infinite; }
+@keyframes pulse { 50% { opacity: 0.35; } }
+
+.searchBox input {
+  width: min(360px, 40vw);
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--ground);
+  font-family: inherit;
+  font-size: 13px;
+}
+.searchBox input:focus { outline: 2px solid var(--green-500); border-color: transparent; }
+
+/* ── page head ──────────────────────────────────────────────────── */
+
+.pageHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 2px 16px;
+}
+.pageHead h1 { margin: 0; font-size: 24px; color: var(--green-800); font-weight: 800; }
+.crumbs { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+.crumbSep { margin: 0 6px; }
+.crumbHere { color: var(--green-600); font-weight: 700; }
+
+.pageHeadTools { display: flex; align-items: center; gap: 10px; }
+
+.dayInput {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  font-family: inherit;
+}
+
+.cardHint { color: var(--ink-soft); font-size: 13px; padding: 10px 2px; }
+
+.errorBar {
+  background: var(--red-50);
+  color: var(--red-500);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  font-weight: 700;
+}
+
+/* ── KPI cards ──────────────────────────────────────────────────── */
+
+.kpiRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.kpiCard {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 18px;
+}
+.kpiHead { display: flex; justify-content: space-between; align-items: center; }
+.kpiLabel { font-size: 13px; color: var(--ink-soft); font-weight: 700; }
+.kpiIcon { width: 34px; height: 34px; border-radius: 10px; background: var(--green-50); position: relative; }
+.kpiIcon::after {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border-radius: 4px;
+  border: 2.5px solid var(--green-600);
+}
+.kpiAbsent .kpiIcon { background: var(--red-50); }
+.kpiAbsent .kpiIcon::after { border-color: var(--red-500); border-radius: 50%; }
+.kpiLeave .kpiIcon { background: var(--amber-50); }
+.kpiLeave .kpiIcon::after { border-color: var(--amber-600); }
+/* Real line icons (prompt.md image-8, 2026-09-14): tinted square, icon in the
+   card's accent colour; no placeholder square drawn behind it. */
+.kpiIconSvg { display: grid; place-items: center; color: var(--green-600); }
+.kpiIconSvg::after { content: none; }
+.kpiAbsent .kpiIconSvg { color: var(--red-500); }
+.kpiLeave .kpiIconSvg { color: var(--amber-600); }
+.kpiValue { font-size: 30px; font-weight: 800; margin: 4px 0 2px; }
+.kpiTag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green-600);
+  background: var(--green-50);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+.kpiAbsent .kpiTag { color: var(--red-500); background: var(--red-50); }
+.kpiLeave .kpiTag { color: var(--amber-600); background: var(--amber-50); }
+
+/* ── two-column body ────────────────────────────────────────────── */
+
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  gap: 16px;
+  align-items: start;
+}
+
+/* right column of the dashboard: camera panel, then the attendance chart
+   stacked below it (prompt.md point 2 -- "beside the table and cameras"). */
+.columnStack { display: flex; flex-direction: column; gap: 16px; }
+
+@media (max-width: 1100px) {
+  .columns { grid-template-columns: 1fr; }
+  .kpiRow { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── camera panel ───────────────────────────────────────────────── */
+
+.camPanel {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.camPanelHead { display: flex; gap: 8px; align-items: flex-start; }
+.camPanelDot { width: 9px; height: 9px; margin-top: 7px; border-radius: 50%; background: var(--green-500); }
+.camPanelHead h2 { margin: 0; font-size: 15px; color: var(--green-800); }
+.camPanelHead p { margin: 2px 0 0; font-size: 11.5px; color: var(--ink-soft); }
+
+.camTile {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #101512;
+  min-height: 110px;
+}
+.camFrame { width: 100%; display: block; aspect-ratio: 16 / 10; object-fit: cover; }
+.camLive {
+  position: absolute;
+  top: 8px;
+  inset-inline-start: 8px;
+  background: rgba(12, 53, 39, 0.85);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.camLive::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff5f57;
+  margin-inline-end: 5px;
+  animation: pulse 1.4s infinite;
+}
+.camName {
+  position: absolute;
+  bottom: 8px;
+  inset-inline-start: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 11px;
+  border-radius: 6px;
+  padding: 2px 8px;
+  max-width: calc(100% - 70px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.camClock {
+  position: absolute;
+  bottom: 8px;
+  inset-inline-end: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #d7f3e3;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  border-radius: 6px;
+  padding: 2px 6px;
+  direction: ltr;
+}
+.camEmpty { color: var(--ink-soft); font-size: 13px; text-align: center; padding: 12px 0; }
+
+.camReconnecting {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #ffd9a8;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(16, 21, 18, 0.55);
+  animation: pulse 1.6s infinite;
+  pointer-events: none;
+}
+
+.camTile { cursor: pointer; transition: transform 0.12s; }
+.camTile:hover { transform: scale(1.015); }
+.camTile:focus-visible { outline: 3px solid var(--green-500); }
+
+/* ── expanded camera modal ──────────────────────────────────────── */
+
+.camModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 22, 16, 0.78);
+  display: grid;
+  place-items: center;
+  z-index: 50;
+  padding: 24px;
+}
+
+.camModal {
+  position: relative; /* anchors LiveFrame's reconnecting overlay */
+  background: var(--card);
+  border-radius: 16px;
+  overflow: hidden;
+  width: min(1100px, 94vw);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+}
+.camModal .camFrame { aspect-ratio: auto; max-height: 78vh; object-fit: contain; background: #101512; }
+
+.camModalHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--green-800);
+  color: #fff;
+}
+.camModalTitle { display: flex; align-items: center; gap: 12px; font-size: 15px; }
+.camLiveInline {
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.camLiveInline::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff5f57;
+  margin-inline-end: 5px;
+  animation: pulse 1.4s infinite;
+}
+.camModalClock {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  color: #bfe9d2;
+  font-size: 14px;
+}
+.camModalClose {
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.camModalClose:hover { background: rgba(255, 255, 255, 0.25); }
+
+.camMore {
+  border: none;
+  background: none;
+  color: var(--green-600);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px;
+}
+.camMore:hover { text-decoration: underline; }
+
+/* ── table card ─────────────────────────────────────────────────── */
+
+.tableCard {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 14px 10px;
+  min-width: 0;
+}
+
+.tableToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.toolbarFilters { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.toolbarFilters .tableSearch {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  width: 220px;
+  max-width: 100%;
+}
+.toolbarFilters select {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--ink);
+}
+.filterTag {
+  background: var(--green-600);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 8px 14px;
+}
+
+.rowClickable { cursor: pointer; }
+.rowClickable:hover { background: var(--green-50); }
+
+.btnGhost {
+  border: 1px solid var(--green-500);
+  color: var(--green-600);
+  background: none;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.btnGhost:hover { background: var(--green-50); }
+
+.btnDanger {
+  border: 1px solid var(--red-500);
+  color: var(--red-500);
+  background: none;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.btnDanger:hover:not(:disabled) { background: var(--red-50); }
+.btnDanger:disabled { opacity: 0.45; cursor: default; }
+
+.exportBtns { display: flex; gap: 6px; }
+/* File icons instead of text (prompt.md point 5, 2026-09-14): light square
+   button, coloured file icon -- as in the image-8 mock. */
+.exportBtns .btnXls, .exportBtns .btnPdf {
+  display: grid; place-items: center; padding: 0;
+  width: 38px; height: 34px;
+  background: var(--card); border: 1px solid var(--line);
+}
+.exportBtns .btnXls { color: #1c7a43; }
+.exportBtns .btnPdf { color: #d64550; }
+.exportBtns .btnXls:hover, .exportBtns .btnPdf:hover { filter: none; background: var(--ground); }
+.btnXls, .btnPdf {
+  border: none;
+  border-radius: 8px;
+  width: 42px;
+  height: 34px;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 11px;
+  color: #fff;
+  cursor: pointer;
+}
+.btnXls { background: #1c7a43; }
+.btnPdf { background: #d64550; }
+.btnXls:hover, .btnPdf:hover { filter: brightness(1.1); }
+
+.attTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.attTable thead tr { background: var(--green-800); color: #fff; }
+.attTable th {
+  padding: 10px 12px;
+  text-align: right;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.attTable th:first-child { border-start-start-radius: 10px; border-end-start-radius: 10px; }
+.attTable th:last-child { border-start-end-radius: 10px; border-end-end-radius: 10px; }
+.attTable td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.attTable tbody tr:hover { background: #f7faf8; }
+
+.cellCode { direction: ltr; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+.cellTime { direction: ltr; text-align: right; font-variant-numeric: tabular-nums; }
+.cellName { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--ground);
+  border: 1px solid var(--line);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.chipDot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.chip-present { color: var(--green-600); background: var(--green-50); }
+.chip-absent { color: var(--red-500); background: var(--red-50); }
+.chip-leave { color: var(--amber-600); background: var(--amber-50); }
+
+.btnLeave {
+  border: 1px solid var(--line);
+  background: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-family: inherit;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btnLeave:hover:not(:disabled) { border-color: var(--amber-600); color: var(--amber-600); }
+.btnLeave:disabled { opacity: 0.4; cursor: default; }
+
+.tableEmpty { text-align: center; color: var(--ink-soft); padding: 26px 0 !important; }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 0 6px;
+}
+.pageBtn {
+  min-width: 34px;
+  height: 32px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.pageBtn:hover { border-color: var(--green-500); color: var(--green-600); }
+.pageActive { background: var(--green-50); border-color: var(--green-500); color: var(--green-700); }
+
+/* ── print (the PDF button) ─────────────────────────────────────── */
+
+@media print {
+  html, body { background: #fff; }
+  .shell { padding: 0; }
+  .rail, .topbar, .kpiRow, .camPanel, .noPrint { display: none !important; }
+  .page { background: #fff; border-radius: 0; padding: 0; }
+  .columns { grid-template-columns: 1fr; }
+  .tableCard { box-shadow: none; padding: 0; }
+  .attTable thead tr { background: #fff; color: var(--ink); border-bottom: 2px solid var(--ink); }
+}
+
+/* ── monitoring page (2026-09-01) ───────────────────────────────── */
+
+.monCameras { margin-bottom: 16px; }
+.monGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 14px;
+}
+.monView {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #101512;
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+.monView:hover { transform: scale(1.01); }
+.monViewLarge { cursor: default; border-radius: 0; }
+.monViewLarge:hover { transform: none; }
+.monFrame { width: 100%; display: block; aspect-ratio: 1080 / 720; object-fit: fill; background: #101512; }
+.monCanvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.zoneCanvas { pointer-events: auto; cursor: crosshair; touch-action: none; }
+
+.monColumns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1100px) { .monColumns { grid-template-columns: 1fr; } }
+
+.kpiTime { font-size: 22px; direction: ltr; text-align: right; font-variant-numeric: tabular-nums; }
+.cellWork { color: var(--green-600); font-weight: 700; }
+.cellNotWork { color: var(--red-500); font-weight: 700; }
+.chip-desk-at_desk { color: var(--green-600); background: var(--green-50); }
+.chip-desk-away { color: var(--amber-600); background: var(--amber-50); }
+.chip-desk-absent { color: var(--ink-soft); background: var(--ground); }
+
+
+/* Settings page row-cards (prompt.md image-6, 2026-09-04): title+description
+   on one side, the actual control on the other -- one card per concern,
+   each with its own save (the settings underneath are two separate backend
+   stores, see AttendanceSettingsPanel/SettingsPanel's own module notes; one
+   shared "save everything" button would silently fire unrelated requests). */
+.settingsRowCard {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.settingsRowInfo { flex: 1; min-width: 220px; }
+.settingsRowInfo h3 { margin: 0 0 4px; font-size: 14px; color: var(--ink); font-weight: 800; }
+.settingsRowInfo p { margin: 0; font-size: 11.5px; color: var(--ink-soft); line-height: 1.65; }
+.settingsRowControl { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; min-width: 240px; }
+.settingsRowFields { display: flex; gap: 12px; flex-wrap: wrap; }
+.settingsRowFields label { display: flex; flex-direction: column; gap: 4px; font-size: 11.5px; font-weight: 700; color: var(--ink-soft); }
+.settingsRowFields input {
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  min-width: 130px;
+  color: var(--ink);
+  background: var(--card);
+}
+
+/* light/dark switch */
+.themeSwitch { display: flex; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+.themeSwitchTrack {
+  width: 46px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--line);
+  position: relative;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: background 0.15s;
+  flex: 0 0 auto;
+}
+.themeSwitchTrack[data-on="true"] { background: var(--green-600); }
+.themeSwitchKnob {
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: inset-inline-start 0.15s;
+}
+.themeSwitchTrack[data-on="true"] .themeSwitchKnob { inset-inline-start: 23px; }
+
+.btnPrimary {
+  border: none;
+  background: var(--green-600);
+  color: #fff;
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+.btnPrimary:hover:not(:disabled) { background: var(--green-700); }
+.btnPrimary:disabled { opacity: 0.45; cursor: default; }
+.btnSmall { padding: 5px 12px; font-size: 12px; }
+.btnOnDark { border-color: rgba(255,255,255,0.5); color: #fff; }
+.btnOnDark:hover { background: rgba(255,255,255,0.12); }
+.camModalActions { display: flex; align-items: center; gap: 8px; }
+.zoneHint { font-size: 11.5px; color: #bfe9d2; font-weight: 400; }
+
+/* zone editor */
+.zoneEditor { width: min(1280px, 96vw); }
+.zoneEditorBody { display: grid; grid-template-columns: minmax(0, 1fr) 260px; }
+.zoneCanvasWrap { border-radius: 0; }
+.zoneRail {
+  padding: 12px;
+  border-inline-start: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 78vh;
+  overflow-y: auto;
+}
+.zoneRailHead { display: flex; justify-content: space-between; align-items: center; }
+.zoneItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.zoneItemActive { border-color: var(--green-500); background: var(--green-50); }
+.zoneItem input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.zoneItem input:focus { outline: 1px solid var(--green-500); border-radius: 4px; }
+.zonePts { font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
+.zoneDel { border: none; background: none; cursor: pointer; font-size: 13px; }
+.zoneActions { display: flex; gap: 8px; margin-top: auto; padding-top: 8px; }
+
+/* Cameras page (2026-09-04): the editor embedded in the page flow instead
+   of a modal overlay -- see ZoneEditor's `inline` prop. */
+.zoneEditorInline {
+  width: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-top: 16px;
+}
+.placeTypeToggle {
+  padding-bottom: 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+.settingsNote {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  background: var(--green-50);
+  border-radius: 10px;
+  padding: 10px 12px;
+  line-height: 1.7;
+}
+.settingsNote a { color: var(--green-600); font-weight: 700; }
+
+/* ── attendance v2 (2026-09-02/03) ──────────────────────────────────── */
+
+.settingsStack { display: flex; flex-direction: column; gap: 16px; }
+.settingsStackRow { flex-direction: row; align-items: flex-start; flex-wrap: wrap; }
+.settingsStackRow > * { flex: 1; min-width: 280px; }
+.settingsGroup { display: flex; flex-direction: column; gap: 14px; }
+.settingsSaveBar { display: flex; justify-content: flex-end; }
+
+/* ── Cameras page grid (2026-09-04) ───────────────────────────────── */
+
+.camerasGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.camTileBig { min-height: 140px; }
+.camTileSelected { outline: 3px solid var(--green-500); }
+.camOffline {
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+  font-size: 12px;
+  background: #101512;
+}
+
+/* ── Fire/smoke incidents tab (2026-09-04) ──────────────────────────── */
+
+.kpiFire .kpiIcon { background: var(--red-50); }
+.kpiFire .kpiIcon::after { border-color: var(--red-500); border-radius: 50%; }
+.kpiFire .kpiTag { color: var(--red-500); background: var(--red-50); }
+.kpiSmoke .kpiIcon { background: var(--amber-50); }
+.kpiSmoke .kpiIcon::after { border-color: var(--amber-600); }
+.kpiSmoke .kpiTag { color: var(--amber-600); background: var(--amber-50); }
+.kpiIconPulse::after { animation: pulse 1.6s infinite; }
+
+.tableScroll { overflow-x: auto; }
+
+.fireOngoingChip { font-variant-numeric: tabular-nums; }
+.fireOngoingDot { animation: pulse 1.1s infinite; }
+.fireUnknown { color: var(--ink-soft); font-size: 12px; }
+.fireDescCell { max-width: 320px; font-size: 12.5px; color: var(--ink); }
+.fireDescPending { color: var(--ink-soft); font-style: italic; }
+
+.fireDescription { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink); }
+.fireDescriptionModal { padding: 12px 16px; }
+
+/* Fire-tagged camera preview grid (2026-09-04) */
+.firePreviewSection {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  margin-bottom: 18px;
+}
+.firePreviewHead {
+  margin: 0 0 14px;
+  font-size: 15px;
+  color: var(--green-800);
+  font-weight: 700;
+}
+.firePreviewGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.firePreviewTile {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #101512;
+  min-height: 140px;
+}
+.firePreviewTile .camFrame { width: 100%; display: block; aspect-ratio: 16 / 10; object-fit: cover; }
+.firePreviewTile .camName {
+  position: absolute;
+  bottom: 8px;
+  inset-inline-start: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 11px;
+  border-radius: 6px;
+  padding: 2px 8px;
+  max-width: calc(100% - 70px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── add-employee work-hours field (prompt.md point 3) ────────────── */
+
+.workHoursField { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; font-weight: 700; }
+.workHoursRow { display: flex; align-items: center; gap: 8px; font-weight: 400; }
+.workHoursRow input {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-family: inherit;
+}
+.workHoursField small { color: var(--ink-soft); font-weight: 400; font-size: 11px; }
+
+/* ── attendance donut chart (prompt.md point 2) ────────────────────── */
+
+.chartCard {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.chartCard h2 { margin: 0; align-self: flex-start; font-size: 15px; color: var(--green-800); }
+.donutWrap { padding: 4px 0; }
+.donutTotal { font-size: 22px; font-weight: 800; fill: var(--ink); }
+.donutTotalLabel { font-size: 10px; fill: var(--ink-soft); }
+.chartPresent { stroke: var(--green-600); }
+.chartAbsent { stroke: var(--red-500); }
+.chartLeave { stroke: var(--amber-600); }
+
+.chartLegend { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-direction: column; gap: 8px; }
+.chartLegend li { display: flex; align-items: center; gap: 8px; font-size: 12.5px; }
+.legendDot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+.legendDot.chartPresent { background: var(--green-600); }
+.legendDot.chartAbsent { background: var(--red-500); }
+.legendDot.chartLeave { background: var(--amber-600); }
+.legendLabel { color: var(--ink-soft); font-weight: 700; }
+.legendValue { margin-inline-start: auto; font-weight: 700; direction: ltr; }
+
+/* ── dashboard diagrams (prompt.md image-7, 2026-09-13) ───────────── */
+/* Rows follow the mock. RTL: a row's FIRST child sits on the right --
+   middle row: wide hourly chart right, department status left; bottom row:
+   bubble chart right, wide employees table left. */
+.dashRow { display: grid; gap: 16px; margin-bottom: 16px; }
+.dashRowWideFirst { grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); align-items: stretch; }
+.dashRowNarrowFirst { grid-template-columns: minmax(260px, 1fr) minmax(0, 2fr); align-items: start; }
+.dashStack { display: flex; flex-direction: column; gap: 16px; }
+@media (max-width: 1100px) {
+  .dashRowWideFirst, .dashRowNarrowFirst { grid-template-columns: 1fr; }
+}
+
+.dashCard {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  min-width: 0;
+}
+.dashCardHead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.dashCard h2 { margin: 0; font-size: 15px; color: var(--green-800); }
+
+/* The four arrival kinds (palette redone 2026-09-14, prompt.md point 9: late
+   used to be a lighter green, reading as a shade of "on time"). Early blue,
+   on time green, late amber, absent neutral gray. Checked with the dataviz
+   palette validator in both themes: lightness band and normal-vision
+   separation pass; green/amber is in the 6-8 colour-blind floor band, which is
+   covered by the legend text and % labels; gray is deliberately colourless. */
+:root {
+  --arr-early: #2a74b8;
+  --arr-onTime: #1b7a52;
+  --arr-late: #c26a12;
+  --arr-absent: #a9b3ae;
+}
+:root[data-theme="dark"] {
+  --arr-early: #4a8fce;
+  --arr-onTime: #2f9767;
+  --arr-late: #c47f2c;
+  --arr-absent: #667370;
+}
+.dashLegend { list-style: none; margin: 0; padding: 0; display: flex; gap: 14px; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+.dashLegend li { display: flex; align-items: center; gap: 6px; }
+.dot-early, .dot-onTime, .dot-late, .dot-absent { display: inline-block; width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+.dot-early { background: var(--arr-early); }
+.dot-onTime { background: var(--arr-onTime); }
+.dot-late { background: var(--arr-late); }
+.dot-absent { background: var(--arr-absent); }
+.bar-early, .bubble-early { fill: var(--arr-early); }
+.bar-onTime, .bubble-onTime { fill: var(--arr-onTime); }
+.bar-late, .bubble-late { fill: var(--arr-late); }
+.bar-absent, .bubble-absent { fill: var(--arr-absent); }
+.earlyTag {
+  display: inline-block;
+  margin-inline-start: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #1f6f80;
+  background: #e2f3f6;
+  border-radius: 999px;
+  padding: 1px 8px;
+  vertical-align: middle;
+}
+.chip-early { color: #1f6f80; background: #e2f3f6; }
+
+.hourSvg { width: 100%; height: auto; display: block; }
+.hourGrid { stroke: var(--line); stroke-width: 1; }
+.hourAxis { font-size: 10px; fill: var(--ink-soft); }
+.hourFuture .hourAxis { opacity: 0.45; }
+
+.deptList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.deptRow { display: flex; align-items: center; gap: 12px; }
+.deptMain { flex: 1; min-width: 0; }
+.deptName { display: block; font-size: 12.5px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+.deptBarRow { display: flex; align-items: center; gap: 8px; }
+.deptBar { flex: 1; height: 4px; border-radius: 999px; background: var(--line); overflow: hidden; }
+.deptBar span { display: block; height: 100%; border-radius: 999px; background: var(--green-800); }
+.deptRow:has(.deptFull) .deptBar span { background: var(--green-500); }
+.deptPct { font-size: 11px; color: var(--ink-soft); direction: ltr; min-width: 34px; }
+.deptHours { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: var(--ink-soft); direction: ltr; }
+.deptHours::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); }
+.deptFull::after { background: var(--green-500); }
+.deptNone::after { background: var(--red-500); }
+
+.bubbleSvg { width: 100%; max-width: 360px; height: auto; display: block; margin: 0 auto 6px; }
+.bubble circle { stroke: var(--card); stroke-width: 2; }
+.bubbleText { font-size: 12px; font-weight: 800; fill: #fff; }
+.bubbleTextDark { fill: var(--ink); }
+
+/* employees table header with the head-count, as in the mock */
+.tableHead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.tableHead h2 { margin: 0; font-size: 15px; color: var(--green-800); }
+.tableCount { font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+
+/* Employees table as tall as the attendance-status card beside it (prompt.md
+   point 6, 2026-09-14): height 0 keeps the table out of the row's height, so
+   the bubble card sets it; min-height 100% then fills that row, and the rows
+   scroll inside. Stacked (narrow screens) it keeps its natural height. */
+/* 2026-09-14 (later): the row is at least 560px tall so the table shows more
+   rows before scrolling; the bubble card stretches with it. */
+.dashRowNarrowFirst { align-items: stretch; min-height: 560px; }
+.dashRowNarrowFirst > .dashTableCard {
+  height: 0; min-height: 100%;
+  display: flex; flex-direction: column;
+  margin: 0;
+}
+.dashTableScroll { flex: 1 1 auto; min-height: 0; overflow: auto; }
+.dashTableScroll thead th { position: sticky; top: 0; z-index: 1; background: var(--green-800); }
+@media (max-width: 1100px) {
+  .dashRowNarrowFirst > .dashTableCard { height: auto; min-height: 0; }
+}
+@media print {
+  .dashRowNarrowFirst > .dashTableCard { height: auto; }
+  .dashTableScroll { overflow: visible; }
+}
+.dashCamRow { margin-bottom: 16px; }
+.chip-neutral { color: var(--ink-soft); background: var(--ground); }
+/* Monthly sheet: every visit of the day, one per line (2026-09-14) */
+.intervalList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; font-variant-numeric: tabular-nums; }
+.intervalList li { text-align: right; }
+/* Links styled as buttons (add-employee page, 2026-09-14) -- no link underline */
+a.btnPrimary, a.btnGhost { text-decoration: none; display: inline-flex; align-items: center; }
+
+/* Cameras as a row at the end of the dashboard (2026-09-13): the same small
+   tiles the old side column had, now side by side from the right (wrapping
+   when they don't fit). The head, "view all" link and empty message keep a
+   full row each. Scoped to the dashboard -- the Cameras page is untouched. */
+.dashStack > .camPanel {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 270px));
+  justify-content: start;
+  gap: 12px;
+}
+.dashStack > .camPanel > .camPanelHead,
+.dashStack > .camPanel > .camMore,
+.dashStack > .camPanel > .camEmpty { grid-column: 1 / -1; }
+
+.zoneTypeEditor {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 10px; margin: 4px 0; border-radius: 10px; background: var(--ground);
+}
+.zoneTypeToggle { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; font-weight: 700; }
+.zoneTypeToggle select, .zoneTypeToggle input {
+  padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; font-family: inherit;
+}
+.zoneTypeToggle small { color: var(--ink-soft); font-weight: 400; font-size: 11px; }
+
+/* Employees admin page -- add-employee card laid out to match image-4.png:
+   photo circle at the top (inline-start side, i.e. the right edge in this
+   RTL app -- see .addEmployeeTop's DOM order), name/email/code/role in a
+   two-column grid, work hours + department full-width, actions bottom. */
+.addEmployeeCard {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.addEmployeeTop { display: flex; gap: 24px; align-items: flex-start; }
+.addEmployeePhoto {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  width: 130px;
+}
+.addEmployeePhoto strong { font-size: 12.5px; color: var(--ink); }
+.addEmployeePhoto small { font-size: 11px; color: var(--ink-soft); }
+/* Staged multi-photo picker (PhotoPicker.tsx), reused by the add-employee
+   card and the existing-employee upload widget below. Flex-wrap rather than
+   a fixed grid so it packs into whatever width its container gives it -- a
+   narrow column here, a wide single row in .photoUpload. */
+.photoPicker { display: flex; flex-wrap: wrap; gap: 8px; }
+.photoThumb {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.photoThumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photoThumbPrimary { border-color: var(--green-500); }
+.photoThumbBadge {
+  position: absolute; bottom: 0; left: 0; right: 0; text-align: center;
+  font-size: 9px; font-weight: 700; color: #fff; background: rgba(20, 160, 94, 0.9);
+  padding: 1px 0;
+}
+.photoThumbRemove {
+  position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; padding: 0;
+  border: none; border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55); color: #fff;
+  font-size: 11px; line-height: 16px; cursor: pointer;
+}
+.photoThumbAdd {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  border: 2px dashed var(--line);
+  background: var(--ground);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--ink-soft);
+}
+.photoThumbAdd:hover { border-color: var(--green-500); }
+.photoThumbAdd.disabled { opacity: 0.5; pointer-events: none; }
+
+.addEmployeeGrid {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+}
+.fieldBox { display: flex; flex-direction: column; gap: 5px; font-size: 12.5px; font-weight: 700; color: var(--ink); }
+.fieldBox input {
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 400;
+}
+.fieldBox input:focus { outline: 2px solid var(--green-500); border-color: transparent; }
+.fieldBoxWide { grid-column: 1 / -1; }
+
+.addEmployeeActions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+
+.cardSubhead { margin: 0 0 16px; font-size: 15px; color: var(--green-800); }
+.rowInactive { opacity: 0.55; }
+.inlineEdit {
+  padding: 5px 8px; border: 1px solid var(--green-500); border-radius: 6px; font-size: 13px; font-family: inherit;
+}
+.employeeActions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.employeeActions a.btnGhost { text-decoration: none; }
+
+.photoUpload { padding: 10px; background: var(--ground); border-radius: 10px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.photoUploadBtn { display: inline-flex; align-items: center; cursor: pointer; }
+.photoUploadResults { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; }
+.uploadOk { color: var(--green-600); }
+.uploadFail { color: var(--red-500); }
+
+/* Violations panel (attendance page) */
+.violationsCard { margin-top: 16px; }
+.violationsHead { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.violationsHead h2 { margin: 0; font-size: 15px; color: var(--green-800); }
+.violationsBadge {
+  font-size: 12px; font-weight: 700; color: #fff; background: var(--red-500);
+  padding: 3px 10px; border-radius: 999px;
+}
+
+/* ── Fire/smoke live wall, history, incident detail, takeover (2026-09-05) ── */
+
+.liveWallBody { display: flex; gap: 14px; align-items: flex-start; }
+.liveWallMain { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.liveWallRail {
+  flex: 0 0 320px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+.liveWallRailHead {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-bottom: 1px solid var(--line);
+  font-size: 13px; font-weight: 700; color: var(--ink-soft);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.liveWallRailBody { flex: 1; min-height: 0; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.railCountPill {
+  background: var(--green-50); color: var(--green-700); border-radius: 999px;
+  padding: 1px 9px; font-size: 12px; font-weight: 800;
+}
+.railCountDanger { background: var(--red-50); color: var(--red-500); }
+.railDivider {
+  border-top: 1px dashed var(--line); margin-top: 4px; padding-top: 10px;
+  font-size: 11px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em;
+}
+
+.streamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 12px;
+}
+.streamTile {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #101512;
+  min-height: 240px;
+  border: 1.5px solid var(--line);
+}
+.streamTile .camFrame { width: 100%; height: 100%; display: block; object-fit: cover; min-height: 240px; }
+.streamTileFire { border: 3px solid var(--red-500); background: var(--red-50); }
+.streamTileSmoke { border: 2px solid var(--amber-600); background: var(--amber-50); }
+.streamTileOffline { display: grid; place-items: center; min-height: 240px; }
+.streamTileTop {
+  position: absolute; inset-inline: 0; top: 0; display: flex; justify-content: space-between;
+  padding: 3px 8px; background: rgba(0, 0, 0, 0.35); color: var(--red-500);
+  font-size: 11px; font-variant-numeric: tabular-nums; font-weight: 700;
+}
+.streamTileBottom {
+  position: absolute; inset-inline: 0; bottom: 0; display: flex; flex-direction: row;
+  align-items: baseline; gap: 8px; padding: 3px 8px; background: rgba(0, 0, 0, 0.55); color: #fff;
+  overflow: hidden; white-space: nowrap;
+}
+.streamTileBottom strong { font-size: 12px; flex: 0 0 auto; }
+.streamTileMeta { font-size: 10px; opacity: 0.85; font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; }
+
+.healthStrip {
+  display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+  background: var(--card); border-radius: 10px; padding: 8px 12px;
+  font-size: 12px; color: var(--ink-soft); box-shadow: var(--shadow);
+}
+.healthOk { color: var(--green-600); }
+.healthDown { color: var(--red-500); }
+
+.incidentCard {
+  border: 1.2px solid var(--line); border-radius: 8px; padding: 8px 10px;
+  display: flex; flex-direction: column; gap: 6px; font-size: 12.5px;
+}
+.incidentCardFire { border-color: var(--red-500); background: var(--red-50); }
+.incidentCardSmoke { border-color: var(--amber-600); background: var(--amber-50); }
+.incidentCardEnded { border-style: dashed; color: var(--ink-soft); background: var(--ground); }
+.incidentCardRow1 { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+.incidentCardRow2 { display: flex; gap: 10px; flex-wrap: wrap; color: var(--ink-soft); font-size: 11.5px; }
+.incidentCardSpacer { flex: 1; }
+.incidentCardActions { display: flex; gap: 8px; }
+
+.statusPill {
+  background: var(--green-50); color: var(--green-700); border-radius: 999px;
+  padding: 1px 9px; font-size: 11px; font-weight: 700;
+}
+.statusPillDanger { background: var(--red-500); color: #fff; }
+
+/* ── History page (3c) ─────────────────────────────────────────────── */
+
+.historyFilterBar { margin-bottom: 14px; padding: 10px 14px; }
+.historyActiveOnly { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-soft); }
+.historySearch {
+  flex: 1; min-width: 180px; padding: 8px 12px; border: 1px solid var(--line);
+  border-radius: 10px; background: var(--card); font-family: inherit; font-size: 13px; color: var(--ink);
+}
+.historyLayout { display: flex; gap: 14px; align-items: flex-start; }
+.historyVideoSection { flex: 1; min-width: 0; }
+.historyRail { flex: 0 0 280px; display: flex; flex-direction: column; gap: 12px; }
+
+.historyVideoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+}
+.historyVideoCard {
+  cursor: pointer; border-radius: 12px; overflow: hidden;
+  background: var(--card); box-shadow: var(--shadow);
+  border: 1.5px solid var(--line);
+}
+.historyVideoCard:hover { border-color: var(--ink-soft); }
+.historyVideoCard:focus-visible { outline: 2px solid var(--green-500); outline-offset: 2px; }
+.historyVideoCardFire { border-inline-start: 4px solid var(--red-500); }
+.historyVideoCardSmoke { border-inline-start: 4px solid var(--amber-600); }
+.historyVideoCardActive { box-shadow: 0 0 0 2px var(--red-500); }
+.historyVideoThumb {
+  position: relative; aspect-ratio: 16 / 10; background: #101512; overflow: hidden;
+}
+.historyVideoThumb .camFrame { width: 100%; height: 100%; object-fit: cover; display: block; }
+.historyVideoPlaceholder { color: var(--ink-soft); font-size: 12px; text-align: center; padding: 0 10px; }
+.historyVideoPlay {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  color: #fff; font-size: 22px; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+.historyVideoTop {
+  position: absolute; inset-inline: 0; top: 0; display: flex; justify-content: space-between;
+  align-items: center; gap: 6px; padding: 6px 8px; background: rgba(0, 0, 0, 0.45);
+  color: #fff; font-size: 11px; font-variant-numeric: tabular-nums; font-weight: 700;
+}
+.historyVideoInfo {
+  display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; font-size: 12px;
+}
+.historyVideoTime { color: var(--ink-soft); font-size: 11px; }
+.historySummary {
+  background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 12px 14px; font-size: 12.5px;
+}
+.historySummary ul { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+
+.miniChart { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 12px 14px; }
+.miniChartBars { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+.miniChartRow { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+.miniChartLabel { flex: 0 0 40px; color: var(--ink-soft); }
+.miniChartTrack { flex: 1; height: 8px; background: var(--ground); border-radius: 4px; overflow: hidden; }
+.miniChartFill { height: 100%; background: var(--green-500); }
+.miniChartValue { flex: 0 0 18px; text-align: end; font-weight: 700; }
+
+.incidentLifecycleLabel {
+  display: block; font-size: 10px; color: var(--ink-soft); text-transform: uppercase;
+  letter-spacing: 0.07em; font-weight: 700;
+}
+.incidentActiveText { color: var(--red-500); font-weight: 700; }
+
+/* ── Incident detail modal (3d) ───────────────────────────────────── */
+
+.incidentModal {
+  position: relative;
+  background: var(--card);
+  border-radius: 16px;
+  overflow: hidden;
+  width: min(960px, 94vw);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+}
+.incidentModalBody { display: flex; gap: 12px; padding: 12px; max-height: 78vh; }
+.incidentModalMain { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.incidentPlayer { width: 100%; max-height: 52vh; background: #101512; object-fit: contain; }
+.incidentModalRail {
+  flex: 0 0 280px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto;
+}
+.incidentLifecycle {
+  display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+.incidentNote {
+  border: 1px solid var(--red-500); background: var(--red-50); color: var(--red-500);
+  border-radius: 8px; padding: 10px 12px; font-size: 12px; line-height: 1.5;
+}
+.incidentActions { display: flex; gap: 8px; flex-wrap: wrap; }
+.incidentEventLog {
+  flex: 1; min-height: 0; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--ground); padding: 10px 12px; overflow-y: auto;
+}
+.incidentEventLog ul { margin: 8px 0 0; padding: 0; list-style: none; font-size: 11.5px; font-family: monospace; display: flex; flex-direction: column; gap: 4px; }
+
+.clipStrip { display: flex; gap: 6px; flex-wrap: wrap; }
+.clipStripBtn {
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  border-radius: 8px; padding: 6px 12px; font-family: inherit; font-size: 12px; cursor: pointer;
+}
+.clipStripBtnActive { border-color: var(--green-500); background: var(--green-50); color: var(--green-700); font-weight: 700; }
+
+/* ── Takeover alarm (3b) ──────────────────────────────────────────── */
+
+.takeover {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.takeoverWindow {
+  width: min(820px, 94vw);
+  max-height: min(760px, 90vh);
+  display: flex;
+  flex-direction: column;
+  background: #2a0f0a;
+  color: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08);
+}
+.takeoverBar {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  background: var(--red-500); padding: 10px 18px; font-size: 14px;
+}
+.takeoverHeadline { font-size: 18px; font-weight: 800; }
+.takeoverMeta { font-size: 13px; font-variant-numeric: tabular-nums; }
+.takeoverQueued { background: rgba(0,0,0,0.25); border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 700; }
+.takeoverSpacer { flex: 1; }
+.takeoverBody {
+  flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center;
+  gap: 16px; padding: 20px; overflow-y: auto;
+}
+.takeoverPlayer {
+  position: relative; width: min(720px, 92vw); flex: none;
+  border: 4px solid var(--red-500); border-radius: 8px; overflow: hidden; background: #000;
+}
+.takeoverPlayer .camFrame { width: 100%; display: block; aspect-ratio: 16 / 10; object-fit: cover; }
+.takeoverLiveTag {
+  position: absolute; top: 8px; inset-inline-start: 8px; background: #fff; color: var(--red-500);
+  font-size: 11px; font-weight: 800; border-radius: 4px; padding: 2px 8px;
+}
+.takeoverBurningTag {
+  position: absolute; bottom: 8px; inset-inline-end: 8px; background: #fff; color: var(--red-500);
+  font-size: 11px; font-weight: 800; border-radius: 4px; padding: 2px 8px; font-variant-numeric: tabular-nums;
+}
+.takeoverActions { display: flex; gap: 12px; }
+.takeoverAckBtn { font-size: 17px; padding: 12px 30px; }
+.takeoverHint { margin: 0; font-size: 12px; color: #e8b7ac; font-family: monospace; }
+.takeoverOthers { width: 100%; }
+.takeoverOthersLabel { display: block; font-size: 11px; color: #e8b7ac; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+.takeoverOthersGrid { display: flex; gap: 14px; flex-wrap: wrap; }
+.takeoverOtherTile { position: relative; width: 180px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); }
+.takeoverOtherTile .camFrame { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+.takeoverOtherTile .camName {
+  position: absolute; bottom: 4px; inset-inline-start: 4px; background: rgba(0,0,0,0.6);
+  color: #fff; font-size: 11px; border-radius: 4px; padding: 1px 6px;
+}
+
+
+/* ── access alerts: side popup + alerts page (2026-11-02) ─────────────────── */
+
+.railBtn { position: relative; }
+.railCount {
+  position: absolute; top: 2px; inset-inline-start: 2px;
+  min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px;
+  background: var(--red-500); color: #fff; font-size: 10px; font-weight: 800;
+  display: grid; place-items: center; border: 1.5px solid var(--green-900);
+}
+
+.alertToasts {
+  position: fixed; top: 108px; left: 24px; z-index: 1000;
+  display: flex; flex-direction: column; gap: 10px; width: min(360px, calc(100vw - 32px));
+}
+.alertToast {
+  display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px;
+  background: var(--card); color: var(--ink); border-radius: var(--radius);
+  border: 1px solid var(--red-500); border-inline-start: 6px solid var(--red-500);
+  box-shadow: 0 8px 24px rgba(214, 69, 80, 0.28);
+  animation: alertToastIn 0.25s ease-out;
+}
+@keyframes alertToastIn { from { transform: translateX(-24px); opacity: 0; } to { transform: none; opacity: 1; } }
+.alertToastBody { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.alertToastBody strong { color: var(--red-500); font-size: 15px; }
+.alertToastEn { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+.alertToastMeta { font-size: 12px; color: var(--ink-soft); }
+.alertToastLink { font-size: 12px; font-weight: 700; color: var(--green-600); margin-top: 4px; }
+.alertToastClose {
+  border: 0; background: transparent; color: var(--ink-soft); font-size: 20px; line-height: 1; cursor: pointer;
+}
+.alertPhoto { border-radius: 50%; object-fit: cover; background: var(--ground); border: 1px solid var(--line); flex: none; }
+.alertPhotoUnknown { display: grid; place-items: center; color: var(--red-500); background: var(--red-50); font-weight: 800; font-size: 20px; }
+
+.alertsNow { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 16px; margin-bottom: 14px; border-inline-start: 6px solid var(--green-500); }
+.alertsNowOn { border-inline-start-color: var(--red-500); background: var(--red-50); }
+.alertsNow h2 { margin: 0 0 6px; font-size: 18px; color: var(--green-800); }
+.alertsNowOn h2 { color: var(--red-500); }
+.alertsNow p { margin: 0; color: var(--ink-soft); }
+.alertCards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-top: 8px; }
+.alertCard { display: flex; gap: 12px; align-items: center; background: var(--card); border-radius: var(--radius); padding: 10px 12px; border: 1px solid var(--red-500); }
+.alertCard > div { display: flex; flex-direction: column; gap: 2px; }
+.whitelistEn { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+.whitelistHint { margin: 0 0 10px; color: var(--ink-soft); font-size: 13px; }
+.whitelistName { display: inline-flex; align-items: center; gap: 10px; }
+
+.scopeCard { margin-bottom: 14px; }
+.scopeCard h2 { margin: 0 0 8px; font-size: 17px; color: var(--green-800); }
+.scopeList { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.scopeList li { display: flex; align-items: center; gap: 10px; }
+.scopeCam { font-weight: 800; min-width: 64px; }

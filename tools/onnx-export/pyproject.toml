@@ -1,0 +1,23 @@
+# The ONNX export of the segmentation model (`just barber-seg-model`, export_yolo26_seg.py in
+# perception/models/DeepStream-Yolo-Seg/), locked in uv.lock beside this file (DEPENDENCIES.md). Its own project, not a
+# group of the root lock: it needs the ultralytics the export was made with (8.4.172) while the app ships another
+# (8.4.150), and one lock holding both pulls the app's shared packages forward on every re-lock.
+#
+# Locked 2026-11-03 to what the recipe resolved that day: no record says which onnx/onnxslim/torch the committed
+# yolo26l-seg-r384.onnx was exported with (2026-10-06, on another machine).
+[project]
+name = "iris-onnx-export"
+version = "0.1.0"
+description = "The seg model's ONNX export: dependencies only."
+requires-python = "==3.12.*"  # what the recipe ran with (`uv run --python 3.12`)
+dependencies = [
+    "ultralytics==8.4.172",
+    "onnx",
+    "onnxslim",
+]
+
+[tool.uv]
+package = false
+required-version = ">=0.13.6,<0.14"  # uv 0.13.x: one lock format, so the lock never churns (DEPENDENCIES.md, "uv")
+# Run on the GPU server only; resolving for other platforms would lock wheels nothing installs.
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]

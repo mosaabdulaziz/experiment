@@ -1,0 +1,19 @@
+# Palm Hills, a run on recordings (2026-10-18, user): the shop's 16 Oct from the recorder's exports, since 2026-10-21
+# the whole day, 09:30-23:59:59 (52200 s; was 09:30-19:00),
+# synced into one file per camera (data/BekkyBarber/palm_hills2/synced), played by test_streamer as ph-* (no ph-4;
+# site.sh palm-hills-16oct). The clip site's settings (barber.palm-hills.yaml), with its own DB and crops so the live
+# site's rows stay as they are. Its reports give the footage's date and times (footage_start), and the day's report
+# (pdf + html, en + ar: daily_report) is written when the recording plays to its end, before the loop clears the lap.
+extends: barber.palm-hills.yaml
+
+data_dir: "data/palm-hills-16oct"
+crops_dir: "../../data/barber/crops-palm-hills-16oct"   # = sidecar.palm-hills-16oct.yaml's customer_crops_dir
+footage_start: 2026-10-16T09:30:00                     # the synced files' first frame (their .sync.json)
+
+cameras:
+  - {id: ph-1, name: "Wash area", clip_duration_s: 52200, clear_on_loop: true}
+  - {id: ph-2, name: "Stations wide", clip_duration_s: 52200, clear_on_loop: true}
+  - {id: ph-3, name: "Reception front", clip_duration_s: 52200, clear_on_loop: true}
+  - {id: ph-5, name: "Reception lounge", clip_duration_s: 52200, clear_on_loop: true}
+  - {id: ph-6, name: "Pedicure", clip_duration_s: 52200, clear_on_loop: true}
+  - {id: ph-7, name: "VIP room", clip_duration_s: 52200, clear_on_loop: true}

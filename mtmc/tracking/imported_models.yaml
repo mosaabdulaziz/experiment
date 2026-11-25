@@ -1,0 +1,407 @@
+# Models the products load that were NOT trained by a tracked run in this repo, imported into MLflow by
+# `python -m mtmc.tracking.import_models` (sub-task 3 of the MLflow story; spike D2, Q3, Q4, Q5, Q7).
+#
+# The import creates one run per entry (experiment `imported-models`) with the provenance below, the params and
+# metrics of any existing record, the record files as artifacts, and the model files via log_model_file (which
+# writes <file>.mlflow.json beside each). It does NOT register models: registration of trained and imported models
+# alike is the registry sub-task's job.
+#
+# Metric steps are 0-based epochs (run tag import.step_base=0): results.csv and the Kaggle training-report.md number
+# epochs from 1, but Ultralytics' MLflow callback logs step = trainer.epoch (0-based), so the import logs epoch N at
+# step N-1 and imported runs line up with newly trained ones.
+#
+# Every value here comes from a file in this repo, cited in `evidence`. Nothing is filled in from memory:
+#   provenance: unknown        -> no record of where the file came from
+#   gaps: [...]                -> what is missing from an otherwise known provenance
+#
+# Fields:
+#   id                 stable entry id (run name, tag import.catalog_entry)
+#   capability         the registered model name it will become a version of (D2)
+#   source             imported | kaggle
+#   files              the model file first (its sha256 makes the import key), then companions the runtime loads
+#                      with it (labels, metadata the runtime reads); each is logged with log_model_file
+#   expected_sha256    pins this repo already records for these files; a mismatch skips the entry
+#   records            existing training/eval records: parsed into params/metrics and logged as artifacts
+#                      kinds: ultralytics_args, ultralytics_results, paddle_config, ocr_training_report, staff_json
+#   artifacts          other record files, logged as artifacts only
+#   data               datasets it was trained on, by .dvc pointer (data.<name>.dvc_md5 tags)
+#   provenance         origin and how the file was produced, or `unknown`
+#   evidence           where in the repo the provenance comes from
+
+entries:
+
+  # ---- multicam (El-Mohandes) ---------------------------------------------------------------------------------
+  - id: vehicle-detector/vehicle_yolo11s_1cls_v3
+    capability: vehicle-detector
+    source: imported
+    files:
+      - products/el-mohandes/models/vehicle_1280_1cls/best.onnx
+      - products/el-mohandes/models/vehicle_1280_1cls/labels.txt
+    records:
+      - {kind: ultralytics_args, file: products/el-mohandes/runs/vehicle_detector/vehicle_yolo11s_1cls_v3/args.yaml}
+      - {kind: ultralytics_results, file: products/el-mohandes/runs/vehicle_detector/vehicle_yolo11s_1cls_v3/results.csv}
+    data:
+      vehicle_detection_1cls: products/el-mohandes/datasets/vehicle_detection_1cls.dvc
+    provenance:
+      origin: in-house training run vehicle_yolo11s_1cls_v3 (mtmc/finetune_vehicle_detector.py, PRO6000 training server)
+      base_weights: yolo11s.pt (args.yaml `model`)
+      exported_by: mtmc/export_vehicle_onnx.py at 1280, dynamic batch, DeepStreamOutput head, no baked NMS
+      gaps: [ultralytics version of the run is not recorded]
+    evidence:
+      - DATA.md "Retired versions" (the deployed vehicle_1280_1cls/best.pt is run _v3's best.pt)
+      - perception/models/DeepStream-Yolo/config_infer_primary_vehicle_1cls.txt:5-8
+
+  - id: plate-detector/plate_640
+    capability: plate-detector
+    source: imported
+    files:
+      - products/el-mohandes/models/plate_640/best.onnx
+      - products/el-mohandes/models/plate_640/labels.txt
+    provenance:
+      origin: 640 export of products/el-mohandes/models/finetuned/best.pt (the in-house finetuned plate detector)
+      gaps: [exporter and export settings not recorded, no training run record for finetuned/best.pt]
+    evidence:
+      - .gitignore comment above `!perception/models/DeepStream-Yolo/config_sgie_plate.txt`
+      - DATA.md layout ("finetuned = the deployed one, plate_640 = its 640 export")
+
+  - id: plate-detector/finetuned_1280
+    capability: plate-detector
+    source: imported
+    files:
+      - products/el-mohandes/models/finetuned/best.onnx
+    provenance:
+      origin: in-house finetune of license-plate-finetune-v1s.pt (Hugging Face morsetechlab/yolov11-license-plate-detection, AGPL-3.0) with mtmc/finetune_plate_detector.py
+      production: false   # Q5 working assumption: production is what the configs load (plate_640)
+      gaps: [training run record not kept, base weights revision not recorded, exporter not recorded]
+    evidence:
+      - mtmc/models/THIRD_PARTY.md (base weights)
+      - mtmc/finetune_plate_detector.py:30
+      - commit 6c3dcaf (finetuned/v2 moved to finetuned/, hashes unchanged)
+
+  - id: plate-ocr/v5_arabic_mobile
+    capability: plate-ocr
+    source: kaggle
+    files:
+      - products/el-mohandes/models/v5_arabic_mobile-fine-tuned/inference/plate_rec.onnx
+      - products/el-mohandes/models/v5_arabic_mobile-fine-tuned/plate_dict.txt
+    records:
+      - {kind: paddle_config, file: products/el-mohandes/models/v5_arabic_mobile-fine-tuned/effective.yml}
+      - {kind: ocr_training_report, file: products/el-mohandes/models/v5_arabic_mobile-fine-tuned/training-report.md}
+    artifacts:
+      - products/el-mohandes/models/v5_arabic_mobile-fine-tuned/epoch-metrics.csv
+      - products/el-mohandes/models/v5_arabic_mobile-fine-tuned/test-metrics.txt
+      - products/el-mohandes/models/v5_arabic_mobile-fine-tuned/test-effective.yml
+      - products/el-mohandes/models/v5_arabic_mobile-fine-tuned/split.json
+    provenance:
+      origin: PaddleOCR arabic_PP-OCRv5_mobile_rec fine-tuned on Kaggle (2x Tesla T4)
+      notebook: products/el-mohandes/training/notebooks/PP-OCRv5_arabic_mobile_direct_Kaggle.ipynb
+      exported_by: mtmc/export_plate_ocr_onnx.py (paddle2onnx, opset 14)
+      gaps: [Kaggle notebook URL / version not recorded, paddle and paddle2onnx versions not recorded]
+    evidence:
+      - effective.yml Global.model_name, training-report.md:3
+      - mtmc/export_plate_ocr_onnx.py
+
+  - id: vehicle-reid/torchvision_resnet50
+    capability: vehicle-reid
+    source: imported
+    files:
+      - mtmc/models/reid/resnet50-11ad3fa6.pth
+    provenance:
+      origin: torchvision ResNet50 ImageNet weights (the module falls back to ResNet50_Weights.DEFAULT when the file is missing)
+      gaps: [download URL and torchvision version not recorded in the repo]
+    evidence:
+      - perception/modules/mtmc/core/_reid.py:51-59
+
+  # ---- barber ---------------------------------------------------------------------------------------------------
+  - id: staff-classifier/bekky_r2
+    capability: staff-classifier
+    source: imported
+    files:
+      - perception/models/staff/staff_dinov2_s.onnx
+      - perception/models/staff/staff_dinov2_s.json
+    records:
+      - {kind: staff_json, file: perception/models/staff/staff_dinov2_s.json}
+    provenance:
+      origin: in-house staff classifier trainer, not in this repo (Q3); source_run, dataset, init in the .json
+      gaps: [trainer code and its environment are not in the repo]
+    evidence:
+      - perception/models/staff/staff_dinov2_s.json
+      - products/barber/sidecar.yaml (round 2 notes)
+
+  - id: staff-classifier/palm_hills_r4
+    capability: staff-classifier
+    source: imported
+    files:
+      - perception/models/staff/staff_dinov2_s_palm.onnx
+      - perception/models/staff/staff_dinov2_s_palm.json
+    records:
+      - {kind: staff_json, file: perception/models/staff/staff_dinov2_s_palm.json}
+    provenance:
+      origin: in-house staff classifier trainer, not in this repo (Q3); source_run, dataset, init in the .json
+      gaps: [trainer code and its environment are not in the repo]
+    evidence:
+      - perception/models/staff/staff_dinov2_s_palm.json
+      - products/barber/sidecar.palm-hills.yaml:18-24
+
+  - id: staff-classifier/palm_hills_r3
+    capability: staff-classifier
+    source: imported
+    files:
+      - perception/models/staff/staff_dinov2_s_palm_r3.onnx
+      - perception/models/staff/staff_dinov2_s_palm_r3.json
+    records:
+      - {kind: staff_json, file: perception/models/staff/staff_dinov2_s_palm_r3.json}
+    provenance:
+      origin: in-house staff classifier trainer, not in this repo (Q3); source_run, dataset, init in the .json
+      gaps: [trainer code and its environment are not in the repo]
+    evidence:
+      - perception/models/staff/staff_dinov2_s_palm_r3.json
+      - products/barber/sidecar.palm-hills.yaml:18-24
+
+  - id: staff-clip/clip_vit_b32
+    capability: staff-clip
+    source: imported
+    files:
+      - perception/models/staff/vision_model.onnx
+      - perception/models/staff/text_model.onnx
+      - perception/models/staff/tokenizer.json
+      - perception/models/staff/prompts.json
+    expected_sha256:
+      perception/models/staff/vision_model.onnx: fd6e1402a588279d1723c7534d4bcba5bc0b14b47dfab0e46f8c47b8270d7d40
+      perception/models/staff/text_model.onnx: 3f6571f5bad13a97c469c1622e1cfc4d9aef78b79fdbfcff804ca357bfada8cc
+      perception/models/staff/tokenizer.json: f7f3b7af117d467b58374797691a6438d3e6b9e9cef800dfd5dced7f697a90cd
+    provenance:
+      origin: Hugging Face Xenova/clip-vit-base-patch32 (onnx/vision_model.onnx, onnx/text_model.onnx, tokenizer.json)
+      prompts: perception/models/staff/prompts.json, built offline with the text tower and tokenizer
+      gaps: [downloaded from the `main` revision, not a pinned commit (the sha256 pin stands in for it)]
+    evidence:
+      - justfile recipe barber-staff-model
+      - perception/pipeline/models.staff.sha256
+
+  - id: person-reid/tao_swin_t
+    capability: person-reid
+    source: imported
+    files:
+      - models/reid/swin_tiny_market1501_aicity156_featuredim256.onnx
+    expected_sha256:
+      models/reid/swin_tiny_market1501_aicity156_featuredim256.onnx: 37b008d887495d5fbad31c72aadbf381c5456cb619e0e2a9c246a6d48a2932ff
+    provenance:
+      origin: NVIDIA NGC nvidia/tao/reidentificationnet_transformer, version deployable_v1.0
+      url: https://api.ngc.nvidia.com/v2/models/nvidia/tao/reidentificationnet_transformer/versions/deployable_v1.0/files/swin_tiny_market1501_aicity156_featuredim256.onnx
+    evidence:
+      - justfile recipe barber-reid-model
+      - perception/pipeline/models.reid.sha256
+
+  - id: tracker-reid/tao_resnet50
+    capability: tracker-reid
+    source: imported
+    files:
+      - models/tracker/resnet50_market1501_aicity156.onnx
+    expected_sha256:
+      models/tracker/resnet50_market1501_aicity156.onnx: 0e21d09278508ec835955f422a9fdd3cd59b2a6ecdef98d705f388f33cebac2b
+    provenance:
+      origin: NVIDIA NGC nvidia/tao/reidentificationnet, version deployable_v1.2
+      url: https://api.ngc.nvidia.com/v2/models/nvidia/tao/reidentificationnet/versions/deployable_v1.2/files/resnet50_market1501_aicity156.onnx
+    evidence:
+      - justfile recipe barber-reid-model (the sha256 pin)
+      - products/barber/tracker.yml:11-14
+
+  - id: person-segmenter/yolo26l_seg_r384
+    capability: person-segmenter
+    source: imported
+    files:
+      - perception/models/DeepStream-Yolo-Seg/yolo26l-seg-r384.onnx
+      - perception/models/DeepStream-Yolo-Seg/labels.txt
+    provenance:
+      origin: Ultralytics yolo26l-seg.pt, release v8.4.0 (sha256 636024306410afa1732692322fba57d22ea2b1c2f07613fcee131a93d7dd380c)
+      url: https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26l-seg.pt
+      exported_by: perception/models/DeepStream-Yolo-Seg/export_yolo26_seg.py, 640x384, dynamic batch, simplify, ultralytics 8.4.172
+      gaps: [onnx/onnxslim/torch versions of the committed export not recorded (tools/onnx-export locks them for the next one)]
+    evidence:
+      - justfile recipe barber-seg-model
+
+  - id: kids-car-detector/yolo26n_416
+    capability: kids-car-detector
+    source: imported
+    files:
+      - perception/models/kids_car/kids_car.onnx
+    provenance: unknown
+    notes: commit f3c83fc says an in-house YOLO26n, one class, 416, with held-out results; no training code, data or record
+
+  # ---- attendance / fall_detection ------------------------------------------------------------------------------
+  - id: object-detector/yolo11x
+    capability: object-detector
+    source: imported
+    files:
+      - perception/models/DeepStream-Yolo/yolo11x.onnx
+      - perception/models/DeepStream-Yolo/labels.txt
+    provenance: unknown
+    notes: no record of the source weights or the exporter; the file predates the one-repo refactor (49e019d)
+
+  - id: fire-detector/fire_smoke_box
+    capability: fire-detector
+    source: imported
+    files:
+      - perception/models/DeepStream-Yolo-Fire/fire_smoke_box.onnx
+      - perception/models/DeepStream-Yolo-Fire/labels_fire_smoke_box.txt
+    provenance:
+      origin: Hugging Face weslleyskah/fire_smoke_detection_box, weights/best.pt (YOLO26n on FASDD_CV, 100 epochs, imgsz 640)
+      exported_by: perception/models/DeepStream-Yolo-Fire/export_raw_anchor_onnx.py
+      licence: see perception/models/DeepStream-Yolo-Fire/README.md "Licence" (deliberate exception)
+      gaps: [Hugging Face revision not recorded]
+    evidence:
+      - perception/models/DeepStream-Yolo-Fire/README.md:13-20
+
+  - id: face-detector/yolov8n_face
+    capability: face-detector
+    source: imported
+    files:
+      - perception/models/DeepStream-Yolo-Face/yolov8n-face.onnx
+      - perception/models/DeepStream-Yolo-Face/labels.txt      # config_sgie_face.txt labelfile-path (git-tracked)
+    provenance: unknown
+    notes: the folder's README is upstream DeepStream-Yolo-Face's and lists candidate sources, but not which one this file is
+
+  - id: face-detector/face_det_lite
+    capability: face-detector
+    source: imported
+    files:
+      - perception/models/DeepStream-Yolo-Face/face_det_lite.onnx
+      - perception/models/DeepStream-Yolo-Face/labels.txt      # config_sgie_face.txt labelfile-path (git-tracked)
+    provenance:
+      origin: Qualcomm Lightweight-Face-Detection (face_det_lite), QFD_V3_superlite_060525_50_pickled.pt (qai_hub_models v0.66.0)
+      url: https://qaihub-public-assets.s3.us-west-2.amazonaws.com/qai-hub-models/models/face_det_lite/v3/QFD_V3_superlite_060525_50_pickled.pt
+      weights_sha256: 7fb1101957f9518fcd7889ab9f558ad058f265cb6d30d2e08184fa71f0bf8f1e
+      exported_by: perception/models/DeepStream-Yolo-Face/export_face_det_lite.py (opset 18, dynamic batch, [batch, 4800, 15])
+      licence: BSD-3-Clause
+    evidence:
+      - perception/models/DeepStream-Yolo-Face/export_face_det_lite.py
+      - perception/models/DeepStream-Yolo-Face/config_sgie_face.txt
+
+  - id: face-recognizer/buffalo_l
+    capability: face-recognizer
+    source: imported
+    # Every .onnx in the pack, because FaceAnalysis loads them all: insightface 1.0.1 (the version perception/uv.lock
+    # pins) globs buffalo_l/*.onnx and opens each in an onnxruntime InferenceSession
+    # (app/face_analysis.py:46-60, model_zoo/model_zoo.py:40) before `allowed_modules` drops the tasks it does not use.
+    # In the repo under DVC since 2026-11-05 (perception/insightface_pack.py: every runtime loads it from here with
+    # FaceAnalysis(root=...), nothing downloads it). The main file (the recognizer's ArcFace) comes first.
+    files:
+      - perception/models/insightface/models/buffalo_l/w600k_r50.onnx
+      - perception/models/insightface/models/buffalo_l/det_10g.onnx
+      - perception/models/insightface/models/buffalo_l/1k3d68.onnx
+      - perception/models/insightface/models/buffalo_l/2d106det.onnx
+      - perception/models/insightface/models/buffalo_l/genderage.onnx
+    expected_sha256:
+      perception/models/insightface/models/buffalo_l/w600k_r50.onnx: 4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43
+      perception/models/insightface/models/buffalo_l/det_10g.onnx: 5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91
+      perception/models/insightface/models/buffalo_l/1k3d68.onnx: df5c06b8a0c12e422b2ed8947b8869faa4105387f199c477af038aa01f9a45cc
+      perception/models/insightface/models/buffalo_l/2d106det.onnx: f001b856447c413801ef5c42091ed0cd516fcd21f2d6b79635b1e733a7109dbf
+      perception/models/insightface/models/buffalo_l/genderage.onnx: 4fde69b1c810857b88c64a335084f1c3fe8f01246c9a191b48c7bb756d6652fb
+    provenance:
+      origin: https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip
+      release: InsightFace v0.7
+      zip_sha256: 80ffe37d8a5940d59a7384c201a2a38d4741f2f3c51eef46ebb28218a7b0ca2f
+      zip_size_bytes: 288621354
+      downloaded: 2026-11-05, unpacked unmodified (five files at the zip's top level)
+      same_bytes_as: >-
+        the model-zoo release's buffalo_l.zip, which insightface 2.0 (the app) downloads: GitHub publishes its digest
+        sha256:80ffe37d8a5940d59a7384c201a2a38d4741f2f3c51eef46ebb28218a7b0ca2f, equal to the v0.7 zip's sha256
+      pins_checked: >-
+        w600k_r50.onnx and det_10g.onnx match the pins the running sidecar images were checked against
+        (perception/pipeline/Dockerfile at 153f318; now tests/test_dockerfile_targets.py BUFFALO_L_SHA256)
+      licence: InsightFace pretrained models are for non-commercial research purposes only (flagged to the lead)
+      gaps: [no record of how InsightFace trained or exported the pack]
+    evidence:
+      - perception/pipeline/Dockerfile:84-96 at 153f318 (the two pins; the image no longer downloads the pack)
+      - https://api.github.com/repos/deepinsight/insightface/releases/tags/model-zoo (buffalo_l.zip digest)
+
+  - id: face-recognizer/auraface
+    capability: face-recognizer
+    source: imported
+    files:
+      - perception/models/insightface/models/auraface/glintr100.onnx
+    expected_sha256:
+      perception/models/insightface/models/auraface/glintr100.onnx: a7933ea5330113b01c9b60351d8f4c33003f145d8470ac5f0e52ee2effe25c60
+    provenance:
+      origin: https://huggingface.co/fal/AuraFace-v1/resolve/main/glintr100.onnx
+      licence: Apache-2.0
+      notes: >-
+        Commercial replacement for buffalo_l (glintr100 ResNet-100 ArcFace, 512-D embeddings).
+        Loaded via perception/insightface_pack.py shim paired with face_det_lite.onnx for detection.
+    evidence:
+      - perception/insightface_pack.py
+      - benchmarks/results/FACE_DETECTOR_BENCHMARK_SUMMARY.md
+
+  - id: pose-estimator/yolo26x_pose
+    capability: pose-estimator
+    source: imported
+    files:
+      - perception/models/DeepStream-Yolo-Pose/yolo26x-pose.onnx
+      - perception/models/DeepStream-Yolo-Pose/labels.txt
+    provenance:
+      origin: Ultralytics yolo26x-pose.pt (products/fall_detection/weights/yolo26x-pose.pt.dvc, config.yaml model_name)
+      exported_by: products/fall_detection/export_pose.py (the product's pose exporter; boxes/scores/keypoints, dynamic batch)
+      gaps: [weights release/URL not recorded, no record of the export run that produced this ONNX or its environment]
+    evidence:
+      - products/fall_detection/README.md:31-38
+      - products/fall_detection/export_pose.py
+
+  - id: fall-classifier/mmaction2_j_jm
+    capability: fall-classifier
+    source: imported
+    files:
+      - products/fall_detection/weights/mmaction2_joint.pth
+      - products/fall_detection/weights/mmaction2_jm.pth
+    expected_sha256:
+      products/fall_detection/weights/mmaction2_joint.pth: 484a394a50246032fef9694396096902909784e8618ccc845d2859dc2b952fea
+      products/fall_detection/weights/mmaction2_jm.pth: f18eb408a42eebced02fc0e0dfeed2c6edb320cc1752abc6df855dff0845fc6d
+    provenance:
+      origin: the fall-detection vendor's release, vendor commit e31325a (the two streams the config loads, j and jm)
+      gaps: [release URL not recorded; the vendor checkout is a local path (F:\fall_detection_module)]
+    evidence:
+      - products/fall_detection/docs/PROVENANCE.md:3-5, :90-94
+      - products/fall_detection/fall_detection/tsstg_model.py:122-131
+      - products/fall_detection/config.yaml:16-18
+
+  # ---- proximity ------------------------------------------------------------------------------------------------
+  - id: person-segmenter/yolo26l_seg_736x1280
+    capability: person-segmenter
+    source: imported
+    files:
+      - perception/models/DeepStream-Yolo-Seg/yolo26l-seg-736x1280.onnx
+      - perception/models/DeepStream-Yolo-Seg/labels.txt
+    provenance:
+      origin: Ultralytics yolo26l-seg.pt, release v8.4.0 (sha256 636024306410afa1732692322fba57d22ea2b1c2f07613fcee131a93d7dd380c)
+      url: https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26l-seg.pt
+      exported_by: >-
+        the recipe that makes it: `just proximity-models` runs perception/models/DeepStream-Yolo-Seg/export_yolo26_seg.py
+        -s 736 1280 --dynamic --simplify with ultralytics 8.4.172 (onnx and onnxslim unpinned)
+      gaps:
+        - no record that the DVC file is that recipe's output (no export run, date, machine or log)
+        - onnx/onnxslim/torch versions of the export not recorded
+        - no evaluation of this 1280 export; the accuracy in RESEARCH 4.1 is not tied to these bytes
+    evidence:
+      - justfile recipe proximity-models (the .pt pin and the export command)
+      - commit 2ae772f (the file put under DVC, 2026-11-03), commit e75e47b (the 1280 camera profile)
+      - products/proximity/sidecar.yaml (pgie_config config_infer_primary_yolo26l_seg_1280.txt)
+
+  - id: depth-estimator/yolo26m_depth_736x1280
+    capability: depth-estimator
+    source: imported
+    files:
+      - perception/models/depth/yolo26m-depth-736x1280.onnx
+    provenance:
+      origin: Ultralytics yolo26m-depth.pt, release v8.4.0 (sha256 c0ff310571f0f159436e95a2a4fa3f8c40e1fbf36fac66a211347bd189990165)
+      url: https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26m-depth.pt
+      exported_by: >-
+        the recipe that makes it: `just proximity-models` runs YOLO('yolo26m-depth.pt').export(format='onnx',
+        imgsz=[736, 1280], simplify=True, device='cpu') with ultralytics 8.4.172 (onnx and onnxslim unpinned)
+      gaps:
+        - no record that the DVC file is that recipe's output (no export run, date, machine or log)
+        - onnx/onnxslim/torch versions of the export not recorded
+        - no evaluation record of the depth model; the depth check's cut-off (depth_max_gap) was tuned on Ticket 3's
+          labelled pairs (perception/modules/proximity/README.md), not recorded as a metric
+    evidence:
+      - justfile recipe proximity-models (the .pt pin and the export command)
+      - commit 2ae772f (the file put under DVC, 2026-11-03)
+      - products/proximity/sidecar.yaml (modules.proximity.depth_model)

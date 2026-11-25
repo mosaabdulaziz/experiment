@@ -1,0 +1,97 @@
+# go2rtc for the scale13 test: the 15 raw-cam-N ingests the streamer pushes into (the sidecar pulls
+# rtsp://go2rtc:8554/raw-cam-N, the original codec untouched), plus the browser-facing cam-N
+# (original first, lazy ffmpeg transcode as the fallback). Same shape as the main go2rtc.yaml,
+# without its real-camera pulls.
+log:
+  level: info
+api:
+  listen: ":1984"
+  origin: "*"
+webrtc:
+  listen: ":8555"
+  candidates:
+    - 10.2.0.60:38555     # the server's LAN address and the host port mapped to 8555
+  ice_servers: []
+rtsp:
+  listen: ":8554"
+  pkt_size: 1472
+preload:
+  raw-cam-1: "video"
+  raw-cam-2: "video"
+  raw-cam-3: "video"
+  raw-cam-4: "video"
+  raw-cam-5: "video"
+  raw-cam-6: "video"
+  raw-cam-7: "video"
+  raw-cam-8: "video"
+  raw-cam-9: "video"
+  raw-cam-10: "video"
+  raw-cam-11: "video"
+  raw-cam-12: "video"
+  raw-cam-13: "video"
+  raw-cam-14: "video"
+  raw-cam-15: "video"
+ffmpeg:
+  bin: ffmpeg
+  h264: "-codec:v libx264 -g:v 30 -preset:v superfast -tune:v zerolatency -profile:v main -level:v 4.1"
+streams:
+  raw-cam-1:
+  raw-cam-2:
+  raw-cam-3:
+  raw-cam-4:
+  raw-cam-5:
+  raw-cam-6:
+  raw-cam-7:
+  raw-cam-8:
+  raw-cam-9:
+  raw-cam-10:
+  raw-cam-11:
+  raw-cam-12:
+  raw-cam-13:
+  raw-cam-14:
+  raw-cam-15:
+  cam-1:
+    - rtsp://127.0.0.1:8554/raw-cam-1
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-1#video=h264
+  cam-2:
+    - rtsp://127.0.0.1:8554/raw-cam-2
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-2#video=h264
+  cam-3:
+    - rtsp://127.0.0.1:8554/raw-cam-3
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-3#video=h264
+  cam-4:
+    - rtsp://127.0.0.1:8554/raw-cam-4
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-4#video=h264
+  cam-5:
+    - rtsp://127.0.0.1:8554/raw-cam-5
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-5#video=h264
+  cam-6:
+    - rtsp://127.0.0.1:8554/raw-cam-6
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-6#video=h264
+  cam-7:
+    - rtsp://127.0.0.1:8554/raw-cam-7
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-7#video=h264
+  cam-8:
+    - rtsp://127.0.0.1:8554/raw-cam-8
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-8#video=h264
+  cam-9:
+    - rtsp://127.0.0.1:8554/raw-cam-9
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-9#video=h264
+  cam-10:
+    - rtsp://127.0.0.1:8554/raw-cam-10
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-10#video=h264
+  cam-11:
+    - rtsp://127.0.0.1:8554/raw-cam-11
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-11#video=h264
+  cam-12:
+    - rtsp://127.0.0.1:8554/raw-cam-12
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-12#video=h264
+  cam-13:
+    - rtsp://127.0.0.1:8554/raw-cam-13
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-13#video=h264
+  cam-14:
+    - rtsp://127.0.0.1:8554/raw-cam-14
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-14#video=h264
+  cam-15:
+    - rtsp://127.0.0.1:8554/raw-cam-15
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-15#video=h264

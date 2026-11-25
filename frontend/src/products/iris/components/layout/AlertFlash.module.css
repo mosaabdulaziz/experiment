@@ -1,0 +1,19 @@
+.flash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  animation: screenFlashRing 1.4s ease-out forwards;
+}
+.flash::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(255, 94, 98, 0.18) 85%,
+    rgba(255, 94, 98, 0.35) 100%
+  );
+  animation: screenFlash 1.4s ease-out forwards;
+}

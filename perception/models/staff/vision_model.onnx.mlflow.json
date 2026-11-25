@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "vision_model.onnx",
+  "sha256": "fd6e1402a588279d1723c7534d4bcba5bc0b14b47dfab0e46f8c47b8270d7d40",
+  "size_bytes": 351685709,
+  "created_at": "2026-11-05T09:11:24+00:00",
+  "run_id": "ee666793f82749f2907091b510f85846",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "staff-clip",
+  "version": "1"
+}

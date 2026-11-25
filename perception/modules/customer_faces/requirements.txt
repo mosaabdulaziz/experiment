@@ -1,0 +1,2 @@
+# Face crops are embedded with InsightFace (the same package face_recognition installs).
+insightface

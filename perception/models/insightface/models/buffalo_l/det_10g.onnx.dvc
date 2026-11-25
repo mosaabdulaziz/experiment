@@ -1,0 +1,5 @@
+outs:
+- md5: 4c10eef5c9e168357a16fdd580fa8371
+  size: 16923827
+  hash: md5
+  path: det_10g.onnx

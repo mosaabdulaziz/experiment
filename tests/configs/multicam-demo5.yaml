@@ -1,0 +1,10 @@
+# DEMO CONFIG (not a product): the multicam preset on its first five recorded clips, for a laptop that cannot hold the
+# thirteen-camera stack (it ran out of memory once). Use: SIDECAR_CONFIG=tests/configs/multicam-demo5.yaml
+extends: ../../configs/presets/multicam/sidecar.yaml
+
+sources:
+    - {id: cam-01, uri: "file:///workspace/iris/products/el-mohandes/videos/1-D41-enter.mp4"}
+    - {id: cam-02, uri: "file:///workspace/iris/products/el-mohandes/videos/2-D16_clip.mp4"}
+    - {id: cam-03, uri: "file:///workspace/iris/products/el-mohandes/videos/3-D52-enter.mp4"}
+    - {id: cam-04, uri: "file:///workspace/iris/products/el-mohandes/videos/4-ch05_clip.mp4"}
+    - {id: cam-05, uri: "file:///workspace/iris/products/el-mohandes/videos/5-CH23-enter.mp4"}

@@ -1,0 +1,5 @@
+outs:
+- md5: d2714071493395770b52bc38d8726480
+  size: 126336
+  hash: md5
+  path: golden-zones.before.jsonl

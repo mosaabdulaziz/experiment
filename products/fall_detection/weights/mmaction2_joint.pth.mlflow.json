@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "mmaction2_joint.pth",
+  "sha256": "484a394a50246032fef9694396096902909784e8618ccc845d2859dc2b952fea",
+  "size_bytes": 12479895,
+  "created_at": "2026-11-05T09:12:22+00:00",
+  "run_id": "e05b173096294fd29029ecdeba1c3a21",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "fall-classifier",
+  "version": "1"
+}

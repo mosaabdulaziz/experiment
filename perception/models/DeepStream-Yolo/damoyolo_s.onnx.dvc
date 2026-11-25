@@ -1,0 +1,5 @@
+outs:
+- md5: a3447f04a1278f841b696b4c154d150f
+  size: 65239033
+  hash: md5
+  path: damoyolo_s.onnx

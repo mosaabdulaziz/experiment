@@ -1,0 +1,8 @@
+# TEST CONFIG (not a product): the attendance rules (fire/smoke detector + alerts on) on a recorded fire clip read from
+# disk, no loop, one source. See golden-attendance.yaml for why. Clip: tools/make_golden_clips.sh.
+extends: ../../products/attendance/sidecar.yaml
+
+file_loop: false
+
+sources:
+  - {id: cam-1, uri: "file:///workspace/iris/data/uploads/golden/fire.mp4", roles: [attendance], label: "golden fire"}

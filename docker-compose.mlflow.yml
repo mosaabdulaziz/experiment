@@ -1,0 +1,41 @@
+# Local MLflow tracking server for DEVELOPING and TESTING the tracking helper (mtmc/tracking), the import script,
+# the registry and the manifest generator (docs: the MLflow tracking/registry spike, "D-dev"). A dev tool: never
+# part of a product stack, and not the team server (that one is central, with Postgres and its own bucket).
+#
+#   docker compose -f docker-compose.mlflow.yml up -d
+#   export MLFLOW_TRACKING_URI=http://localhost:${MLFLOW_HOST_PORT:-15000}
+#   # UI: the same URL in a browser
+#   docker compose -f docker-compose.mlflow.yml down        # add -v to drop the runs
+#
+# Backend: sqlite, artifacts served by the server itself (--serve-artifacts), both in the `mlflow-dev` volume.
+# No MinIO here on purpose: the minio/minio image is no longer pullable without credentials (DEPENDENCIES.md on
+# chore/pin-dependencies), and served file artifacts exercise the same client code.
+#
+# The unit tests (tests/test_mlflow_tracking.py) do not need this server.
+name: iris-mlflow-dev
+
+services:
+  mlflow:
+    # The official image, pinned by version and digest (multi-arch index) like the stack's other images.
+    image: ghcr.io/mlflow/mlflow:v3.18.0@sha256:257204c77980b0f3450a26eb6089e487603fcdd4509529eadaf88f90669f5c13
+    command:
+      - mlflow
+      - server
+      - --host=0.0.0.0
+      - --port=5000
+      - --backend-store-uri=sqlite:////mlflow/mlflow.db
+      - --artifacts-destination=/mlflow/artifacts
+      - --serve-artifacts
+    ports:
+      - "${MLFLOW_HOST_PORT:-15000}:5000"     # 5000 is often taken (macOS AirPlay, other dev servers)
+    volumes:
+      - mlflow-dev:/mlflow
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    restart: unless-stopped
+
+volumes:
+  mlflow-dev:

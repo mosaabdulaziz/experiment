@@ -1,0 +1,165 @@
+12:44:17 [INFO] iris.sidecar: sidecar starting shard=0/1 role=None sources=1 ids=['cam-1']
+12:44:20 [INFO] iris.sidecar: TRT engine path: /workspace/iris/model_b1_gpu0_fp32.engine
+0:00:05.484530206    78     0x2b020450 INFO                 nvinfer gstnvinfer.cpp:725:gst_nvinfer_logger:<sgie_face> NvDsInferContext[UID 2]: Info from NvDsInferContextImpl::deserializeEngineAndBackend() <nvdsinfer_context_impl.cpp:2183> [UID = 2]: deserialized trt engine from :/workspace/iris/perception/models/DeepStream-Yolo-Face/yolov8n-face.onnx_b16_gpu0_fp32.engine
+0:00:05.690985563    78     0x2b020450 INFO                 nvinfer gstnvinfer.cpp:725:gst_nvinfer_logger:<pgie_fire> NvDsInferContext[UID 3]: Info from NvDsInferContextImpl::deserializeEngineAndBackend() <nvdsinfer_context_impl.cpp:2183> [UID = 3]: deserialized trt engine from :/workspace/iris/perception/models/DeepStream-Yolo-Fire/fire_smoke_box.onnx_b1_gpu0_fp16.engine
+12:44:55 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=10 total=10.1ms busy=0.0% avg=1.01ms max=6.54ms thread=gpu window=38.3s
+12:44:55 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=1 total=31.4ms busy=0.1% avg=31.37ms max=31.37ms thread=gpu window=38.3s
+12:44:55 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=2 total=14.8ms busy=0.0% avg=7.42ms max=13.60ms thread=gpu window=38.3s
+12:44:55 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=1 total=0.1ms busy=0.0% avg=0.05ms max=0.05ms thread=gpu window=38.3s
+12:44:55 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=1 total=57.3ms busy=0.1% avg=57.27ms max=57.27ms thread=gpu window=38.3s
+12:44:55 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:44:55 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:44:55 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:44:55 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:00 [INFO] iris.sidecar: [cam-1] 11.6 fps
+12:45:00 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=46 total=4073.0ms busy=81.2% avg=88.54ms max=2213.90ms thread=gpu window=5.0s
+12:45:00 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=53 total=1374.3ms busy=27.4% avg=25.93ms max=30.62ms thread=gpu window=5.0s
+12:45:00 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=51 total=130.9ms busy=2.6% avg=2.57ms max=12.85ms thread=gpu window=5.0s
+12:45:00 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=53 total=2973.3ms busy=59.3% avg=56.10ms max=2182.61ms thread=gpu window=5.0s
+12:45:00 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=54 total=1316.7ms busy=26.3% avg=24.38ms max=69.51ms thread=gpu window=5.0s
+12:45:00 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:00 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:00 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:00 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:05 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:45:05 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=79 total=2432.7ms busy=48.6% avg=30.79ms max=106.93ms thread=gpu window=5.0s
+12:45:05 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=97 total=2728.4ms busy=54.6% avg=28.13ms max=30.04ms thread=gpu window=5.0s
+12:45:05 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=97 total=177.9ms busy=3.6% avg=1.83ms max=11.33ms thread=gpu window=5.0s
+12:45:05 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=94 total=1616.7ms busy=32.3% avg=17.20ms max=21.92ms thread=gpu window=5.0s
+12:45:05 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=100 total=2448.3ms busy=49.0% avg=24.48ms max=51.50ms thread=gpu window=5.0s
+12:45:05 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:05 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:05 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:05 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:10 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=79 total=2258.5ms busy=44.9% avg=28.59ms max=101.15ms thread=gpu window=5.0s
+12:45:10 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=98 total=2727.2ms busy=54.3% avg=27.83ms max=29.82ms thread=gpu window=5.0s
+12:45:10 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=98 total=220.9ms busy=4.4% avg=2.25ms max=31.45ms thread=gpu window=5.0s
+12:45:10 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=96 total=1635.4ms busy=32.5% avg=17.04ms max=19.47ms thread=gpu window=5.0s
+12:45:10 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=101 total=2473.2ms busy=49.2% avg=24.49ms max=51.70ms thread=gpu window=5.0s
+12:45:10 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:10 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:10 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:10 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:10 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:45:15 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=82 total=2347.2ms busy=46.9% avg=28.62ms max=102.63ms thread=gpu window=5.0s
+12:45:15 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=99 total=2834.5ms busy=56.6% avg=28.63ms max=31.36ms thread=gpu window=5.0s
+12:45:15 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=100 total=158.1ms busy=3.2% avg=1.58ms max=2.40ms thread=gpu window=5.0s
+12:45:15 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=100 total=1709.4ms busy=34.2% avg=17.09ms max=19.53ms thread=gpu window=5.0s
+12:45:15 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=100 total=2513.6ms busy=50.2% avg=25.14ms max=27.83ms thread=gpu window=5.0s
+12:45:15 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:15 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:15 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:15 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:15 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:45:20 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=77 total=1669.6ms busy=33.3% avg=21.68ms max=100.69ms thread=gpu window=5.0s
+12:45:20 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=101 total=2857.7ms busy=56.9% avg=28.29ms max=30.07ms thread=gpu window=5.0s
+12:45:20 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=101 total=167.3ms busy=3.3% avg=1.66ms max=2.15ms thread=gpu window=5.0s
+12:45:20 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=101 total=1700.7ms busy=33.9% avg=16.84ms max=19.81ms thread=gpu window=5.0s
+12:45:20 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=100 total=2404.5ms busy=47.9% avg=24.04ms max=26.67ms thread=gpu window=5.0s
+12:45:20 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:20 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:20 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:20 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:20 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:45:25 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=78 total=1962.0ms busy=39.2% avg=25.15ms max=100.92ms thread=gpu window=5.0s
+12:45:25 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=100 total=2835.4ms busy=56.7% avg=28.35ms max=29.59ms thread=gpu window=5.0s
+12:45:25 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=100 total=169.1ms busy=3.4% avg=1.69ms max=2.11ms thread=gpu window=5.0s
+12:45:25 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=100 total=1696.7ms busy=33.9% avg=16.97ms max=18.70ms thread=gpu window=5.0s
+12:45:25 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=100 total=2440.1ms busy=48.8% avg=24.40ms max=26.51ms thread=gpu window=5.0s
+12:45:25 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:25 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:25 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:25 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:25 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:45:30 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=78 total=2193.2ms busy=43.9% avg=28.12ms max=101.08ms thread=gpu window=5.0s
+12:45:30 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=100 total=2830.0ms busy=56.6% avg=28.30ms max=30.31ms thread=gpu window=5.0s
+12:45:30 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=100 total=165.4ms busy=3.3% avg=1.65ms max=2.20ms thread=gpu window=5.0s
+12:45:30 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=97 total=1656.7ms busy=33.1% avg=17.08ms max=32.48ms thread=gpu window=5.0s
+12:45:30 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=99 total=2403.2ms busy=48.1% avg=24.28ms max=26.50ms thread=gpu window=5.0s
+12:45:30 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:30 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:30 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:30 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:30 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:45:35 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=76 total=1304.9ms busy=26.1% avg=17.17ms max=100.68ms thread=gpu window=5.0s
+12:45:35 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=100 total=2863.7ms busy=57.3% avg=28.64ms max=29.96ms thread=gpu window=5.0s
+12:45:35 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=100 total=166.5ms busy=3.3% avg=1.66ms max=2.20ms thread=gpu window=5.0s
+12:45:35 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=100 total=1572.7ms busy=31.5% avg=15.73ms max=18.59ms thread=gpu window=5.0s
+12:45:35 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=100 total=2451.3ms busy=49.0% avg=24.51ms max=26.98ms thread=gpu window=5.0s
+12:45:35 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:35 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:35 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:35 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:35 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:45:40 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=75 total=1606.0ms busy=32.1% avg=21.41ms max=100.97ms thread=gpu window=5.0s
+12:45:40 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=100 total=2862.5ms busy=57.2% avg=28.62ms max=30.07ms thread=gpu window=5.0s
+12:45:40 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=100 total=164.6ms busy=3.3% avg=1.65ms max=2.14ms thread=gpu window=5.0s
+12:45:40 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=100 total=1568.8ms busy=31.4% avg=15.69ms max=18.00ms thread=gpu window=5.0s
+12:45:40 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=100 total=2458.1ms busy=49.2% avg=24.58ms max=26.76ms thread=gpu window=5.0s
+12:45:40 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:40 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:40 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:40 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:40 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:45:45 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=72 total=1358.3ms busy=27.0% avg=18.86ms max=101.31ms thread=gpu window=5.0s
+12:45:45 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=101 total=2885.5ms busy=57.4% avg=28.57ms max=30.11ms thread=gpu window=5.0s
+12:45:45 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=100 total=169.3ms busy=3.4% avg=1.69ms max=2.29ms thread=gpu window=5.0s
+12:45:45 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=100 total=1570.7ms busy=31.3% avg=15.71ms max=17.49ms thread=gpu window=5.0s
+12:45:45 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=101 total=2511.4ms busy=50.0% avg=24.87ms max=26.72ms thread=gpu window=5.0s
+12:45:45 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:45 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:45 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:45 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:45 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:45:50 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=81 total=2624.3ms busy=52.5% avg=32.40ms max=101.71ms thread=gpu window=5.0s
+12:45:50 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=100 total=2869.6ms busy=57.4% avg=28.70ms max=30.15ms thread=gpu window=5.0s
+12:45:50 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=100 total=169.5ms busy=3.4% avg=1.69ms max=2.12ms thread=gpu window=5.0s
+12:45:50 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=100 total=1549.4ms busy=31.0% avg=15.49ms max=17.42ms thread=gpu window=5.0s
+12:45:50 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=100 total=2516.7ms busy=50.3% avg=25.17ms max=27.13ms thread=gpu window=5.0s
+12:45:50 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:50 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:50 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:50 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:50 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:45:55 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=79 total=1987.7ms busy=39.7% avg=25.16ms max=101.69ms thread=gpu window=5.0s
+12:45:55 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=100 total=2877.5ms busy=57.5% avg=28.77ms max=30.25ms thread=gpu window=5.0s
+12:45:55 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=100 total=171.0ms busy=3.4% avg=1.71ms max=2.31ms thread=gpu window=5.0s
+12:45:55 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=100 total=1531.9ms busy=30.6% avg=15.32ms max=17.78ms thread=gpu window=5.0s
+12:45:55 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=100 total=2548.4ms busy=51.0% avg=25.48ms max=27.28ms thread=gpu window=5.0s
+12:45:55 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:45:55 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:45:55 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:45:55 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:45:55 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:46:00 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=73 total=1252.5ms busy=25.0% avg=17.16ms max=100.55ms thread=gpu window=5.0s
+12:46:00 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=100 total=2877.4ms busy=57.5% avg=28.77ms max=31.05ms thread=gpu window=5.0s
+12:46:00 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=100 total=173.3ms busy=3.5% avg=1.73ms max=2.30ms thread=gpu window=5.0s
+12:46:00 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=100 total=1508.8ms busy=30.2% avg=15.09ms max=17.99ms thread=gpu window=5.0s
+12:46:00 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=100 total=2473.5ms busy=49.5% avg=24.74ms max=27.19ms thread=gpu window=5.0s
+12:46:00 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:46:00 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:46:00 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:46:00 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:46:00 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:46:05 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=77 total=2086.0ms busy=41.7% avg=27.09ms max=101.11ms thread=gpu window=5.0s
+12:46:05 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=99 total=2823.9ms busy=56.5% avg=28.52ms max=30.48ms thread=gpu window=5.0s
+12:46:05 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=99 total=178.2ms busy=3.6% avg=1.80ms max=10.03ms thread=gpu window=5.0s
+12:46:05 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=98 total=1514.0ms busy=30.3% avg=15.45ms max=17.58ms thread=gpu window=5.0s
+12:46:05 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=100 total=2422.3ms busy=48.4% avg=24.22ms max=49.91ms thread=gpu window=5.0s
+12:46:05 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:46:05 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:46:05 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:46:05 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:46:05 [INFO] iris.sidecar: [cam-1] 20.0 fps
+12:46:10 [INFO] iris.sidecar: [telemetry] gpu.decode.cam-1 n=76 total=1946.4ms busy=38.8% avg=25.61ms max=100.97ms thread=gpu window=5.0s
+12:46:10 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie n=100 total=2854.2ms busy=56.9% avg=28.54ms max=31.21ms thread=gpu window=5.0s
+12:46:10 [INFO] iris.sidecar: [telemetry] gpu.infer.pgie_fire n=101 total=176.9ms busy=3.5% avg=1.75ms max=2.32ms thread=gpu window=5.0s
+12:46:10 [INFO] iris.sidecar: [telemetry] gpu.infer.sgie_face n=101 total=1559.2ms busy=31.1% avg=15.44ms max=18.63ms thread=gpu window=5.0s
+12:46:10 [INFO] iris.sidecar: [telemetry] gpu.jpeg n=100 total=2383.0ms busy=47.5% avg=23.83ms max=26.82ms thread=gpu window=5.0s
+12:46:10 [INFO] iris.sidecar: [telemetry] gauge pub_shed_total_cam-1=0
+12:46:10 [INFO] iris.sidecar: [telemetry] gauge publisher_drops=0
+12:46:10 [INFO] iris.sidecar: [telemetry] gauge qos_dropped_total=0
+12:46:10 [INFO] iris.sidecar: [telemetry] gauge source_stall_episodes_total_cam-1=0
+12:46:10 [INFO] iris.sidecar: [cam-1] 20.0 fps
+nvstreammux: Successfully handled EOS for source_id=0
+12:46:13 [WARNING] iris.sidecar: EOS — pipeline reached end of stream

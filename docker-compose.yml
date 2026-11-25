@@ -1,0 +1,527 @@
+name: iris
+# Per-developer identity: this project name is the ONLY hardcoded default in
+# this file that matters for multi-developer isolation, and it's neutral on
+# purpose. Docker Compose's own COMPOSE_PROJECT_NAME env var (set in .env)
+# overrides this `name:` outright -- no ${} interpolation needed here, that's
+# just how Compose resolves project name (CLI flag > COMPOSE_PROJECT_NAME >
+# this field > directory name). Every host port below follows the same
+# pattern: a ${VAR:-default} whose default reproduces today's behavior
+# exactly if nobody sets anything, and which any developer can override in
+# their own .env (gitignored, never committed) to run alongside someone
+# else's checkout of this same repo on the same machine without colliding.
+# See .env.example for the full list of overridable vars.
+x-sidecar-shard: &sidecar-shard
+  # ── DeepStream perception sidecar (M1: process sharding) ────────────────
+  # Each replica owns a disjoint camera slice: perception.engine.main slices
+  # sources[IRIS_SHARD_ID::IRIS_SHARD_COUNT]. All Redis keys are per-source-id,
+  # so shards never collide; only shard 0 runs the stale-status purge.
+  # Default (no profile): single process = today's behavior.
+  # Enable shards:  IRIS_SHARD_COUNT=2 docker compose --profile shards up -d
+  # IRIS_SHARD_COUNT defaults to 1 so plain compose commands need no env; a
+  # shard replica with an out-of-range id refuses to start (sidecar validates
+  # 0 <= IRIS_SHARD_ID < IRIS_SHARD_COUNT and exits with a clear log line), so
+  # cameras can never be silently mis-split.
+  build:
+    context: .
+    dockerfile: perception/pipeline/Dockerfile
+  # Scoped by project name so separate checkouts on the same host (e.g. two
+  # people running `docker compose` from different clones) never share or
+  # clobber each other's image -- only the shard replicas WITHIN one project
+  # (deepstream-sidecar-1/-2, below) still share this one build.
+  image: ${COMPOSE_PROJECT_NAME:-surveillance-camera-sys}-deepstream-sidecar:latest
+  ulimits:
+    nofile:
+      soft: 65536
+      hard: 65536
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+  environment:
+    - NVIDIA_DRIVER_CAPABILITIES=all   # compute + video (NVDEC) for DeepStream
+    - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+    - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+    # RTSP camera credentials for the ${RTSP_USER}/${RTSP_PASS} placeholders in
+    # the pipeline's settings file (filled from the host .env). Empty when unset, in
+    # which case the sidecar keeps the placeholder and those sources fail to
+    # authenticate — never put real credentials in the repo.
+    - RTSP_USER=${RTSP_USER:-}
+    - RTSP_PASS=${RTSP_PASS:-}
+    - IRIS_SHARD_ID=0
+    # Default 1 = single process (today's behavior). The shards profile is
+    # only coherent when IRIS_SHARD_COUNT is exported (2 or 3) — replicas with
+    # an invalid shard id exit loudly at boot (sidecar validation), so you can
+    # never silently mis-partition cameras.
+    - IRIS_SHARD_COUNT=${IRIS_SHARD_COUNT:-1}
+  volumes:
+    # Mount the repo root itself (not its parent) so the in-container layout
+    # is independent of the checkout directory's name: the repo is always
+    # /workspace/iris here, and every config references it as such.
+    - ./:/workspace/iris     # perception/models/DeepStream-Yolo artifacts (onnx, parser .so, engine, pgie config), perception/pipeline/, data/
+  tmpfs:
+    # Segment staging. splitmuxsink writes each fragment here while it is open,
+    # then _SegmentUploader copies it to data/segments once closed -- two disk
+    # writes per recorded byte. On tmpfs the open fragment never touches disk.
+    # A rename instead of a copy would also work, but /tmp (container overlay)
+    # and data/segments (bind mount) are different filesystems, so os.replace
+    # raises EXDEV and shutil.move silently degrades to copy-then-delete.
+    # ~4MB per stream in flight at record_seconds=8, record_bitrate_kbps=2000;
+    # sized for the per-shard stream count, not the fleet total.
+    - /tmp/iris-segments:size=256m
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+  depends_on:
+    - redis
+  # SIDECAR_CONFIG picks this replica's settings file; unset = perception/pipeline/sidecar.yaml,
+  # exactly as before. An overlay (`extends:`) can point the same pipeline at other
+  # cameras or models without touching the shared file -- e.g. the recorded-clip
+  # baselines in tests/baselines/.
+  command: ["python3", "-m", "perception.engine.main", "${SIDECAR_CONFIG:-perception/pipeline/sidecar.yaml}"]
+  restart: unless-stopped
+
+services:
+  iris:
+    build: .
+    ports:
+      # ${IRIS_HOST_PORT:-18000}: override in .env if 18000 collides with
+      # another checkout of this repo (or anything else) on the same host.
+      # iris-frontend's vite proxy (frontend/vite.config.ts) needs to agree --
+      # see that file's own IRIS_HOST_PORT handling.
+      - "${IRIS_HOST_PORT:-18000}:8000"
+    # .env is optional: without it the stack boots with MINIO defaults and no
+    # QWEN_API_KEY (chat/analysis degrade until one is set). Copy .env.example
+    # to .env and fill in QWEN_API_KEY for full functionality.
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      # Which products the dashboard offers (/api/products). Passed explicitly so a recipe can set it
+      # for one run (`just multi` does); .env's value is the default, and unset means "every product".
+      - IRIS_PRODUCT=${IRIS_PRODUCT:-}
+      # The pipeline's settings file. The sidecar gets it from the same variable (its `command:`), and the app
+      # must read the SAME file (camera roles, mux size, which features are on). It reached the app only through
+      # .env's env_file, so `SIDECAR_CONFIG=... just up` -- what RUNNING.md tells you to do -- gave the sidecar
+      # the overlay and the app the default file: every camera came back with no role and the attendance page
+      # showed "no cameras streaming". Empty falls back to zones.sidecar_config_path (app/sidecar_config.py).
+      - SIDECAR_CONFIG=${SIDECAR_CONFIG:-}
+    volumes:
+      - ./data:/app/data        # persist SQLite events database + uploads
+      - ./config.yaml:/app/config.yaml  # allow config changes without rebuild
+      - ./products:/app/products:ro  # each product's own sidecar.yaml -- SIDECAR_CONFIG names one of
+                                    # these, and it must resolve inside this container too
+      - ./perception:/app/perception:ro  # the pipeline's settings (mux size, per-camera roles) and any
+                                  # overlay SIDECAR_CONFIG names; read-only, owned by the sidecar service
+      - ./configs/presets:/app/configs/presets:ro  # `just multi|vlm` overlays (SIDECAR_CONFIG=configs/presets/...)
+      - ./tests/configs:/app/tests/configs:ro  # the recorded-clip overlays (RUNNING.md: SIDECAR_CONFIG=
+                                  # tests/configs/...). Without this the app cannot read the file the
+                                  # sidecar is running, so camera roles come back empty and fire
+                                  # incidents are never created.
+    group_add:
+      - video                    # grants container access to the video group
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4.10-alpine@sha256:e7723ff73d963f5cc6d9c4643ea3d989527a402a319239054e9472a7fb9219a2
+    restart: unless-stopped
+    ports:
+      # ${REDIS_HOST_PORT:-6379}: override in .env if this collides with
+      # another checkout. products/attendance (a host process, not in compose)
+      # must be pointed at whichever port this resolves to (its own
+      # REDIS_URL env var, see products/attendance/server.py).
+      - "${REDIS_HOST_PORT:-6379}:6379"  # exposed for products/attendance (runs natively, not in compose)
+
+  # Dev/test_streamer media server (self-contained — no host install needed).
+  # test_streamer/stream_recordings.py PUBLISHES the recorded uploads here over
+  # RTSP ingest (rtsp://localhost:8554/raw-<cam-id>, original codecs via
+  # `-c copy`); the sidecar consumes the derived streams over RTSP
+  # (rtsp://go2rtc:8554/<cam-id>), and browsers play them over WebRTC — the
+  # raw-preview path for pipeline_preview: false. Browser-incompatible codecs
+  # (High-profile H.264 with B-frames, HEVC) are transcoded on demand by the
+  # ffmpeg: source variants in go2rtc.yaml, only while a viewer needs them.
+  # Official image: https://github.com/AlexxIT/go2rtc
+  go2rtc:
+    # Plain `latest` on purpose: the browser transcodes in go2rtc.yaml run on
+    # the CPU (libx264), NOT on the GPU — the GPU stays reserved for DeepStream
+    # inference. A hardware build (latest-hardware + #video=h264#hardware) could
+    # move them to NVENC, but that spends GPU headroom that inference needs, so
+    # it is deliberately not used (see go2rtc.yaml header).
+    image: alexxit/go2rtc:1.9.14@sha256:675c318b23c06fd862a61d262240c9a63436b4050d177ffc68a32710d9e05bae
+    # RAW_CAM_N_SRC: the full source of go2rtc.yaml's raw-cam-1/2/3. Unset in
+    # .env = the real camera, with RTSP_USER/RTSP_PASS from .env filled in
+    # (real values live in .env only). A second checkout on this host sets
+    # them to the first checkout's go2rtc (rtsp://host.docker.internal:<its
+    # GO2RTC_RTSP_PORT>/raw-cam-N), so the camera tunnel carries each camera
+    # once -- see .env.example.
+    environment:
+      - RTSP_USER=${RTSP_USER:-}
+      - RTSP_PASS=${RTSP_PASS:-}
+      - RAW_CAM_1_SRC=${RAW_CAM_1_SRC:-rtsp://${RTSP_USER:-}:${RTSP_PASS:-}@192.168.45.88:554/ch1/main/av_stream#transport=tcp}
+      - RAW_CAM_2_SRC=${RAW_CAM_2_SRC:-rtsp://${RTSP_USER:-}:${RTSP_PASS:-}@192.168.45.52:554/ch1/main/av_stream#transport=tcp}
+      - RAW_CAM_3_SRC=${RAW_CAM_3_SRC:-rtsp://${RTSP_USER:-}:${RTSP_PASS:-}@192.168.45.54:554/ch1/main/av_stream#transport=tcp}
+    # Lets a second checkout's go2rtc reach the first checkout's go2rtc
+    # through its host port. Harmless when unused.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./go2rtc.yaml:/config/go2rtc.yaml:ro
+    ports:
+      # Override GO2RTC_RTSP_PORT/GO2RTC_API_PORT/GO2RTC_WEBRTC_PORT in .env if
+      # these collide with another checkout. The host-side CHIRLA streamer
+      # (test_streamer/stream_recordings.py, launched via justfile) needs to
+      # be told the same GO2RTC_RTSP_PORT -- it already takes --port for this.
+      - "${GO2RTC_RTSP_PORT:-8554}:8554"      # RTSP — ffmpeg pushers (ingest) + the sidecar's rtsp:// sources
+      - "${GO2RTC_API_PORT:-1984}:1984"       # API/UI — WHEP at /api/webrtc?src=<cam-id>
+      - "${GO2RTC_WEBRTC_PORT:-8555}:8555"    # WebRTC media (single TCP+UDP port)
+      - "${GO2RTC_WEBRTC_PORT:-8555}:8555/udp"
+    restart: unless-stopped
+
+  minio:
+    # RELEASE.2025-09-07T16-13-09Z, the build that runs here. Docker Hub no longer serves minio/minio without
+    # credentials (2026-11-03: 401 for every tag and digest), so only a machine that already has it can start this
+    # service; finding another source is a follow-up (DEPENDENCIES.md).
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_SECRET_KEY:-minioadmin}
+    ports:
+      # Override MINIO_API_HOST_PORT/MINIO_CONSOLE_HOST_PORT in .env if these
+      # collide with another checkout. Only the HOST-side mapping changes --
+      # config.yaml's minio_endpoint ("minio:9000") is container-to-container
+      # traffic on the compose network, untouched by what's published here.
+      - "${MINIO_API_HOST_PORT:-19000}:9000"
+      - "${MINIO_CONSOLE_HOST_PORT:-19001}:9001"
+    volumes:
+      - minio-data:/data
+    restart: unless-stopped
+
+  deepstream-sidecar:
+    <<: *sidecar-shard
+    # Host mirror of the telemetry /metrics port (9100 in-container) so you can
+    # curl localhost:9101/metrics on the host. The monitoring stack scrapes the
+    # internal port; shard replicas (below) are intentionally NOT host-mapped to
+    # avoid port collisions. Override SIDECAR_TELEMETRY_PORT in .env if this
+    # collides with another checkout.
+    ports:
+      - "${SIDECAR_TELEMETRY_PORT:-9101}:9100"
+
+  # ── Monitoring stack (Prometheus + Grafana + DCGM + node exporter) ──────────
+  # Bring up with:  docker compose up -d prometheus grafana dcgm-exporter node-exporter
+  # Then open http://localhost:3000 (admin/admin), dashboard "IRIS — pipeline & GPU".
+  # The sidecar must run with telemetry_enabled: true (sidecar.yaml) for its
+  # iris_stage_*/iris_gauge metrics to appear; DCGM + node metrics need no config.
+  # NOT started by `just up`/`up-roles`. dcgm-exporter and node-exporter watch
+  # the shared HOST and GPU, not any one project's own state -- if another
+  # checkout on this machine already has this block running, prefer reading
+  # its Grafana instead of starting a second, redundant copy here.
+  prometheus:
+    image: prom/prometheus:v3.13.2@sha256:508729e0e2d18e11fd742a5a5ca70e557b940a93948c3c95fd0123a6fd538b69
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:13.1.3@sha256:ab5cb380e3ff3172d6c8bd2e7cfd31cce977d2881b260e1f5bc089bf0b759b43
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    restart: unless-stopped
+
+  # NVIDIA DCGM exporter — GPU hardware metrics (utilization, decode util, FB
+  # usage, temp, power) scraped by prometheus on :9400. Requires the NVIDIA
+  # container toolkit + driver, same as the sidecar.
+  dcgm-exporter:
+    image: nvidia/dcgm-exporter:4.6.0-4.8.3-distroless@sha256:613ab03c11d442fd960ff515f547e9921537454a712d08160bc8f677f89f1c35
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    ports:
+      - "${DCGM_EXPORTER_PORT:-9400}:9400"
+    restart: unless-stopped
+
+  # Host machine metrics (CPU, memory, disk, network) for the GPU host.
+  node-exporter:
+    image: prom/node-exporter:v1.12.1@sha256:1b4e4438faca4dd7e001dd445d161a4a2091b0fededa84093b3a8dfeae1f1be0
+    command:
+      - --path.rootfs=/host
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    ports:
+      - "${NODE_EXPORTER_PORT:-9100}:9100"
+    restart: unless-stopped
+
+  deepstream-sidecar-1:
+    <<: *sidecar-shard
+    profiles: ["shards"]
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - RTSP_USER=${RTSP_USER:-}
+      - RTSP_PASS=${RTSP_PASS:-}
+      - IRIS_SHARD_ID=1
+      # Same default as the anchor (1 = single process). If the shards profile
+      # is enabled without exporting IRIS_SHARD_COUNT, this replica exits with
+      # "IRIS_SHARD_ID out of range" (id 1 >= count 1) instead of silently
+      # slicing — the harness always exports the real count.
+      - IRIS_SHARD_COUNT=${IRIS_SHARD_COUNT:-1}
+
+  deepstream-sidecar-2:
+    <<: *sidecar-shard
+    profiles: ["shards"]
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - RTSP_USER=${RTSP_USER:-}
+      - RTSP_PASS=${RTSP_PASS:-}
+      - IRIS_SHARD_ID=2
+      - IRIS_SHARD_COUNT=${IRIS_SHARD_COUNT:-1}
+
+  # ── Purpose-split replicas (M2: role separation) ────────────────────────
+  # Same image, same sidecar.yaml as the plain `deepstream-sidecar` service
+  # above, but each owns only the sources tagged for its role (untagged
+  # sources go to both -- see sources.select_sources) and never builds the
+  # GStreamer elements the other role needs. Mutually exclusive with plain
+  # `deepstream-sidecar` in practice: running both would double-process any
+  # untagged/shared camera. Bring up with (name BOTH services explicitly --
+  # `docker compose --profile roles up -d` with no service names ALSO starts
+  # every profile-less service, plain `deepstream-sidecar` included, which is
+  # exactly the double-processing this comment warns about):
+  #   docker compose --profile roles up -d deepstream-sidecar-fire deepstream-sidecar-attendance
+  deepstream-sidecar-fire:
+    <<: *sidecar-shard
+    profiles: ["roles"]
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - RTSP_USER=${RTSP_USER:-}
+      - RTSP_PASS=${RTSP_PASS:-}
+      - IRIS_SIDECAR_ROLE=fire
+      - IRIS_SHARD_ID=0
+      - IRIS_SHARD_COUNT=1
+
+  deepstream-sidecar-attendance:
+    <<: *sidecar-shard
+    profiles: ["roles"]
+    ports:
+      # ${SIDECAR_ATTENDANCE_TELEMETRY_PORT:-9102}: only this replica
+      # host-maps telemetry, avoiding a port collision with
+      # deepstream-sidecar-fire (same pattern the shard-1/2 replicas already
+      # use). 9102, not 9101: plain `deepstream-sidecar` already claims 9101,
+      # so any invocation that started both would fail to bind. Override in
+      # .env if this collides with another checkout.
+      - "${SIDECAR_ATTENDANCE_TELEMETRY_PORT:-9102}:9100"
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - RTSP_USER=${RTSP_USER:-}
+      - RTSP_PASS=${RTSP_PASS:-}
+      - IRIS_SIDECAR_ROLE=attendance
+      - IRIS_SHARD_ID=0
+      - IRIS_SHARD_COUNT=1
+
+  # ── Barber shop monitoring (its own deployment) ─────────────────────────
+  # Runs products/barber/sidecar.yaml: an overlay on sidecar.yaml holding only
+  # the barber camera(s), the barber face gallery and the barber tracker
+  # config. products/barber/ (a host process, `just barber-up`) reads its Redis
+  # streams. Name the services explicitly -- a bare `--profile barber up`
+  # would also start the profile-less plain `deepstream-sidecar`:
+  #   docker compose --profile barber up -d redis minio go2rtc deepstream-sidecar-barber
+  deepstream-sidecar-barber:
+    <<: *sidecar-shard
+    profiles: ["barber"]
+    command: ["python3", "-m", "perception.engine.main", "${BARBER_SIDECAR_CONFIG:-products/barber/sidecar.yaml}"]
+    # No core files: an nvstreammux segfault wrote a 12 GB core into the repo
+    # root (the /workspace/iris mount). Restates the anchor's nofile because
+    # a service's ulimits replaces the anchor's whole map.
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+      core:
+        soft: 0
+        hard: 0
+    ports:
+      # 9103: 9101 is plain deepstream-sidecar's, 9102 the attendance replica's.
+      - "${SIDECAR_BARBER_TELEMETRY_PORT:-9103}:9100"
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - RTSP_USER=${RTSP_USER:-}
+      - RTSP_PASS=${RTSP_PASS:-}
+      - IRIS_SIDECAR_ROLE=barber
+      # nvinfer's TensorRT engine build for the seg model crashes when GStreamer has loaded libunwind first.
+      - LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+      - IRIS_SHARD_ID=0
+      - IRIS_SHARD_COUNT=1
+
+  # ── Fall detection (its own deployment) ─────────────────────────────────
+  # Runs products/fall_detection/sidecar.yaml: an overlay on sidecar.yaml holding
+  # the pilot camera and the pose secondary GIE. products/fall_detection/ (a host
+  # process, `just fall-up`) reads the `pose` field of its iris:meta stream.
+  #
+  # The fall deployment REPLACES the attendance deployment on its cameras: the
+  # `roles` tag names the recording's owner but does not exclude a second process
+  # (perception/engine/sources.py:52-74), so `just fall-up` refuses to start beside
+  # a live sidecar that already holds one of these cameras.
+  #   docker compose --profile fall up -d redis minio go2rtc deepstream-sidecar-fall
+  deepstream-sidecar-fall:
+    <<: *sidecar-shard
+    profiles: ["fall"]
+    command: ["python3", "-m", "perception.engine.main", "${FALL_SIDECAR_CONFIG:-products/fall_detection/sidecar.yaml}"]
+    # No core files: an nvstreammux segfault wrote a 12 GB core into the repo root
+    # (the /workspace/iris mount). Restates the anchor's nofile because a service's
+    # ulimits replaces the anchor's whole map.
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+      core:
+        soft: 0
+        hard: 0
+    ports:
+      # 9105: 9101 plain deepstream-sidecar, 9102 attendance, 9103 barber, 9104 multicam.
+      - "${SIDECAR_FALL_TELEMETRY_PORT:-9105}:9100"
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - RTSP_USER=${RTSP_USER:-}
+      - RTSP_PASS=${RTSP_PASS:-}
+      - IRIS_SIDECAR_ROLE=fall_detection
+      - IRIS_SHARD_ID=0
+      - IRIS_SHARD_COUNT=1
+
+  # ── Concealment detection (its own deployment) ──────────────────────────
+  # Runs products/concealment_detection/sidecar.yaml: an overlay on sidecar.yaml
+  # adding the pose secondary GIE (interval=1, 25 Hz) and bag context classes
+  # (`person`, `handbag`, `backpack`, `suitcase`). products/concealment_detection/
+  # (a host process, `just concealment-up`) reads `pose` + `dets` from iris:meta:<cam>.
+  #
+  # Owns its cameras exclusively (`roles: [concealment_detection]`): `roles` filters
+  # recording ownership rather than stream reads, so `just concealment-up` checks for
+  # conflicting live sidecars before starting. Name services explicitly if invoking
+  # compose directly so the profile-less default sidecar is not started alongside:
+  #   docker compose --profile concealment up -d redis minio iris go2rtc deepstream-sidecar-concealment
+  deepstream-sidecar-concealment:
+    <<: *sidecar-shard
+    profiles: ["concealment"]
+    command: ["python3", "-m", "perception.engine.main", "${CONCEALMENT_SIDECAR_CONFIG:-products/concealment_detection/sidecar.yaml}"]
+    # No core files: an nvstreammux segfault can write multi-GB cores into /workspace/iris.
+    # Restates nofile because a service's ulimits replaces the anchor's map.
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+      core:
+        soft: 0
+        hard: 0
+    ports:
+      # 9107: 9101 plain deepstream-sidecar, 9102 attendance, 9103 barber, 9104 multicam, 9105 fall, 9106 proximity.
+      - "${SIDECAR_CONCEALMENT_TELEMETRY_PORT:-9107}:9100"
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - RTSP_USER=${RTSP_USER:-}
+      - RTSP_PASS=${RTSP_PASS:-}
+      - IRIS_SIDECAR_ROLE=concealment_detection
+      - IRIS_SHARD_ID=0
+      - IRIS_SHARD_COUNT=1
+
+  # Pedestrian-vehicle proximity (products/proximity): YOLO26l-seg + the proximity module on the multicam sites'
+  # yard, warehouse and loading-bay cameras. Models first (`just proximity-models`), then:
+  #   docker compose --profile proximity up -d redis minio go2rtc deepstream-sidecar-proximity
+  deepstream-sidecar-proximity:
+    <<: *sidecar-shard
+    profiles: ["proximity"]
+    command: ["python3", "-m", "perception.engine.main", "${PROXIMITY_SIDECAR_CONFIG:-products/proximity/sidecar.yaml}"]
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+      core:
+        soft: 0
+        hard: 0
+    ports:
+      # 9106: 9101 plain deepstream-sidecar, 9102 attendance, 9103 barber, 9104 multicam, 9105 fall.
+      - "${SIDECAR_PROXIMITY_TELEMETRY_PORT:-9106}:9100"
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - RTSP_USER=${RTSP_USER:-}
+      - RTSP_PASS=${RTSP_PASS:-}
+      # nvinfer's TensorRT engine build for the seg model crashes when GStreamer has loaded libunwind first.
+      - LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+      - IRIS_SHARD_ID=0
+      - IRIS_SHARD_COUNT=1
+
+  # ── Multi-camera vehicle tracking (its own deployment) ──────────────────
+  # Runs products/multicam/sidecar.yaml: MTMC + Re-ID + VLM arbiter + plate reading on
+  # the 1-class vehicle detector. Built from the `mtmc` target of the pipeline Dockerfile
+  # (torch, fast-ReID helpers, ollama/openai) -- the shared `slim` image the other
+  # services use does not carry them. Its own image name so the two targets never
+  # overwrite each other's tag. The VLM arbiter reads QWEN_API_KEY / QWEN_BASE_URL /
+  # QWEN_MODEL from .env (env_file below; .env stays optional).
+  #   docker compose --profile multicam up -d redis minio go2rtc deepstream-sidecar-multicam
+  deepstream-sidecar-multicam:
+    <<: *sidecar-shard
+    profiles: ["multicam"]
+    build:
+      context: .
+      dockerfile: perception/pipeline/Dockerfile
+      target: mtmc
+    image: ${COMPOSE_PROJECT_NAME:-surveillance-camera-sys}-deepstream-sidecar-mtmc:latest
+    env_file:
+      - path: .env
+        required: false
+    # The product's own overlay unless SIDECAR_CONFIG names another one (the presets do:
+    # `just multi` runs it on configs/presets/multicam/sidecar.yaml, recorded clips).
+    command: ["python3", "-m", "perception.engine.main", "${SIDECAR_CONFIG:-products/multicam/sidecar.yaml}"]
+    volumes:
+      - ./:/workspace/iris
+      - ~/.cache/torch:/root/.cache/torch   # Re-ID checkpoint cache (ResNet50), multicam only
+    ports:
+      # 9104: 9101 plain deepstream-sidecar, 9102 attendance, 9103 barber.
+      - "${SIDECAR_MULTICAM_TELEMETRY_PORT:-9104}:9100"
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:-minioadmin}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:-minioadmin}
+      - RTSP_USER=${RTSP_USER:-}
+      - RTSP_PASS=${RTSP_PASS:-}
+      - IRIS_SHARD_ID=0
+      - IRIS_SHARD_COUNT=1
+
+volumes:
+  minio-data:
+  prometheus-data:
+  grafana-data:

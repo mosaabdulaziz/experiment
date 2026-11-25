@@ -1,0 +1,40 @@
+[property]
+gpu-id=0
+net-scale-factor=0.0039215697906911373
+model-color-format=0
+# 1-class vehicle detector fine-tuned on PRO6000
+# (products/el-mohandes/datasets/vehicle_detection_1cls -> products/el-mohandes/runs/vehicle_detector/
+# vehicle_yolo11s_1cls_v3/weights/best.pt), exported via mtmc.export_vehicle_onnx
+# at 1280 (dynamic batch, DeepStreamOutput head, no baked NMS).
+# Label file has a single class: vehicle.
+# v3 weights replaced the v1 ONNX in place on 2026-09-27; the previous ONNX and
+# its engine are kept as best_v1_1cls.onnx / labels_v1_1cls.txt and
+# model_b13_gpu0_fp16_v1_1cls.engine for rollback.
+onnx-file=/workspace/iris/products/el-mohandes/models/vehicle_1280_1cls/best.onnx
+# Probe path only: the sidecar overrides model-engine-file with the path it
+# derives per batch/mode (next to this ONNX), and the DS-Yolo custom builder
+# serializes there. See sidecar._pgie_engine_path.
+model-engine-file=model_b1_gpu0_fp16.engine
+labelfile-path=/workspace/iris/products/el-mohandes/models/vehicle_1280_1cls/labels.txt
+batch-size=1
+# network-mode: 0=FP32, 1=INT8 (needs calib.table), 2=FP16
+network-mode=2
+num-detected-classes=1
+interval=0
+gie-unique-id=1
+process-mode=1
+network-type=0
+cluster-mode=2
+maintain-aspect-ratio=1
+symmetric-padding=1
+parse-bbox-func-name=NvDsInferParseYolo
+custom-lib-path=/opt/nvidia/deepstream/deepstream/custom_parsers/libnvdsinfer_custom_impl_Yolo.so
+engine-create-func-name=NvDsInferYoloCudaEngineGet
+
+[class-attrs-all]
+# pre-cluster-threshold is the per-anchor conf floor BEFORE NMS clustering —
+# the DS equivalent of the annotator's conf=0.5 (the value the 1-class model
+# was tuned/reviewed at). 0.25 shows the noisy low-conf boxes instead.
+nms-iou-threshold=0.45
+pre-cluster-threshold=0.5
+topk=300

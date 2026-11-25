@@ -1,0 +1,3 @@
+# Safety role "fall": the fall product's pipeline (pose on each person); the decision runs in its service
+# (products/safety/fall_detection.yaml).
+extends: ../../fall_detection/sidecar.yaml

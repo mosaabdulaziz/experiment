@@ -1,0 +1,5 @@
+outs:
+- md5: a50ed0ab53bd07b77684e5f16144a1c2
+  size: 1746741
+  hash: md5
+  path: golden-proximity.before.jsonl

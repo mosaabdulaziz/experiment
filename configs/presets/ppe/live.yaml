@@ -1,0 +1,12 @@
+# Shared part of the PPE live presets: the PPE preset plus what a simulated live camera needs. Not used alone -- each
+# video has its own file naming its camera (live-test.yaml, live-test2.yaml), started by `just ppe-live-sim`:
+#
+#   just ppe-live-sim                     test.mp4  -> cam-ppe-live
+#   just ppe-live-sim VIDEO=test2.mp4     test2.mp4 -> cam-ppe-test2
+#   just ppe-live-status | ppe-live-logs | ppe-live-down
+#
+# A new video needs a live-<name>.yaml like those two (its source id is the camera) and raw-<camera id> in go2rtc-live.yaml.
+extends: sidecar.yaml
+
+jpeg_quality: 75          # preview only (shared default 50): our one camera's tile is easier to judge by eye
+telemetry_interval: 1.0   # 1 s timing lines, to relate PPE inference time to the persons in view

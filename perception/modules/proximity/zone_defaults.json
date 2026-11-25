@@ -1,0 +1,19 @@
+{
+  "_about": "Per-zone proximity settings: the defaults a zone gets for what it does not set, and the allowed values. Read by the module (zone_defaults.py: Settings, rules.py) and by the app (app/zones.py, by path), so the zone editor and the pipeline cannot drift. Tuned in Ticket 3 (2026-11-01): best F1 on labelled site footage, chosen on one half and checked on the other; see products/proximity/README.md. Ticket 6 (2026-11-04): the depth check is on by default, each zone with its own cut-off (depth_max_gap 0.25: on Ticket 3's labelled close pairs it keeps 87 % of the real near misses and drops 25 % of the false ones; 0.2 kept 77 % and dropped 37 %).",
+  "defaults": {
+    "vehicle_classes": ["car", "truck", "bus", "motorcycle"],
+    "max_gap": 0.75,
+    "stationary_window_s": 2.0,
+    "stationary_motion": 0.75,
+    "persist_s": 0.25,
+    "grace_s": 0.5,
+    "cooldown_s": 10.0,
+    "depth_check": true,
+    "hidden_feet": "unconfirmed",
+    "depth_max_gap": 0.25
+  },
+  "vehicle_classes": ["car", "truck", "bus", "motorcycle"],
+  "hidden_feet": ["unconfirmed", "suppress"],
+  "positive": ["max_gap", "stationary_window_s", "stationary_motion", "persist_s", "depth_max_gap"],
+  "non_negative": ["grace_s", "cooldown_s"]
+}

@@ -1,0 +1,29 @@
+# DanceTrack preset (frequent crossings & full occlusions, non-linear motion, 20 fps)
+tau_high: 0.60
+tau_low: 0.15
+alpha: 0.72
+gamma: 0.96
+eps_cal: 0.08
+ref_fps: 20.0
+dt_aware: true
+
+area_ratio_min: 0.70
+cos_min: -0.15
+min_speed_ratio: 0.05
+
+iou_thresh_high: 0.20
+iou_thresh_low: 0.15
+relocation_cost_thresh: 1.75
+biou_rate: 0.07
+biou_max_expansion: 2.4
+lambda_biou: 1.0
+lambda_pos: 0.40
+lambda_dir: 0.35
+sigma_par_scale: 1.6
+sigma_perp_scale: 0.75
+
+probation_frames: 2
+max_lost_frames: 30
+early_term_lost: 2
+check_class_match: false
+emit_shadow_tracks: false

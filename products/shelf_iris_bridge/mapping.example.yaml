@@ -1,0 +1,9 @@
+# Shelf -> iris-platform mapping (products/shelf_iris_bridge/mapping.py). Copy it, put the ids from iris-platform
+# (the pipeline's id and the camera's id) and point SHELF_IRIS_MAPPING at the copy.
+#
+# <DeepStream camera: the source id of the sidecar preset, the X of iris:alert:X (or of X@<role>; no role here)>:
+#   <shelf region: a name from the module's roi for that camera (R1, R2, ... for a roi.json list)>:
+#     {pipelineId: <iris-platform pipeline id>, cameraId: <iris-platform camera id>}
+cam-shelf-test:
+  R1: {pipelineId: 00000000-0000-4000-8000-000000000001, cameraId: 00000000-0000-4000-8000-0000000000c1}
+  R2: {pipelineId: 00000000-0000-4000-8000-000000000002, cameraId: 00000000-0000-4000-8000-0000000000c1}

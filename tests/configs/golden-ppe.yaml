@@ -1,0 +1,8 @@
+# TEST CONFIG (not a product): the PPE preset (configs/presets/ppe) on a recorded construction clip read from disk, no loop,
+# one source. See golden-attendance.yaml for why. Clip: tools/make_golden_clips_extra.sh (cut from the PPE demo video test.mp4).
+extends: ../../configs/presets/ppe/sidecar.yaml
+
+file_loop: false
+
+sources:
+  - {id: cam-1, uri: "file:///workspace/iris/data/uploads/golden/ppe.mp4", label: "golden ppe"}

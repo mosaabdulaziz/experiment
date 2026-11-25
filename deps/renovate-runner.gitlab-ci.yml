@@ -1,0 +1,29 @@
+# The Renovate bot for this repository (DEPENDENCIES.md, "Updates"). This file is NOT this repository's CI: it is the
+# .gitlab-ci.yml of a separate GitLab project (e.g. iris/renovate-runner) whose only job is to run the bot weekly, so
+# the bot's token never reaches this repository's merge-request pipelines. A maintainer copies it there; the checklist
+# in DEPENDENCIES.md lists the token, the variables and the schedule it needs.
+renovate:
+  image:
+    # Pinned like everything else; -full carries python3 for the postUpgradeTasks and installs uv 0.13.6 on demand.
+    name: ghcr.io/renovatebot/renovate:44.160.1-full@sha256:6359ff0ff044d7abceea8ae139667f687028dce67dca554d00e3874b42396d0d
+    entrypoint: [""]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"          # "Run pipeline" by hand, e.g. after ticking a box on the dashboard
+  resource_group: renovate                     # one run at a time
+  variables:
+    RENOVATE_PLATFORM: gitlab
+    RENOVATE_ENDPOINT: $CI_API_V4_URL
+    RENOVATE_REPOSITORIES: Mohamed.Abdulhafez/surveillance-camera-sys
+    RENOVATE_ONBOARDING: "false"                # the configuration is already in the repository (renovate.json5)
+    RENOVATE_REQUIRE_CONFIG: required
+    RENOVATE_BINARY_SOURCE: install            # install the tool versions the repository asks for (uv 0.13.6)
+    # The only commands renovate.json5's postUpgradeTasks may run.
+    RENOVATE_ALLOWED_COMMANDS: '["^python3 tools/deps/hold_majors\\.py --base [A-Za-z0-9._/-]+$", "^python3 tools/deps/root_exports\\.py$"]'
+    LOG_LEVEL: info
+    # Set as masked, protected CI/CD variables of the runner project (never here):
+    #   RENOVATE_TOKEN     the bot's project access token on surveillance-camera-sys (api, write_repository)
+    #   GITHUB_COM_TOKEN   optional: a read-only github.com token, for release notes and against rate limits
+    #   RENOVATE_GIT_AUTHOR  e.g. "IRIS Renovate <...>", the bot user's name and e-mail
+  script:
+    - renovate

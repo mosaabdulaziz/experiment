@@ -1,0 +1,596 @@
+{
+ "default": {
+  "rel": 0.1,
+  "abs": 0.0
+ },
+ "rules": [
+  {
+   "match": "runtime.*.res.cgroup_peak_mib",
+   "gate": false,
+   "why": "the cgroup peak includes page cache and varies by hundreds of MiB between identical runs; anon memory (rss_anon_mib) is the gated memory metric"
+  },
+  {
+   "match": "runtime.*.cpu_stage.*.busy",
+   "gate": false,
+   "why": "a stage's share of the replay depends on the window length and the frame rate; the time per call (avg_ms) is the gated metric"
+  },
+  {
+   "match": "runtime.*.flight_cpu_pct",
+   "gate": false,
+   "why": "one or two flight-recorder samples per replay (every 30 s): shown, not judged; the container CPU (res.cpu_cores) is gated"
+  },
+  {
+   "match": "runtime.*.cpu_stage.rotation.*",
+   "gate": false,
+   "why": "irregular housekeeping stage (segment rotation)"
+  },
+  {
+   "match": "runtime.*.cpu_stage.upload.*",
+   "gate": false,
+   "why": "irregular housekeeping stage (segment upload)"
+  },
+  {
+   "match": "runtime.*.main_loop_lag_s",
+   "rel": 0.0,
+   "abs": 0.5,
+   "why": "0 in every reference run; a lag over half a second is notable, a blip is not"
+  },
+  {
+   "match": "runtime.barber-faces.*",
+   "gate": false,
+   "why": "barber-faces is flaky: its golden output differs between identical runs"
+  },
+  {
+   "match": "counters.barber-faces.*",
+   "gate": false,
+   "why": "barber-faces is flaky: its golden output differs between identical runs"
+  },
+  {
+   "match": "counters.barber.gpu_util.median",
+   "gate": false,
+   "why": "59% apart between identical runs (15 to 31)"
+  },
+  {
+   "match": "counters.barber.sm_active.median",
+   "gate": false,
+   "why": "102% apart between identical runs (0 to 0.34)"
+  },
+  {
+   "match": "counters.barber.sm_active.p95",
+   "gate": false,
+   "why": "102% apart between identical runs (0 to 0.363)"
+  },
+  {
+   "match": "counters.barber.sm_occupancy.median",
+   "gate": false,
+   "why": "103% apart between identical runs (0 to 0.125)"
+  },
+  {
+   "match": "counters.barber.sm_occupancy.p95",
+   "gate": false,
+   "why": "102% apart between identical runs (0 to 0.135)"
+  },
+  {
+   "match": "counters.barber.tensor_active.median",
+   "gate": false,
+   "why": "100% apart between identical runs (0 to 0.059)"
+  },
+  {
+   "match": "counters.barber.tensor_active.p95",
+   "gate": false,
+   "why": "100% apart between identical runs (0 to 0.061)"
+  },
+  {
+   "match": "counters.multicam.sm_active.p95",
+   "gate": false,
+   "why": "121% apart between identical runs (0 to 0.754)"
+  },
+  {
+   "match": "counters.multicam.sm_occupancy.p95",
+   "gate": false,
+   "why": "125% apart between identical runs (0 to 0.266)"
+  },
+  {
+   "match": "counters.multicam.tensor_active.p95",
+   "gate": false,
+   "why": "109% apart between identical runs (0 to 0.154)"
+  },
+  {
+   "match": "counters.proximity.dram_active.median",
+   "gate": false,
+   "why": "200% apart between identical runs (0 to 0.064)"
+  },
+  {
+   "match": "counters.proximity.gpu_util.median",
+   "gate": false,
+   "why": "46% apart between identical runs (22 to 35)"
+  },
+  {
+   "match": "counters.proximity.sm_active.median",
+   "gate": false,
+   "why": "200% apart between identical runs (0 to 0.341)"
+  },
+  {
+   "match": "counters.proximity.sm_active.p95",
+   "gate": false,
+   "why": "63% apart between identical runs (0.346 to 0.665)"
+  },
+  {
+   "match": "counters.proximity.sm_occupancy.median",
+   "gate": false,
+   "why": "200% apart between identical runs (0 to 0.132)"
+  },
+  {
+   "match": "counters.proximity.sm_occupancy.p95",
+   "gate": false,
+   "why": "64% apart between identical runs (0.135 to 0.262)"
+  },
+  {
+   "match": "counters.proximity.tensor_active.median",
+   "gate": false,
+   "why": "200% apart between identical runs (0 to 0.059)"
+  },
+  {
+   "match": "runtime.attendance.flight_cpu_pct",
+   "gate": false,
+   "why": "103% apart between identical runs (0 to 65)"
+  },
+  {
+   "match": "runtime.fall_detection.cpu_stage.publish.busy",
+   "gate": false,
+   "why": "92% apart between identical runs (31.03 to 60.72)"
+  },
+  {
+   "match": "runtime.fall_detection.cpu_stage.publish.draw.busy",
+   "gate": false,
+   "why": "93% apart between identical runs (30.59 to 59.66)"
+  },
+  {
+   "match": "runtime.fire.cpu_stage.publish.busy",
+   "gate": false,
+   "why": "66% apart between identical runs (17.69 to 51.25)"
+  },
+  {
+   "match": "runtime.fire.cpu_stage.publish.draw.busy",
+   "gate": false,
+   "why": "66% apart between identical runs (17.26 to 49.57)"
+  },
+  {
+   "match": "runtime.fire.cpu_stage.upload.avg_ms",
+   "gate": false,
+   "why": "152% apart between identical runs (1.7 to 4.812)"
+  },
+  {
+   "match": "runtime.fire.flight_cpu_pct",
+   "gate": false,
+   "why": "102% apart between identical runs (0 to 58)"
+  },
+  {
+   "match": "runtime.fire.stage.gpu.infer.pgie_fire.busy",
+   "gate": false,
+   "why": "38% apart between identical runs (12.35 to 19.15)"
+  },
+  {
+   "match": "runtime.fire.stage.gpu.infer.sgie_face.avg_ms",
+   "gate": false,
+   "why": "36% apart between identical runs (15.34 to 21.27)"
+  },
+  {
+   "match": "runtime.fire.stage.gpu.infer.sgie_face.busy",
+   "gate": false,
+   "why": "60% apart between identical runs (34.85 to 57.75)"
+  },
+  {
+   "match": "runtime.multicam.boot_s",
+   "gate": false,
+   "why": "134% apart between identical runs (14.1 to 40.5)"
+  },
+  {
+   "match": "runtime.multicam.flight_cpu_pct",
+   "gate": false,
+   "why": "100% apart between identical runs (0 to 29)"
+  },
+  {
+   "match": "runtime.shelf.cpu_stage.publish.busy",
+   "gate": false,
+   "why": "96% apart between identical runs (21.29 to 41.88)"
+  },
+  {
+   "match": "runtime.shelf.cpu_stage.publish.draw.busy",
+   "gate": false,
+   "why": "98% apart between identical runs (20.87 to 41.47)"
+  },
+  {
+   "match": "counters.*.dram_active.median",
+   "rel": 0.02,
+   "abs": 0.003,
+   "members": 8
+  },
+  {
+   "match": "counters.*.dram_active.p95",
+   "rel": 1.5,
+   "abs": 0.021,
+   "members": 9
+  },
+  {
+   "match": "counters.*.gpu_util.median",
+   "rel": 0.5,
+   "abs": 6.0,
+   "members": 7
+  },
+  {
+   "match": "counters.*.gr_engine_active.median",
+   "rel": 0.47,
+   "abs": 0.088,
+   "members": 9
+  },
+  {
+   "match": "counters.*.gr_engine_active.p95",
+   "rel": 0.46,
+   "abs": 0.096,
+   "members": 9
+  },
+  {
+   "match": "counters.*.mem_ctrl_util.median",
+   "rel": 0.75,
+   "abs": 6.0,
+   "members": 9
+  },
+  {
+   "match": "counters.*.nvdec_util.median",
+   "rel": 2.25,
+   "abs": 3.0,
+   "members": 9
+  },
+  {
+   "match": "counters.*.nvjpg_util.median",
+   "rel": 0.02,
+   "abs": 0.0,
+   "members": 9
+  },
+  {
+   "match": "counters.*.power_w.median",
+   "rel": 0.08,
+   "abs": 4.08,
+   "members": 9
+  },
+  {
+   "match": "counters.*.sm_active.median",
+   "rel": 0.04,
+   "abs": 0.019,
+   "members": 7
+  },
+  {
+   "match": "counters.*.sm_active.p95",
+   "rel": 0.03,
+   "abs": 0.019,
+   "members": 6
+  },
+  {
+   "match": "counters.*.sm_occupancy.median",
+   "rel": 0.04,
+   "abs": 0.005,
+   "members": 7
+  },
+  {
+   "match": "counters.*.sm_occupancy.p95",
+   "rel": 0.04,
+   "abs": 0.006,
+   "members": 6
+  },
+  {
+   "match": "counters.*.tensor_active.median",
+   "rel": 0.07,
+   "abs": 0.006,
+   "members": 7
+  },
+  {
+   "match": "counters.*.tensor_active.p95",
+   "rel": 0.82,
+   "abs": 0.068,
+   "members": 7
+  },
+  {
+   "match": "runtime.*.boot_s",
+   "rel": 0.14,
+   "abs": 1.35,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.probe.avg_ms",
+   "rel": 0.43,
+   "abs": 0.928,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.probe.busy",
+   "rel": 1.41,
+   "abs": 4.86,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.probe.dets.avg_ms",
+   "rel": 0.5,
+   "abs": 0.096,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.probe.dets.busy",
+   "rel": 1.74,
+   "abs": 0.225,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.probe.frame_objects.avg_ms",
+   "rel": 0.83,
+   "abs": 0.09,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.probe.frame_objects.busy",
+   "rel": 1.5,
+   "abs": 0.18,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.probe.map_bgr.avg_ms",
+   "rel": 0.19,
+   "abs": 0.35,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.probe.map_bgr.busy",
+   "rel": 1.55,
+   "abs": 3.405,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.publish.avg_ms",
+   "rel": 0.44,
+   "abs": 11.174,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.publish.busy",
+   "rel": 0.67,
+   "abs": 22.185,
+   "members": 5
+  },
+  {
+   "match": "runtime.*.cpu_stage.publish.draw.avg_ms",
+   "rel": 0.4,
+   "abs": 12.93,
+   "members": 5
+  },
+  {
+   "match": "runtime.*.cpu_stage.publish.draw.busy",
+   "rel": 0.43,
+   "abs": 21.555,
+   "members": 2
+  },
+  {
+   "match": "runtime.*.cpu_stage.publish.redis.avg_ms",
+   "rel": 0.39,
+   "abs": 0.323,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.publish.redis.busy",
+   "rel": 1.54,
+   "abs": 1.71,
+   "members": 8
+  },
+  {
+   "match": "runtime.*.cpu_stage.rotation.avg_ms",
+   "rel": 3.02,
+   "abs": 0.235,
+   "members": 7
+  },
+  {
+   "match": "runtime.*.cpu_stage.rotation.busy",
+   "rel": 0.02,
+   "abs": 0.0,
+   "members": 7
+  },
+  {
+   "match": "runtime.*.cpu_stage.upload.avg_ms",
+   "rel": 2.33,
+   "abs": 4.479,
+   "members": 6
+  },
+  {
+   "match": "runtime.*.cpu_stage.upload.busy",
+   "rel": 3.5,
+   "abs": 0.105,
+   "members": 7
+  },
+  {
+   "match": "runtime.*.drops",
+   "rel": 0.02,
+   "abs": 0.0,
+   "members": 9
+  },
+  {
+   "match": "runtime.*.flight_cpu_pct",
+   "rel": 0.11,
+   "abs": 4.5,
+   "members": 3
+  },
+  {
+   "match": "runtime.*.fps_median",
+   "rel": 0.02,
+   "abs": 0.525,
+   "members": 9
+  },
+  {
+   "match": "runtime.*.fps_p10",
+   "rel": 0.05,
+   "abs": 0.75,
+   "members": 9
+  },
+  {
+   "match": "runtime.*.gpu_added_mib",
+   "rel": 0.11,
+   "abs": 114.0,
+   "members": 9
+  },
+  {
+   "match": "runtime.*.main_loop_lag_s",
+   "rel": 0.02,
+   "abs": 0.0,
+   "members": 6
+  },
+  {
+   "match": "runtime.*.res.cgroup_peak_mib",
+   "rel": 0.43,
+   "abs": 760.2,
+   "members": 6
+  },
+  {
+   "match": "runtime.*.res.cpu_cores",
+   "rel": 0.14,
+   "abs": 0.084,
+   "members": 6
+  },
+  {
+   "match": "runtime.*.res.rss_anon_mib",
+   "rel": 0.1,
+   "abs": 114.45,
+   "members": 6
+  },
+  {
+   "match": "runtime.*.res.threads",
+   "rel": 0.02,
+   "abs": 1.5,
+   "members": 6
+  },
+  {
+   "match": "runtime.*.stage.gpu.decode.avg_ms",
+   "rel": 0.37,
+   "abs": 9.54,
+   "members": 9
+  },
+  {
+   "match": "runtime.*.stage.gpu.decode.busy",
+   "rel": 0.43,
+   "abs": 17.31,
+   "members": 9
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie.avg_ms",
+   "rel": 0.17,
+   "abs": 2.76,
+   "members": 9
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie.busy",
+   "rel": 0.22,
+   "abs": 13.005,
+   "members": 9
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie_fire.avg_ms",
+   "rel": 0.58,
+   "abs": 3.735,
+   "members": 3
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie_fire.busy",
+   "rel": 0.16,
+   "abs": 0.54,
+   "members": 2
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie_ppe.avg_ms",
+   "rel": 0.16,
+   "abs": 2.16,
+   "members": 1
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie_ppe.busy",
+   "rel": 0.21,
+   "abs": 3.945,
+   "members": 1
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie_shelf.avg_ms",
+   "rel": 0.09,
+   "abs": 1.14,
+   "members": 1
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie_shelf.busy",
+   "rel": 0.11,
+   "abs": 2.055,
+   "members": 1
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.sgie_face.avg_ms",
+   "rel": 0.13,
+   "abs": 2.265,
+   "members": 3
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.sgie_face.busy",
+   "rel": 0.13,
+   "abs": 4.455,
+   "members": 3
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.sgie_plate.avg_ms",
+   "rel": 0.05,
+   "abs": 1.95,
+   "members": 1
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.sgie_plate.busy",
+   "rel": 0.05,
+   "abs": 4.005,
+   "members": 1
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.sgie_pose.avg_ms",
+   "rel": 0.14,
+   "abs": 4.89,
+   "members": 1
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.sgie_pose.busy",
+   "rel": 0.14,
+   "abs": 6.18,
+   "members": 1
+  },
+  {
+   "match": "runtime.*.stage.gpu.jpeg.avg_ms",
+   "rel": 0.06,
+   "abs": 2.415,
+   "members": 6
+  },
+  {
+   "match": "runtime.*.stage.gpu.jpeg.busy",
+   "rel": 0.1,
+   "abs": 6.3,
+   "members": 6
+  },
+  {
+   "match": "runtime.*.stages_sum",
+   "rel": 0.17,
+   "abs": 36.75,
+   "members": 9
+  },
+  {
+   "match": "capacity.*.ceiling_fps",
+   "rel": 0.03,
+   "abs": 0.0,
+   "why": "attendance's ceiling measured three times varied 0.2 %; 3 % floor (one reference measurement per use case)"
+  },
+  {
+   "match": "capacity.*.realtime_cameras",
+   "rel": 0.0,
+   "abs": 0.5,
+   "why": "an integer count at a fixed analysis rate: any drop is notable (only compare runs with the same camera counts)"
+  }
+ ],
+ "note": "proposed by `regress noise` from 11 runs of the default six (5 at 6e3deb1e, 6 at af128f7d, the last 3 hours after the others), 3 PPE/fall/shelf and 2 warm proximity runs, plus judgment rules and the capacity rules",
+ "runs": 16
+}

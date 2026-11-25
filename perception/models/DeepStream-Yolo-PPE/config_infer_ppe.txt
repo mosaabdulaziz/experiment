@@ -1,0 +1,54 @@
+[property]
+gpu-id=0
+net-scale-factor=0.0039215697906911373
+model-color-format=0
+# VoxDroid YOLOv8s (Construction Site Safety, 200 epochs), exported with
+# ../DeepStream-Yolo-Fire/export_raw_anchor_onnx.py. Original class ids 0-9,
+# which overlap COCO's (Hardhat = 0 = person, Safety Vest = 7 = truck).
+onnx-file=voxdroid_yolov8s_css.onnx
+# NOTE: model-engine-file and engine-create-func-name are deliberately absent,
+# as in config_infer_fire_box.txt: build_pipeline sets the engine path from
+# gie_engine_path() (<onnx>_b<batch>_gpu0_<mode>.engine, beside this file).
+labelfile-path=labels_ppe.txt
+# Crops per inference batch (a frame with more persons runs more batches). With
+# process-mode=2 the ppe module keeps this value (engine <onnx>_b16_gpu0_fp16.engine);
+# it does not take the nvstreammux batch.
+batch-size=16
+network-mode=2
+num-detected-classes=10
+interval=0
+# 1 = every pgie, 2 = face SGIE, 3 = fire and plate. 4 is free.
+gie-unique-id=4
+# On each tracked person's crop: the YOLO11x pgie's (gie-unique-id 1) persons,
+# COCO class 0. People are small in CCTV views; on the full frame (process-mode=1)
+# 96.5% of person-frames on test2.mp4 were helmet unknown. nvinfer maps the boxes
+# back to frame (mux) coordinates. The ppe module places this detector AFTER the
+# tracker (GieSpec role="secondary"), so its boxes are never tracked.
+# Crops are cut from the mux frame (1080x720), not the camera's original.
+process-mode=2
+operate-on-gie-id=1
+operate-on-class-ids=0
+# secondary-reinfer-interval left at its default: a secondary DETECTOR then
+# infers on every frame.
+network-type=0
+cluster-mode=2
+maintain-aspect-ratio=1
+symmetric-padding=1
+# Crop scaling: bilinear. The default (0, nearest) gave crops the model could
+# not read: PPE on 0 of 1,722 persons on a 30 s clip of test2.mp4, against 765
+# with scaling-filter=1. Adding scaling-compute-hw=0, as the face SGIE has,
+# changed nothing.
+scaling-filter=1
+# Mask, NO-Mask, Person, Safety Cone, machinery, vehicle: dropped. Kept:
+# Hardhat (0), NO-Hardhat (2), NO-Safety Vest (4), Safety Vest (7).
+filter-out-class-ids=1;3;5;6;8;9
+parse-bbox-func-name=NvDsInferParseYolo
+custom-lib-path=/opt/nvidia/deepstream/deepstream/custom_parsers/libnvdsinfer_custom_impl_Yolo.so
+
+[class-attrs-all]
+# The evaluation's settings (ppe-compliance: nms_iou 0.6, min_detection_conf
+# 0.10): "no vest" means no Safety Vest box >= 0.10, so a higher floor here
+# would change the compliance logic's evidence.
+nms-iou-threshold=0.6
+pre-cluster-threshold=0.10
+topk=100

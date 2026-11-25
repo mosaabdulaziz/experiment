@@ -1,0 +1,8 @@
+# Safety role "zones": intrusion and overcrowding on the base person detector, with end markers so the app can end
+# the incidents (intrusion_cleared / overcrowding_resolved).
+extends: ../../../perception/pipeline/sidecar.yaml
+relevant_classes: [person]
+modules:
+  zones:
+    end_markers: true
+    intrusion_clear_seconds: 5.0

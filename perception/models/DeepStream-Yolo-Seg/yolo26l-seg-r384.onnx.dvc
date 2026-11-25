@@ -1,0 +1,5 @@
+outs:
+- md5: 5780e8d16528bad82646e535961a16d8
+  size: 112230196
+  hash: md5
+  path: yolo26l-seg-r384.onnx

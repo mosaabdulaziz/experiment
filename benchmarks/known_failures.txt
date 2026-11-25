@@ -1,0 +1,4 @@
+# Tests that are known to fail, one per line: `<junit classname>::<test name>  # why`.
+# A test listed here does not fail the regression verdict, but every run prints it, so it is not forgotten.
+# Empty on 2026-11-10: the core suite (2,469 tests) is green on main. Do not add a test here to make a merge request
+# pass; fix the test or the code. An entry needs a reason and a story that removes it.

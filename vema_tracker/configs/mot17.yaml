@@ -1,0 +1,29 @@
+# MOT17 preset (pedestrian streets, moderate occlusions, ~25-30 fps)
+tau_high: 0.60
+tau_low: 0.10
+alpha: 0.80
+gamma: 0.98
+eps_cal: 0.05
+ref_fps: 30.0
+dt_aware: true
+
+area_ratio_min: 0.75
+cos_min: 0.0
+min_speed_ratio: 0.04
+
+iou_thresh_high: 0.20
+iou_thresh_low: 0.15
+relocation_cost_thresh: 1.65
+biou_rate: 0.06
+biou_max_expansion: 2.2
+lambda_biou: 1.0
+lambda_pos: 0.35
+lambda_dir: 0.25
+sigma_par_scale: 1.6
+sigma_perp_scale: 0.65
+
+probation_frames: 2
+max_lost_frames: 30
+early_term_lost: 2
+check_class_match: false
+emit_shadow_tracks: false

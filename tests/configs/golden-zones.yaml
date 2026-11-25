@@ -1,0 +1,17 @@
+# TEST CONFIG (not a product): the attendance clip with zone analytics on -- a restricted zone that also counts
+# crowding, a "valid" zone, and a filter zone that drops detections left of x=250. Exercises intrusion alerts,
+# overcrowding alerts, zone box colouring and filter gating, none of which the other golden configs reach.
+# The zone files are fixtures next to this file; the module renders its ROI config from them (beside
+# golden-zones-roi.txt, which is that render and only the fallback here).
+extends: ../../products/attendance/sidecar.yaml
+
+file_loop: false
+
+modules:
+  zones:
+    analytics_config_path: "tests/configs/golden-zones-roi.txt"
+    config_path: "tests/configs/golden_zones_config.json"   # the filter zones file is found beside it by name
+    overcrowding_enabled: true
+
+sources:
+  - {id: cam-1, uri: "file:///workspace/iris/data/uploads/attendance/enter-3.mp4", roles: [attendance], label: "golden zones"}

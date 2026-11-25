@@ -1,0 +1,796 @@
+{
+  "data_root": "F:\\IRIS\\data\\RetailS",
+  "elapsed_s": 12057.0,
+  "splits": {
+    "train_tune_days": [
+      "0418",
+      "0419",
+      "0420",
+      "0421",
+      "0422",
+      "0423",
+      "0424",
+      "0425"
+    ],
+    "train_holdout_days": [
+      "0426",
+      "0428",
+      "0429"
+    ],
+    "train_tune_files": 618,
+    "train_tune_sampled_files": 36,
+    "train_tune_span_hours": 20.05,
+    "train_holdout_files": 324,
+    "train_holdout_sampled_files": 36,
+    "train_holdout_span_hours": 21.35,
+    "staged_clips": 624,
+    "staged_events": 622,
+    "staged_single_person_events": 459,
+    "realworld_clips": 47,
+    "realworld_events": 43,
+    "realworld_single_person_events": 25
+  },
+  "stage1_proposed_zones": {
+    "cameras": {
+      "cam-1": {
+        "zone_free": true,
+        "zones": [
+          {
+            "id": "proposed_shelf_1",
+            "kind": "shelf_front",
+            "facing": null,
+            "points": [
+              [
+                0.0,
+                0.075
+              ],
+              [
+                0.625,
+                0.075
+              ],
+              [
+                0.625,
+                1.0
+              ],
+              [
+                0.0,
+                1.0
+              ]
+            ]
+          },
+          {
+            "id": "proposed_shelf_2",
+            "kind": "shelf_front",
+            "facing": null,
+            "points": [
+              [
+                0.475,
+                0.275
+              ],
+              [
+                1.0,
+                0.275
+              ],
+              [
+                1.0,
+                1.0
+              ],
+              [
+                0.475,
+                1.0
+              ]
+            ]
+          }
+        ]
+      },
+      "cam-2": {
+        "zone_free": true,
+        "zones": [
+          {
+            "id": "proposed_shelf_1",
+            "kind": "shelf_front",
+            "facing": null,
+            "points": [
+              [
+                0.0,
+                0.175
+              ],
+              [
+                1.0,
+                0.175
+              ],
+              [
+                1.0,
+                1.0
+              ],
+              [
+                0.0,
+                1.0
+              ]
+            ]
+          }
+        ]
+      },
+      "cam-3": {
+        "zone_free": true,
+        "zones": [
+          {
+            "id": "proposed_shelf_1",
+            "kind": "shelf_front",
+            "facing": null,
+            "points": [
+              [
+                0.075,
+                0.0
+              ],
+              [
+                1.0,
+                0.0
+              ],
+              [
+                1.0,
+                1.0
+              ],
+              [
+                0.075,
+                1.0
+              ]
+            ]
+          },
+          {
+            "id": "proposed_shelf_2",
+            "kind": "shelf_front",
+            "facing": null,
+            "points": [
+              [
+                0.0,
+                0.675
+              ],
+              [
+                0.325,
+                0.675
+              ],
+              [
+                0.325,
+                1.0
+              ],
+              [
+                0.0,
+                1.0
+              ]
+            ]
+          }
+        ]
+      },
+      "cam-4": {
+        "zone_free": true,
+        "zones": [
+          {
+            "id": "proposed_shelf_1",
+            "kind": "shelf_front",
+            "facing": null,
+            "points": [
+              [
+                0.075,
+                0.075
+              ],
+              [
+                1.0,
+                0.075
+              ],
+              [
+                1.0,
+                1.0
+              ],
+              [
+                0.075,
+                1.0
+              ]
+            ]
+          }
+        ]
+      },
+      "cam-5": {
+        "zone_free": true,
+        "zones": [
+          {
+            "id": "proposed_shelf_1",
+            "kind": "shelf_front",
+            "facing": null,
+            "points": [
+              [
+                0.0,
+                0.075
+              ],
+              [
+                1.0,
+                0.075
+              ],
+              [
+                1.0,
+                1.0
+              ],
+              [
+                0.0,
+                1.0
+              ]
+            ]
+          }
+        ]
+      },
+      "cam-6": {
+        "zone_free": true,
+        "zones": [
+          {
+            "id": "proposed_shelf_1",
+            "kind": "shelf_front",
+            "facing": null,
+            "points": [
+              [
+                0.175,
+                0.0
+              ],
+              [
+                1.0,
+                0.0
+              ],
+              [
+                1.0,
+                1.0
+              ],
+              [
+                0.175,
+                1.0
+              ]
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "stage2_empirical_quantiles": {
+    "positive_staged_gt": {
+      "event_duration_s": {
+        "count": 250,
+        "p10": 1.2667,
+        "p25": 1.5333,
+        "p50": 2.0333,
+        "p75": 2.6667,
+        "p90": 3.3333
+      },
+      "pre_event_lead_s": {
+        "count": 250,
+        "p10": 0.6667,
+        "p25": 0.8,
+        "p50": 1.0,
+        "p75": 1.3333,
+        "p90": 1.6667
+      },
+      "wrist_excursion_torsos": {
+        "count": 9556,
+        "p10": 0.1866,
+        "p25": 0.3537,
+        "p50": 0.5925,
+        "p75": 0.9226,
+        "p90": 1.2177
+      },
+      "min_elbow_deg": {
+        "count": 9556,
+        "p10": 52.1588,
+        "p25": 87.6215,
+        "p50": 114.593,
+        "p75": 141.2075,
+        "p90": 158.5513
+      },
+      "wrist_to_body_torsos": {
+        "count": 9556,
+        "p10": 0.0909,
+        "p25": 0.1588,
+        "p50": 0.2469,
+        "p75": 0.3555,
+        "p90": 0.5267
+      },
+      "active_wrist_conf": {
+        "count": 9556,
+        "p10": 0.2212,
+        "p25": 0.3904,
+        "p50": 0.6738,
+        "p75": 0.8193,
+        "p90": 0.8667
+      }
+    },
+    "negative_normal_train": {
+      "wrist_excursion_torsos": {
+        "count": 17857,
+        "p10": 0.142,
+        "p25": 0.3129,
+        "p50": 0.5541,
+        "p75": 0.8885,
+        "p90": 1.1823
+      },
+      "min_elbow_deg": {
+        "count": 17857,
+        "p10": 26.5097,
+        "p25": 61.717,
+        "p50": 101.2217,
+        "p75": 147.1546,
+        "p90": 163.323
+      },
+      "wrist_to_body_torsos": {
+        "count": 17857,
+        "p10": 0.0967,
+        "p25": 0.1657,
+        "p50": 0.2451,
+        "p75": 0.3493,
+        "p90": 0.4879
+      },
+      "active_wrist_conf": {
+        "count": 17857,
+        "p10": 0.1608,
+        "p25": 0.2942,
+        "p50": 0.5366,
+        "p75": 0.7842,
+        "p90": 0.8525
+      }
+    }
+  },
+  "stage3_grid_search": {
+    "total_configs_evaluated": 216,
+    "selected_operating_points": [
+      {
+        "name": "Baseline (Un-tuned Default)",
+        "params": {
+          "min_track_s": 0.4,
+          "min_keypoints": 6,
+          "keypoint_conf_threshold": 0.3,
+          "min_box_height_px": 48.0,
+          "min_torso_px": 25.0,
+          "min_core_conf_enter": 0.3,
+          "min_core_conf_exit": 0.35,
+          "degrade_max_s": 1.0,
+          "recover_s": 0.4,
+          "lost_s": 1.5,
+          "camera_stale_s": 3.0,
+          "reid_max_gap_s": 1.5,
+          "reid_max_dist_torsos": 1.2,
+          "dwell_min_s": 2.0,
+          "short_track_grace_s": 1.2,
+          "reach_excursion_torsos": 0.35,
+          "reach_window_s": 2.5,
+          "body_zone_radius_torsos": 0.55,
+          "bag_zone_radius_torsos": 0.5,
+          "max_conceal_elbow_deg": 135.0,
+          "min_hold_s": 0.35,
+          "hidden_s": 0.45,
+          "hidden_conf_drop_fraction": 0.45,
+          "baseline_window_s": 2.0,
+          "cooldown_s": 8.0,
+          "emit_low_tier": true
+        },
+        "tuning_metrics": {
+          "tp_events": 552,
+          "total_events": 622,
+          "recall_all": 0.8875,
+          "tp_single_person": 400,
+          "total_single_person": 459,
+          "recall_single_person": 0.8715,
+          "pos_candidates_emitted": 621,
+          "neg_false_alarms": 2059,
+          "neg_warning_false_alarms": 1413,
+          "neg_span_hours": 20.05,
+          "neg_active_hours": 4.25,
+          "fa_per_span_hour": 102.687,
+          "warning_fa_per_span_hour": 70.469,
+          "fa_per_active_hour": 484.644,
+          "fa_upper_bound_95_per_span_hour": 106.488
+        }
+      },
+      {
+        "name": "Recommended Balanced (PoC Default)",
+        "params": {
+          "min_track_s": 0.25,
+          "min_keypoints": 6,
+          "keypoint_conf_threshold": 0.3,
+          "min_box_height_px": 48.0,
+          "min_torso_px": 25.0,
+          "min_core_conf_enter": 0.3,
+          "min_core_conf_exit": 0.35,
+          "degrade_max_s": 1.0,
+          "recover_s": 0.4,
+          "lost_s": 1.5,
+          "camera_stale_s": 3.0,
+          "reid_max_gap_s": 1.5,
+          "reid_max_dist_torsos": 1.2,
+          "dwell_min_s": 1.6,
+          "short_track_grace_s": 1.5,
+          "reach_excursion_torsos": 0.32,
+          "reach_window_s": 2.5,
+          "body_zone_radius_torsos": 0.5,
+          "bag_zone_radius_torsos": 0.5,
+          "max_conceal_elbow_deg": 140.0,
+          "min_hold_s": 0.35,
+          "hidden_s": 0.4,
+          "hidden_conf_drop_fraction": 0.45,
+          "baseline_window_s": 2.0,
+          "cooldown_s": 8.0,
+          "emit_low_tier": false
+        },
+        "tuning_metrics": {
+          "tp_events": 536,
+          "total_events": 622,
+          "recall_all": 0.8617,
+          "tp_single_person": 388,
+          "total_single_person": 459,
+          "recall_single_person": 0.8453,
+          "pos_candidates_emitted": 591,
+          "neg_false_alarms": 1827,
+          "neg_warning_false_alarms": 1827,
+          "neg_span_hours": 20.05,
+          "neg_active_hours": 4.25,
+          "fa_per_span_hour": 91.116,
+          "warning_fa_per_span_hour": 91.116,
+          "fa_per_active_hour": 430.036,
+          "fa_upper_bound_95_per_span_hour": 94.702
+        }
+      },
+      {
+        "name": "High-Sensitivity (Max Recall)",
+        "params": {
+          "min_track_s": 0.25,
+          "min_keypoints": 6,
+          "keypoint_conf_threshold": 0.3,
+          "min_box_height_px": 48.0,
+          "min_torso_px": 25.0,
+          "min_core_conf_enter": 0.3,
+          "min_core_conf_exit": 0.35,
+          "degrade_max_s": 1.0,
+          "recover_s": 0.4,
+          "lost_s": 1.5,
+          "camera_stale_s": 3.0,
+          "reid_max_gap_s": 1.5,
+          "reid_max_dist_torsos": 1.2,
+          "dwell_min_s": 1.6,
+          "short_track_grace_s": 1.5,
+          "reach_excursion_torsos": 0.25,
+          "reach_window_s": 2.5,
+          "body_zone_radius_torsos": 0.6,
+          "bag_zone_radius_torsos": 0.5,
+          "max_conceal_elbow_deg": 150.0,
+          "min_hold_s": 0.25,
+          "hidden_s": 0.4,
+          "hidden_conf_drop_fraction": 0.45,
+          "baseline_window_s": 2.0,
+          "cooldown_s": 8.0,
+          "emit_low_tier": true
+        },
+        "tuning_metrics": {
+          "tp_events": 602,
+          "total_events": 622,
+          "recall_all": 0.9678,
+          "tp_single_person": 443,
+          "total_single_person": 459,
+          "recall_single_person": 0.9651,
+          "pos_candidates_emitted": 713,
+          "neg_false_alarms": 2429,
+          "neg_warning_false_alarms": 1934,
+          "neg_span_hours": 20.05,
+          "neg_active_hours": 4.25,
+          "fa_per_span_hour": 121.139,
+          "warning_fa_per_span_hour": 96.453,
+          "fa_per_active_hour": 571.734,
+          "fa_upper_bound_95_per_span_hour": 125.261
+        }
+      },
+      {
+        "name": "Strict Low-FA (Conservative)",
+        "params": {
+          "min_track_s": 0.25,
+          "min_keypoints": 6,
+          "keypoint_conf_threshold": 0.3,
+          "min_box_height_px": 48.0,
+          "min_torso_px": 25.0,
+          "min_core_conf_enter": 0.3,
+          "min_core_conf_exit": 0.35,
+          "degrade_max_s": 1.0,
+          "recover_s": 0.4,
+          "lost_s": 1.5,
+          "camera_stale_s": 3.0,
+          "reid_max_gap_s": 1.5,
+          "reid_max_dist_torsos": 1.2,
+          "dwell_min_s": 1.6,
+          "short_track_grace_s": 1.5,
+          "reach_excursion_torsos": 0.4,
+          "reach_window_s": 2.5,
+          "body_zone_radius_torsos": 0.5,
+          "bag_zone_radius_torsos": 0.5,
+          "max_conceal_elbow_deg": 130.0,
+          "min_hold_s": 0.5,
+          "hidden_s": 0.4,
+          "hidden_conf_drop_fraction": 0.45,
+          "baseline_window_s": 2.0,
+          "cooldown_s": 8.0,
+          "emit_low_tier": false
+        },
+        "tuning_metrics": {
+          "tp_events": 440,
+          "total_events": 622,
+          "recall_all": 0.7074,
+          "tp_single_person": 313,
+          "total_single_person": 459,
+          "recall_single_person": 0.6819,
+          "pos_candidates_emitted": 478,
+          "neg_false_alarms": 1425,
+          "neg_warning_false_alarms": 1425,
+          "neg_span_hours": 20.05,
+          "neg_active_hours": 4.25,
+          "fa_per_span_hour": 71.068,
+          "warning_fa_per_span_hour": 71.068,
+          "fa_per_active_hour": 335.414,
+          "fa_upper_bound_95_per_span_hour": 74.243
+        }
+      }
+    ]
+  },
+  "stage4_locked_holdout": [
+    {
+      "name": "Baseline (Un-tuned Default)",
+      "params": {
+        "min_track_s": 0.4,
+        "min_keypoints": 6,
+        "keypoint_conf_threshold": 0.3,
+        "min_box_height_px": 48.0,
+        "min_torso_px": 25.0,
+        "min_core_conf_enter": 0.3,
+        "min_core_conf_exit": 0.35,
+        "degrade_max_s": 1.0,
+        "recover_s": 0.4,
+        "lost_s": 1.5,
+        "camera_stale_s": 3.0,
+        "reid_max_gap_s": 1.5,
+        "reid_max_dist_torsos": 1.2,
+        "dwell_min_s": 2.0,
+        "short_track_grace_s": 1.2,
+        "reach_excursion_torsos": 0.35,
+        "reach_window_s": 2.5,
+        "body_zone_radius_torsos": 0.55,
+        "bag_zone_radius_torsos": 0.5,
+        "max_conceal_elbow_deg": 135.0,
+        "min_hold_s": 0.35,
+        "hidden_s": 0.45,
+        "hidden_conf_drop_fraction": 0.45,
+        "baseline_window_s": 2.0,
+        "cooldown_s": 8.0,
+        "emit_low_tier": true
+      },
+      "tuning_metrics": {
+        "tp_events": 552,
+        "total_events": 622,
+        "recall_all": 0.8875,
+        "tp_single_person": 400,
+        "total_single_person": 459,
+        "recall_single_person": 0.8715,
+        "pos_candidates_emitted": 621,
+        "neg_false_alarms": 2059,
+        "neg_warning_false_alarms": 1413,
+        "neg_span_hours": 20.05,
+        "neg_active_hours": 4.25,
+        "fa_per_span_hour": 102.687,
+        "warning_fa_per_span_hour": 70.469,
+        "fa_per_active_hour": 484.644,
+        "fa_upper_bound_95_per_span_hour": 106.488
+      },
+      "holdout_metrics": {
+        "tp_events": 30,
+        "total_events": 43,
+        "recall_all": 0.6977,
+        "tp_single_person": 16,
+        "total_single_person": 25,
+        "recall_single_person": 0.64,
+        "pos_candidates_emitted": 49,
+        "neg_false_alarms": 1979,
+        "neg_warning_false_alarms": 1378,
+        "neg_span_hours": 21.35,
+        "neg_active_hours": 4.54,
+        "fa_per_span_hour": 92.69,
+        "warning_fa_per_span_hour": 64.541,
+        "fa_per_active_hour": 435.727,
+        "fa_upper_bound_95_per_span_hour": 96.191
+      }
+    },
+    {
+      "name": "Recommended Balanced (PoC Default)",
+      "params": {
+        "min_track_s": 0.25,
+        "min_keypoints": 6,
+        "keypoint_conf_threshold": 0.3,
+        "min_box_height_px": 48.0,
+        "min_torso_px": 25.0,
+        "min_core_conf_enter": 0.3,
+        "min_core_conf_exit": 0.35,
+        "degrade_max_s": 1.0,
+        "recover_s": 0.4,
+        "lost_s": 1.5,
+        "camera_stale_s": 3.0,
+        "reid_max_gap_s": 1.5,
+        "reid_max_dist_torsos": 1.2,
+        "dwell_min_s": 1.6,
+        "short_track_grace_s": 1.5,
+        "reach_excursion_torsos": 0.32,
+        "reach_window_s": 2.5,
+        "body_zone_radius_torsos": 0.5,
+        "bag_zone_radius_torsos": 0.5,
+        "max_conceal_elbow_deg": 140.0,
+        "min_hold_s": 0.35,
+        "hidden_s": 0.4,
+        "hidden_conf_drop_fraction": 0.45,
+        "baseline_window_s": 2.0,
+        "cooldown_s": 8.0,
+        "emit_low_tier": false
+      },
+      "tuning_metrics": {
+        "tp_events": 536,
+        "total_events": 622,
+        "recall_all": 0.8617,
+        "tp_single_person": 388,
+        "total_single_person": 459,
+        "recall_single_person": 0.8453,
+        "pos_candidates_emitted": 591,
+        "neg_false_alarms": 1827,
+        "neg_warning_false_alarms": 1827,
+        "neg_span_hours": 20.05,
+        "neg_active_hours": 4.25,
+        "fa_per_span_hour": 91.116,
+        "warning_fa_per_span_hour": 91.116,
+        "fa_per_active_hour": 430.036,
+        "fa_upper_bound_95_per_span_hour": 94.702
+      },
+      "holdout_metrics": {
+        "tp_events": 30,
+        "total_events": 43,
+        "recall_all": 0.6977,
+        "tp_single_person": 16,
+        "total_single_person": 25,
+        "recall_single_person": 0.64,
+        "pos_candidates_emitted": 46,
+        "neg_false_alarms": 1744,
+        "neg_warning_false_alarms": 1744,
+        "neg_span_hours": 21.35,
+        "neg_active_hours": 4.54,
+        "fa_per_span_hour": 81.683,
+        "warning_fa_per_span_hour": 81.683,
+        "fa_per_active_hour": 383.986,
+        "fa_upper_bound_95_per_span_hour": 84.975
+      }
+    },
+    {
+      "name": "High-Sensitivity (Max Recall)",
+      "params": {
+        "min_track_s": 0.25,
+        "min_keypoints": 6,
+        "keypoint_conf_threshold": 0.3,
+        "min_box_height_px": 48.0,
+        "min_torso_px": 25.0,
+        "min_core_conf_enter": 0.3,
+        "min_core_conf_exit": 0.35,
+        "degrade_max_s": 1.0,
+        "recover_s": 0.4,
+        "lost_s": 1.5,
+        "camera_stale_s": 3.0,
+        "reid_max_gap_s": 1.5,
+        "reid_max_dist_torsos": 1.2,
+        "dwell_min_s": 1.6,
+        "short_track_grace_s": 1.5,
+        "reach_excursion_torsos": 0.25,
+        "reach_window_s": 2.5,
+        "body_zone_radius_torsos": 0.6,
+        "bag_zone_radius_torsos": 0.5,
+        "max_conceal_elbow_deg": 150.0,
+        "min_hold_s": 0.25,
+        "hidden_s": 0.4,
+        "hidden_conf_drop_fraction": 0.45,
+        "baseline_window_s": 2.0,
+        "cooldown_s": 8.0,
+        "emit_low_tier": true
+      },
+      "tuning_metrics": {
+        "tp_events": 602,
+        "total_events": 622,
+        "recall_all": 0.9678,
+        "tp_single_person": 443,
+        "total_single_person": 459,
+        "recall_single_person": 0.9651,
+        "pos_candidates_emitted": 713,
+        "neg_false_alarms": 2429,
+        "neg_warning_false_alarms": 1934,
+        "neg_span_hours": 20.05,
+        "neg_active_hours": 4.25,
+        "fa_per_span_hour": 121.139,
+        "warning_fa_per_span_hour": 96.453,
+        "fa_per_active_hour": 571.734,
+        "fa_upper_bound_95_per_span_hour": 125.261
+      },
+      "holdout_metrics": {
+        "tp_events": 38,
+        "total_events": 43,
+        "recall_all": 0.8837,
+        "tp_single_person": 21,
+        "total_single_person": 25,
+        "recall_single_person": 0.84,
+        "pos_candidates_emitted": 68,
+        "neg_false_alarms": 2270,
+        "neg_warning_false_alarms": 1836,
+        "neg_span_hours": 21.35,
+        "neg_active_hours": 4.54,
+        "fa_per_span_hour": 106.319,
+        "warning_fa_per_span_hour": 85.992,
+        "fa_per_active_hour": 499.798,
+        "fa_upper_bound_95_per_span_hour": 110.064
+      }
+    },
+    {
+      "name": "Strict Low-FA (Conservative)",
+      "params": {
+        "min_track_s": 0.25,
+        "min_keypoints": 6,
+        "keypoint_conf_threshold": 0.3,
+        "min_box_height_px": 48.0,
+        "min_torso_px": 25.0,
+        "min_core_conf_enter": 0.3,
+        "min_core_conf_exit": 0.35,
+        "degrade_max_s": 1.0,
+        "recover_s": 0.4,
+        "lost_s": 1.5,
+        "camera_stale_s": 3.0,
+        "reid_max_gap_s": 1.5,
+        "reid_max_dist_torsos": 1.2,
+        "dwell_min_s": 1.6,
+        "short_track_grace_s": 1.5,
+        "reach_excursion_torsos": 0.4,
+        "reach_window_s": 2.5,
+        "body_zone_radius_torsos": 0.5,
+        "bag_zone_radius_torsos": 0.5,
+        "max_conceal_elbow_deg": 130.0,
+        "min_hold_s": 0.5,
+        "hidden_s": 0.4,
+        "hidden_conf_drop_fraction": 0.45,
+        "baseline_window_s": 2.0,
+        "cooldown_s": 8.0,
+        "emit_low_tier": false
+      },
+      "tuning_metrics": {
+        "tp_events": 440,
+        "total_events": 622,
+        "recall_all": 0.7074,
+        "tp_single_person": 313,
+        "total_single_person": 459,
+        "recall_single_person": 0.6819,
+        "pos_candidates_emitted": 478,
+        "neg_false_alarms": 1425,
+        "neg_warning_false_alarms": 1425,
+        "neg_span_hours": 20.05,
+        "neg_active_hours": 4.25,
+        "fa_per_span_hour": 71.068,
+        "warning_fa_per_span_hour": 71.068,
+        "fa_per_active_hour": 335.414,
+        "fa_upper_bound_95_per_span_hour": 74.243
+      },
+      "holdout_metrics": {
+        "tp_events": 22,
+        "total_events": 43,
+        "recall_all": 0.5116,
+        "tp_single_person": 12,
+        "total_single_person": 25,
+        "recall_single_person": 0.48,
+        "pos_candidates_emitted": 34,
+        "neg_false_alarms": 1398,
+        "neg_warning_false_alarms": 1398,
+        "neg_span_hours": 21.35,
+        "neg_active_hours": 4.54,
+        "fa_per_span_hour": 65.478,
+        "warning_fa_per_span_hour": 65.478,
+        "fa_per_active_hour": 307.805,
+        "fa_upper_bound_95_per_span_hour": 68.432
+      }
+    }
+  ]
+}

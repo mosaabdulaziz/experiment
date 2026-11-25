@@ -1,0 +1,65 @@
+{
+  "vendor": {
+    "path": "F:\\fall_detection_module\\src",
+    "commit": "e31325a",
+    "taken": "2026-10-25"
+  },
+  "note": "hashes are over the file text with CRLF normalised to LF",
+  "files": {
+    "__init__.py": "83cad3699b9ac9bf7a98862e419a69b8a1a1c57a6d44e3b212f8a7f9d27842c1",
+    "evaluate_benchmark.py": "e93feb5e0d6949df7af8f2a6b937c9dabb05396486ccd45305bd0a3a432021f3",
+    "fall_monitor.py": "73c4647175e5dadeb31c2232c2ab77136faa4f414537b632ac70f12f43b6f5db",
+    "keypoint_adapter.py": "44ae5f5d5799d730e061f84f0c5c60ef68c259b695d72000013f984ae4ef6e00",
+    "omnifall_adapter.py": "803140e0637e5289a215bb1f52f5ba91505667f1b065f6f756ee8036f41fe810",
+    "transfer_gate.py": "8bb163cae44e24377c9d3313e5e0eae1f82f4b79fe99b095171b1af00e2d367e",
+    "tsstg_model.py": "b979d0bf03c495993e659019f943e300372cc734205f979e36c83107162f0828"
+  },
+  "seam": {
+    "fall_monitor.py": {
+      "what": "the product seam (design \u00a74.2): the smoothed reading, the latching paths, and the track state that carries the latch; the product's monitor turns the latch into the path scores; plus the vendor's ROOT path expression, rewritten to the same path",
+      "edits": [
+        {
+          "copy": "                fall_paths=None,\n",
+          "pristine": ""
+        },
+        {
+          "copy": "                    # The seam's latch record (design \u00a74.2): which paths spoke. The scores are\n                    # measured at the packaging, where the collapse is still in the rolling\n                    # windows; the latch frame has only just crossed the gate.\n                    d['fall_paths'] = dict(a=bool(path_a), b=bool(path_b), c=bool(path_c))\n",
+          "pristine": ""
+        },
+        {
+          "copy": "                                    priority='high',\n                                    fall_paths=d['fall_paths']\n",
+          "pristine": "                                    priority='high'\n"
+        },
+        {
+          "copy": "                                d['last_fall_cand_t'] = t_cand\n                                d['pending_fall_t0'] = None\n                                d['fall_paths'] = None\n",
+          "pristine": "                                d['last_fall_cand_t'] = t_cand\n                                d['pending_fall_t0'] = None\n"
+        },
+        {
+          "copy": "                    d['pending_fall_t0'] = None\n                    d['fall_paths'] = None\n",
+          "pristine": "                    d['pending_fall_t0'] = None\n"
+        },
+        {
+          "copy": "                # The seam (design \u00a74.2): the reading and the fall paths that spoke. The reading\n                # is the smoothed vector at packaging time; without a window there is no reading.\n                # The latch travels as data -- the product's monitor turns it into the path\n                # scores, so the copy imports nothing from the product.\n                rec['reading'] = ({'probs': probs_smooth.tolist(),\n                                   'top': int(np.argmax(probs_smooth))} if has_win else None)\n                rec['fall_paths'] = ev.get('fall_paths')\n",
+          "pristine": ""
+        },
+        {
+          "copy": "ROOT = Path(__file__).resolve().parents[1]\n",
+          "pristine": "ROOT = Path(__file__).resolve().parent.parent\n"
+        },
+        {
+          "copy": "            # Bounded state for a days-long run: when a ledger is over cap, halve it by\n            # insertion order -- no clock arithmetic, so a PTS restart cannot corrupt it.\n            # The override is events.state_cap in this config file.\n            state_cap = int((self.cfg.get('events') or {}).get('state_cap', 4096))\n            if len(self.emitted) > state_cap:\n                for key in list(self.emitted)[:len(self.emitted) // 2]:\n                    self.emitted.pop(key)\n                    self.last_cand.pop(key, None)\n            if len(self.events) > state_cap:\n                for key in list(self.events)[:len(self.events) // 2]:\n                    self.events.pop(key)\n",
+          "pristine": ""
+        }
+      ]
+    },
+    "tsstg_model.py": {
+      "what": "the same path, spelled with an explicit depth: the repo's rule (tests/test_product_paths.py) bans counting parents in product sources, because it broke when a product moved one level deeper. `.parents[1]` IS `.parent.parent` -- the identical path, in every layout",
+      "edits": [
+        {
+          "copy": "ROOT = Path(__file__).resolve().parents[1]\n",
+          "pristine": "ROOT = Path(__file__).resolve().parent.parent\n"
+        }
+      ]
+    }
+  }
+}

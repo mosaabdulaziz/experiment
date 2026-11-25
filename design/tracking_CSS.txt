@@ -1,0 +1,6682 @@
+/* Vehicle Tracking */
+
+box-sizing: border-box;
+
+position: relative;
+width: 1944px;
+height: 1504px;
+
+background: #444444;
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 2px;
+
+
+/* Vehicle Tracking */
+
+position: relative;
+width: 1440px;
+height: 787px;
+left: calc(50% - 1440px/2 - 31px);
+top: 394px;
+
+background: #050505;
+border-radius: 24px;
+
+
+/* grafica */
+
+position: absolute;
+visibility: hidden;
+width: 528.03px;
+height: 210.62px;
+left: 271px;
+top: 522.04px;
+
+
+
+/* Group 11 */
+
+position: absolute;
+width: 729.84px;
+height: 253.62px;
+left: -120.43px;
+top: 14.94px;
+
+
+
+/* lines */
+
+position: absolute;
+width: 286.96px;
+height: 112.04px;
+left: 29.88px;
+top: 14.94px;
+
+
+
+/* Line 1 */
+
+position: absolute;
+width: 284.71px;
+height: 0px;
+left: 29.88px;
+top: 14.94px;
+
+border: 0.622466px solid #151515;
+
+
+/* Line 2 */
+
+position: absolute;
+width: 284.71px;
+height: 0px;
+left: 29.88px;
+top: 33.61px;
+
+border: 0.622466px solid #151515;
+
+
+/* Line 3 */
+
+position: absolute;
+width: 284.71px;
+height: 0px;
+left: 29.88px;
+top: 52.29px;
+
+border: 0.622466px solid #151515;
+
+
+/* Line 4 */
+
+position: absolute;
+width: 284.71px;
+height: 0px;
+left: 29.88px;
+top: 70.96px;
+
+border: 0.622466px solid #151515;
+
+
+/* Line 5 */
+
+position: absolute;
+width: 284.71px;
+height: 0px;
+left: 32.12px;
+top: 89.63px;
+
+border: 0.622466px solid #151515;
+
+
+/* Line 6 */
+
+position: absolute;
+width: 284.71px;
+height: 0px;
+left: 32.12px;
+top: 108.31px;
+
+border: 0.622466px solid #151515;
+
+
+/* Line 7 */
+
+position: absolute;
+width: 284.71px;
+height: 0px;
+left: 32.12px;
+top: 126.98px;
+
+border: 0.622466px solid #151515;
+
+
+/* Graph */
+
+position: absolute;
+height: 225.93px;
+left: -120.43px;
+right: -81.38px;
+top: 42.63px;
+
+
+
+/* grafica */
+
+position: absolute;
+visibility: hidden;
+width: 500.61px;
+height: 197.64px;
+left: 846.75px;
+top: 536.36px;
+
+
+
+/* Group 11 */
+
+position: absolute;
+width: 691px;
+height: 237.98px;
+left: -113px;
+top: 14.02px;
+
+
+
+/* lines */
+
+position: absolute;
+width: 269.27px;
+height: 105.13px;
+left: 28.04px;
+top: 14.02px;
+
+
+
+/* Line 1 */
+
+position: absolute;
+width: 267.16px;
+height: 0px;
+left: 28.04px;
+top: 14.02px;
+
+border: 0.584087px solid #151515;
+
+
+/* Line 2 */
+
+position: absolute;
+width: 267.16px;
+height: 0px;
+left: 28.04px;
+top: 31.54px;
+
+border: 0.584087px solid #151515;
+
+
+/* Line 3 */
+
+position: absolute;
+width: 267.16px;
+height: 0px;
+left: 28.04px;
+top: 49.06px;
+
+border: 0.584087px solid #151515;
+
+
+/* Line 4 */
+
+position: absolute;
+width: 267.16px;
+height: 0px;
+left: 28.04px;
+top: 66.59px;
+
+border: 0.584087px solid #151515;
+
+
+/* Line 5 */
+
+position: absolute;
+width: 267.16px;
+height: 0px;
+left: 30.15px;
+top: 84.11px;
+
+border: 0.584087px solid #151515;
+
+
+/* Line 6 */
+
+position: absolute;
+width: 267.16px;
+height: 0px;
+left: 30.15px;
+top: 101.63px;
+
+border: 0.584087px solid #151515;
+
+
+/* Line 7 */
+
+position: absolute;
+width: 267.16px;
+height: 0px;
+left: 30.15px;
+top: 119.15px;
+
+border: 0.584087px solid #151515;
+
+
+/* Graph */
+
+position: absolute;
+height: 212px;
+left: -113px;
+right: -77.39px;
+top: 40px;
+
+
+
+/* Frame 2085661564 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+position: absolute;
+width: 779px;
+height: 61px;
+left: 271px;
+top: 96px;
+
+
+
+/* Frame 2085661795 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: flex-end;
+align-items: center;
+padding: 0px;
+gap: 18px;
+
+width: 578px;
+height: 61px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Component 4 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 6px 12px;
+gap: 10px;
+
+width: 33px;
+height: 33px;
+
+background: linear-gradient(92.2deg, rgba(255, 255, 255, 0.048) 5.62%, rgba(153, 153, 153, 0) 108.9%);
+border-radius: 6px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Actions */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 16px;
+height: 16px;
+
+transform: rotate(-180deg);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* CaretRight
+
+chevron, directional, pointer, pointing, arrowhead, triangle, arrows
+*/
+
+width: 16px;
+height: 16px;
+
+transform: rotate(-180deg);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 29.69%;
+right: 35.94%;
+top: 17.19%;
+bottom: 17.19%;
+
+border: 1.25px solid #FFFFFF;
+transform: rotate(-180deg);
+
+
+/* Frame 2085661794 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+padding: 0px;
+gap: 5px;
+
+width: 527px;
+height: 61px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+
+/* Frame 2085661793 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 6px 0px 0px;
+gap: 10px;
+
+width: 527px;
+height: 36px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Vehicle Tracking */
+
+width: 527px;
+height: 30px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 40px;
+/* or 200% */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* Breadcrumb */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 6px;
+
+width: 527px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* external-link */
+
+display: none;
+width: 12px;
+height: 12px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 1.08px 0px 0px;
+
+display: none;
+width: 74.08px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* تفاصيل العميل */
+
+width: 73px;
+height: 20px;
+
+font-family: 'Tajawal';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+color: #4A5254;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Actions */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+display: none;
+width: 15px;
+height: 15px;
+
+transform: rotate(-180deg);
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* CaretRight
+
+chevron, directional, pointer, pointing, arrowhead, triangle, arrows
+*/
+
+width: 15px;
+height: 15px;
+
+transform: rotate(-180deg);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 1.08px 0px 0px;
+
+display: none;
+width: 74.08px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* تفاصيل العميل */
+
+width: 73px;
+height: 20px;
+
+font-family: 'Tajawal';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+color: #4A5254;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Actions */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+display: none;
+width: 15px;
+height: 15px;
+
+transform: rotate(-180deg);
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 0;
+
+
+/* CaretRight
+
+chevron, directional, pointer, pointing, arrowhead, triangle, arrows
+*/
+
+width: 15px;
+height: 15px;
+
+transform: rotate(-180deg);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 1.08px 0px 0px;
+
+display: none;
+width: 74.08px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 5;
+flex-grow: 0;
+
+
+/* تفاصيل العميل */
+
+width: 118px;
+height: 20px;
+
+font-family: 'Tajawal';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+color: #4A5254;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Actions */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+display: none;
+width: 15px;
+height: 15px;
+
+transform: rotate(-180deg);
+
+/* Inside auto layout */
+flex: none;
+order: 6;
+flex-grow: 0;
+
+
+/* CaretRight
+
+chevron, directional, pointer, pointing, arrowhead, triangle, arrows
+*/
+
+width: 15px;
+height: 15px;
+
+transform: rotate(-180deg);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 1.08px 0px 0px;
+
+width: 42.08px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 7;
+flex-grow: 0;
+
+
+/* Home */
+
+width: 41px;
+height: 20px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+color: #757575;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Actions */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 15px;
+height: 15px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 8;
+flex-grow: 0;
+
+
+/* CaretRight
+
+chevron, directional, pointer, pointing, arrowhead, triangle, arrows
+*/
+
+width: 15px;
+height: 15px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 35.94%;
+right: 29.69%;
+top: 17.19%;
+bottom: 17.19%;
+
+/* Gray/400 */
+border: 1.25px solid #98A2B3;
+
+
+/* Button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 1.08px 0px 0px;
+
+width: 107.08px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 9;
+flex-grow: 0;
+
+
+/* Vehicle Tracking */
+
+width: 106px;
+height: 20px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+display: flex;
+align-items: center;
+
+color: #F9996C;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* CaretRight
+
+chevron, directional, pointer, pointing, arrowhead, triangle, arrows
+*/
+
+display: none;
+width: 4px;
+height: 4px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 10;
+flex-grow: 0;
+
+
+/* Button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+display: none;
+width: 113px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 11;
+flex-grow: 0;
+
+
+/* Button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+display: none;
+width: 153px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Header navigation */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 0px;
+
+position: absolute;
+width: 1193px;
+height: 80px;
+left: calc(50% - 1193px/2 + 123.5px);
+top: 0px;
+
+
+
+/* Container */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px 32px;
+gap: 738px;
+
+width: 1193px;
+height: 80px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Input */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 6px 12px;
+gap: 10px;
+
+margin: 0 auto;
+width: 400px;
+height: 48px;
+
+background: linear-gradient(92.2deg, rgba(255, 255, 255, 0.048) 5.62%, rgba(153, 153, 153, 0) 108.9%);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 376px;
+height: 24px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* search */
+
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Icon */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 12.5%;
+bottom: 12.5%;
+
+border: 1.66667px solid #FFFFFF;
+
+
+/* Text */
+
+width: 53px;
+height: 24px;
+
+/* Text md/Regular */
+font-family: 'Inter';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+/* identical to box height, or 150% */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame 2121453804 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 16px;
+
+margin: 0 auto;
+display: none;
+width: 380px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Input field */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 4px;
+
+width: 182px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Input */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 8px 12px;
+gap: 8px;
+
+width: 182px;
+height: 44px;
+min-height: 36px;
+
+background: #FFFFFF;
+border: 1px solid #E4E4E7;
+border-radius: 6px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 1;
+
+
+/* mail */
+
+display: none;
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 134px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+
+/* Text */
+
+width: 134px;
+height: 20px;
+
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+
+/* Gray/400 */
+color: #A1A1AA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* Actions */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 16px;
+height: 16px;
+
+transform: rotate(90deg);
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* CaretRight
+
+chevron, directional, pointer, pointing, arrowhead, triangle, arrows
+*/
+
+width: 16px;
+height: 16px;
+
+transform: rotate(90deg);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Input field */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 4px;
+
+width: 182px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Input */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 8px 12px;
+gap: 8px;
+
+width: 182px;
+height: 44px;
+min-height: 36px;
+
+background: #FFFFFF;
+border: 1px solid #E4E4E7;
+border-radius: 6px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 1;
+
+
+/* mail */
+
+display: none;
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 134px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+
+/* Text */
+
+width: 134px;
+height: 20px;
+
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+
+/* Gray/400 */
+color: #A1A1AA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* Actions */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 16px;
+height: 16px;
+
+transform: rotate(90deg);
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* CaretRight
+
+chevron, directional, pointer, pointing, arrowhead, triangle, arrows
+*/
+
+width: 16px;
+height: 16px;
+
+transform: rotate(90deg);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Input field */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 4px;
+
+margin: 0 auto;
+display: none;
+width: 182px;
+height: 36px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Input */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 8px 12px;
+gap: 8px;
+
+width: 182px;
+height: 36px;
+min-height: 36px;
+
+background: #FFFFFF;
+border: 1px solid #E4E4E7;
+border-radius: 6px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* mail */
+
+display: none;
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 134px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+
+/* Text */
+
+width: 134px;
+height: 20px;
+
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+/* identical to box height, or 143% */
+
+/* Gray/400 */
+color: #A1A1AA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* Actions */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 16px;
+height: 16px;
+
+transform: rotate(90deg);
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* CaretRight
+
+chevron, directional, pointer, pointing, arrowhead, triangle, arrows
+*/
+
+width: 16px;
+height: 16px;
+
+transform: rotate(90deg);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 16px;
+
+margin: 0 auto;
+width: 239px;
+height: 40px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* Frame 2121453831 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 92px;
+height: 40px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* _Nav item button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 6px 12px;
+gap: 10px;
+
+width: 44px;
+height: 40px;
+
+background: linear-gradient(92.2deg, rgba(255, 255, 255, 0.048) 5.62%, rgba(153, 153, 153, 0) 108.9%);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group */
+
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 27.27%;
+right: 27.27%;
+top: 25%;
+bottom: 25%;
+
+/* White */
+border: 1px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 39.78%;
+right: 42.04%;
+top: 42.11%;
+bottom: 42.1%;
+
+/* White */
+border: 1px solid #FFFFFF;
+
+
+/* _Nav item button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 6px 12px;
+gap: 10px;
+
+width: 40px;
+height: 40px;
+
+background: linear-gradient(92.2deg, rgba(255, 255, 255, 0.048) 5.62%, rgba(153, 153, 153, 0) 108.9%);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* bell */
+
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Icon */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 8.33%;
+bottom: 8.35%;
+
+border: 1.66667px solid #FFFFFF;
+
+
+/* Frame 2121453806 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 131px;
+height: 40px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Dropdown */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+
+width: 40px;
+height: 40px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+margin: 0px -8px;
+
+
+/* Avatar */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 0px;
+
+width: 40px;
+height: 40px;
+
+/* Avatar user square/Olivia Rhye */
+background: url(olivia-rhye.jpg);
+border-radius: 200px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 2121453830 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 6px 12px;
+gap: 10px;
+
+width: 99px;
+height: 40px;
+
+background: linear-gradient(92.2deg, rgba(255, 255, 255, 0.048) 5.62%, rgba(153, 153, 153, 0) 108.9%);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Admin */
+
+width: 41px;
+height: 24px;
+
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 24px;
+/* identical to box height, or 171% */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Actions */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 16px;
+height: 16px;
+
+transform: rotate(90deg);
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* CaretRight
+
+chevron, directional, pointer, pointing, arrowhead, triangle, arrows
+*/
+
+width: 16px;
+height: 16px;
+
+transform: rotate(90deg);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 17.19%;
+right: 48.44%;
+top: 35.94%;
+bottom: -1.56%;
+
+border: 1.25px solid #FFFFFF;
+transform: rotate(90deg);
+
+
+/* KPI-Row */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+gap: 16px;
+
+position: absolute;
+width: 1145px;
+height: 114px;
+left: 271px;
+top: 181px;
+
+
+
+/* kpi-Total Tracks */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+padding: 16px;
+gap: 10px;
+
+width: 274.25px;
+height: 114px;
+
+background: rgba(255, 255, 255, 0.06);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* Total Tracks */
+
+width: 94px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+letter-spacing: 1px;
+text-transform: capitalize;
+
+/* True Gray/300 */
+color: #D4D4D4;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 299 */
+
+width: 70px;
+height: 38px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 32px;
+line-height: 38px;
+
+background: linear-gradient(102.31deg, #F9996C 8.7%, #FFFFFF 151.04%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* global identities */
+
+width: 95px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/300 */
+color: #D4D4D4;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* kpi-Visible Now */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+padding: 16px;
+gap: 10px;
+
+width: 274.25px;
+height: 114px;
+
+background: rgba(255, 255, 255, 0.06);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 1;
+
+
+/* Visible Now */
+
+width: 93px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+letter-spacing: 1px;
+text-transform: capitalize;
+
+/* True Gray/300 */
+color: #D4D4D4;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 3 */
+
+width: 24px;
+height: 38px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 32px;
+line-height: 38px;
+
+background: linear-gradient(102.31deg, #F9996C 8.7%, #FFFFFF 151.04%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* on cameras right now */
+
+width: 133px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/300 */
+color: #D4D4D4;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* kpi-Multi-Camera */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+padding: 16px;
+gap: 10px;
+
+width: 274.25px;
+height: 114px;
+
+background: rgba(255, 255, 255, 0.06);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 1;
+
+
+/* Multi-Camera */
+
+width: 107px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+letter-spacing: 1px;
+text-transform: capitalize;
+
+/* True Gray/300 */
+color: #D4D4D4;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 62 */
+
+width: 47px;
+height: 38px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 32px;
+line-height: 38px;
+
+background: linear-gradient(102.31deg, #F9996C 8.7%, #FFFFFF 151.04%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* cross-camera matches */
+
+width: 143px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/300 */
+color: #D4D4D4;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* kpi-Avg Between Cams */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+padding: 16px;
+gap: 10px;
+
+width: 274.25px;
+height: 114px;
+
+background: rgba(255, 255, 255, 0.06);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 1;
+
+
+/* Avg Between Cams */
+
+width: 152px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+letter-spacing: 1px;
+text-transform: capitalize;
+
+/* True Gray/300 */
+color: #D4D4D4;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 49.9s */
+
+width: 97px;
+height: 38px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 32px;
+line-height: 38px;
+
+background: linear-gradient(102.31deg, #F9996C 8.7%, #FFFFFF 151.04%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+text-fill-color: transparent;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* between cameras */
+
+width: 111px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/300 */
+color: #D4D4D4;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Tracked-Vehicles-Section */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 24px;
+gap: 12px;
+
+position: absolute;
+width: 728px;
+height: 435px;
+left: 271px;
+top: 319px;
+
+background: rgba(255, 255, 255, 0.06);
+border: 1px solid rgba(255, 255, 255, 0.0509804);
+border-radius: 24px;
+
+
+/* Tracked Vehicles (100) */
+
+width: 248px;
+height: 26px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 22px;
+line-height: 26px;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Table-Layout */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 6px;
+
+width: 680px;
+height: 368px;
+overflow-y: scroll;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Table-Header */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 16px;
+
+width: 680px;
+height: 46px;
+
+background: #303030;
+/* True Gray/800 */
+border-bottom: 1px solid #262626;
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* ID */
+
+width: 120px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 12px;
+line-height: 14px;
+letter-spacing: 0.5px;
+text-transform: capitalize;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Cameras */
+
+width: 160px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 12px;
+line-height: 14px;
+letter-spacing: 0.5px;
+text-transform: capitalize;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Status */
+
+width: 120px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 12px;
+line-height: 14px;
+letter-spacing: 0.5px;
+text-transform: capitalize;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Duration */
+
+width: 160px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 12px;
+line-height: 14px;
+letter-spacing: 0.5px;
+text-transform: capitalize;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* First Seen */
+
+width: 88px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 12px;
+line-height: 14px;
+letter-spacing: 0.5px;
+text-transform: capitalize;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 1;
+
+
+/* Row-461 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 680px;
+height: 54px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 22px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 4px 8px;
+
+width: 38px;
+height: 22px;
+
+background: rgba(255, 75, 145, 0.0823529);
+border: 0.5px solid #FF4B91;
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 461 */
+
+width: 22px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+color: #FF4B91;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* D41 */
+
+width: 24px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* status-badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 2px 6px;
+gap: 4px;
+
+width: 74px;
+height: 18px;
+
+background: rgba(34, 197, 94, 0.15);
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Ellipse */
+
+width: 4px;
+height: 4px;
+
+background: #22C55E;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Active */
+
+width: 36px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+color: #22C55E;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 0.0s */
+
+width: 31px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 26m 52s */
+
+width: 88px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 1;
+
+
+/* Row-460 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 680px;
+height: 54px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 22px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 4px 8px;
+
+width: 42px;
+height: 22px;
+
+background: rgba(0, 255, 102, 0.0823529);
+border: 0.5px solid #00FF66;
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 460 */
+
+width: 26px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+color: #00FF66;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* D41 */
+
+width: 24px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* status-badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 2px 6px;
+gap: 4px;
+
+width: 74px;
+height: 18px;
+
+background: rgba(115, 115, 115, 0.2);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Ellipse */
+
+width: 4px;
+height: 4px;
+
+/* True Gray/600 */
+background: #525252;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Pending */
+
+width: 47px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+display: flex;
+align-items: center;
+
+/* True Gray/600 */
+color: #525252;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 0.0s */
+
+width: 31px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 26m 50s */
+
+width: 88px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 1;
+
+
+/* Row-454 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 680px;
+height: 54px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 22px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 4px 8px;
+
+width: 42px;
+height: 22px;
+
+background: rgba(0, 191, 255, 0.0823529);
+border: 0.5px solid #00BFFF;
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 454 */
+
+width: 26px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+color: #00BFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* D41 */
+
+width: 24px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* status-badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 2px 6px;
+gap: 4px;
+
+width: 74px;
+height: 18px;
+
+background: rgba(34, 197, 94, 0.15);
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Ellipse */
+
+width: 4px;
+height: 4px;
+
+background: #22C55E;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Active */
+
+width: 36px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+color: #22C55E;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 6.0s */
+
+width: 30px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 26m 38s */
+
+width: 88px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 1;
+
+
+/* Row-456 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 680px;
+height: 54px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 22px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 4px 8px;
+
+width: 42px;
+height: 22px;
+
+background: rgba(255, 75, 145, 0.0823529);
+border: 0.5px solid #FF4B91;
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 456 */
+
+width: 26px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+color: #FF4B91;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* D41 */
+
+width: 24px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* status-badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 2px 6px;
+gap: 4px;
+
+width: 74px;
+height: 18px;
+
+background: rgba(34, 197, 94, 0.15);
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Ellipse */
+
+width: 4px;
+height: 4px;
+
+background: #22C55E;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Active */
+
+width: 36px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+color: #22C55E;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 0.0s */
+
+width: 31px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 26m 42s */
+
+width: 88px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 1;
+
+
+/* Row-452 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 680px;
+height: 54px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 5;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 22px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 4px 8px;
+
+width: 42px;
+height: 22px;
+
+background: rgba(0, 255, 102, 0.0823529);
+border: 0.5px solid #00FF66;
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 452 */
+
+width: 26px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+color: #00FF66;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* D41 */
+
+width: 24px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* status-badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 2px 6px;
+gap: 4px;
+
+width: 74px;
+height: 18px;
+
+background: rgba(115, 115, 115, 0.2);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Ellipse */
+
+width: 4px;
+height: 4px;
+
+/* True Gray/600 */
+background: #525252;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Pending */
+
+width: 47px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+display: flex;
+align-items: center;
+
+/* True Gray/600 */
+color: #525252;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 11.9s */
+
+width: 33px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 26m 29s */
+
+width: 88px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 1;
+
+
+/* Row-452 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 680px;
+height: 54px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 6;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 22px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 4px 8px;
+
+width: 42px;
+height: 22px;
+
+background: rgba(0, 255, 102, 0.0823529);
+border: 0.5px solid #00FF66;
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 452 */
+
+width: 26px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+color: #00FF66;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* D41 */
+
+width: 24px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* status-badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 2px 6px;
+gap: 4px;
+
+width: 74px;
+height: 18px;
+
+background: rgba(115, 115, 115, 0.2);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Ellipse */
+
+width: 4px;
+height: 4px;
+
+/* True Gray/600 */
+background: #525252;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Pending */
+
+width: 47px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+display: flex;
+align-items: center;
+
+/* True Gray/600 */
+color: #525252;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 11.9s */
+
+width: 33px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 26m 29s */
+
+width: 88px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 1;
+
+
+/* Row-452 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 680px;
+height: 54px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 7;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 22px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 4px 8px;
+
+width: 42px;
+height: 22px;
+
+background: rgba(0, 255, 102, 0.0823529);
+border: 0.5px solid #00FF66;
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 452 */
+
+width: 26px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+color: #00FF66;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* D41 */
+
+width: 24px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #8A8994;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 120px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* status-badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 2px 6px;
+gap: 4px;
+
+width: 74px;
+height: 18px;
+
+background: rgba(115, 115, 115, 0.2);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Ellipse */
+
+width: 4px;
+height: 4px;
+
+/* True Gray/600 */
+background: #525252;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Pending */
+
+width: 47px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+display: flex;
+align-items: center;
+
+/* True Gray/600 */
+color: #525252;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 160px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 11.9s */
+
+width: 33px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* 26m 29s */
+
+width: 88px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #8A8994;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 1;
+
+
+/* Recent-Transitions-Section */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 24px;
+gap: 10px;
+
+position: absolute;
+width: 393px;
+height: 435px;
+left: 1023px;
+top: 319px;
+
+background: rgba(255, 255, 255, 0.06);
+border-radius: 16px;
+
+
+/* Recent Transitions (64) */
+
+width: 256px;
+height: 26px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 600;
+font-size: 22px;
+line-height: 26px;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Transitions-List */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 8px;
+
+width: 345px;
+height: 369px;
+overflow-y: scroll;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Transition-0 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 345px;
+height: 49px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* transition-routing */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 131px;
+height: 17px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* #406 */
+
+width: 41px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+
+color: #F9996C;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* D52 */
+
+width: 29px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* arrow-right */
+
+width: 12px;
+height: 12px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.83%;
+right: 20.83%;
+top: 20.83%;
+bottom: 20.83%;
+
+border: 2px solid #4F4E5A;
+
+
+/* D41 */
+
+width: 25px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 13.3s travel */
+
+width: 66px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Transition-1 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 345px;
+height: 49px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* transition-routing */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 130px;
+height: 17px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* #405 */
+
+width: 40px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+
+color: #F9996C;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* D41 */
+
+width: 25px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* arrow-right */
+
+width: 12px;
+height: 12px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.83%;
+right: 20.83%;
+top: 20.83%;
+bottom: 20.83%;
+
+border: 2px solid #4F4E5A;
+
+
+/* D52 */
+
+width: 29px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 1m 7s travel */
+
+width: 67px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Transition-2 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 345px;
+height: 49px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* transition-routing */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 129px;
+height: 17px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* #407 */
+
+width: 39px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+
+color: #F9996C;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* D41 */
+
+width: 25px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* arrow-right */
+
+width: 12px;
+height: 12px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.83%;
+right: 20.83%;
+top: 20.83%;
+bottom: 20.83%;
+
+border: 2px solid #4F4E5A;
+
+
+/* D52 */
+
+width: 29px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 55.1s travel */
+
+width: 64px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Transition-3 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 345px;
+height: 49px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* transition-routing */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 128px;
+height: 17px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* #374 */
+
+width: 38px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+
+color: #F9996C;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* D52 */
+
+width: 29px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* arrow-right */
+
+width: 12px;
+height: 12px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.83%;
+right: 20.83%;
+top: 20.83%;
+bottom: 20.83%;
+
+border: 2px solid #4F4E5A;
+
+
+/* D41 */
+
+width: 25px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 0.0s travel */
+
+width: 61px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Transition-3 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 345px;
+height: 49px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* transition-routing */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 128px;
+height: 17px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* #374 */
+
+width: 38px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+
+color: #F9996C;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* D52 */
+
+width: 29px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* arrow-right */
+
+width: 12px;
+height: 12px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.83%;
+right: 20.83%;
+top: 20.83%;
+bottom: 20.83%;
+
+border: 2px solid #4F4E5A;
+
+
+/* D41 */
+
+width: 25px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 0.0s travel */
+
+width: 61px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Transition-3 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 345px;
+height: 49px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 5;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* transition-routing */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 128px;
+height: 17px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* #374 */
+
+width: 38px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+
+color: #F9996C;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* D52 */
+
+width: 29px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* arrow-right */
+
+width: 12px;
+height: 12px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.83%;
+right: 20.83%;
+top: 20.83%;
+bottom: 20.83%;
+
+border: 2px solid #4F4E5A;
+
+
+/* D41 */
+
+width: 25px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 0.0s travel */
+
+width: 61px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Transition-3 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 345px;
+height: 49px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 6;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* transition-routing */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 128px;
+height: 17px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* #374 */
+
+width: 38px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+
+color: #F9996C;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* D52 */
+
+width: 29px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* arrow-right */
+
+width: 12px;
+height: 12px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.83%;
+right: 20.83%;
+top: 20.83%;
+bottom: 20.83%;
+
+border: 2px solid #4F4E5A;
+
+
+/* D41 */
+
+width: 25px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 0.0s travel */
+
+width: 61px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Transition-3 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 16px;
+
+width: 345px;
+height: 49px;
+
+background: rgba(255, 255, 255, 0.04);
+border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+border-radius: 12px;
+
+/* Inside auto layout */
+flex: none;
+order: 7;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* transition-routing */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 128px;
+height: 17px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* #374 */
+
+width: 38px;
+height: 17px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 17px;
+/* identical to box height */
+
+color: #F9996C;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* D52 */
+
+width: 29px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* arrow-right */
+
+width: 12px;
+height: 12px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.83%;
+right: 20.83%;
+top: 20.83%;
+bottom: 20.83%;
+
+border: 2px solid #4F4E5A;
+
+
+/* D41 */
+
+width: 25px;
+height: 16px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 16px;
+/* identical to box height */
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* 0.0s travel */
+
+width: 61px;
+height: 14px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 14px;
+
+/* True Gray/400 */
+color: #A3A3A3;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Sidebar-Expanded-Light */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+align-items: flex-start;
+padding: 12px 24px;
+gap: 4px;
+
+position: absolute;
+width: 247px;
+height: 787px;
+left: 0px;
+top: 0px;
+
+background: rgba(255, 255, 255, 0.04);
+
+
+/* top options */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 4px;
+
+margin: 0 auto;
+width: 199px;
+height: 276.72px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* profile */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 12px 0px;
+gap: 10px;
+
+width: 199px;
+height: 68.72px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Group 12 */
+
+margin: 0 auto;
+width: 135.5px;
+height: 44.72px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* iris-iris-logomark-inverted-rgb-1000px-w-300ppi 1 */
+
+position: absolute;
+width: 69.31px;
+height: 44.72px;
+left: 31.75px;
+top: 12px;
+
+background: url(iris-iris-logomark-inverted-rgb-1000px-w-300ppi.png);
+
+
+/* iris-iris-logotype-full-color-rgb-1000px-w-300ppi 2 */
+
+position: absolute;
+width: 78.69px;
+height: 15.35px;
+left: 88.56px;
+top: 38.75px;
+
+background: url(iris-iris-logotype-full-color-rgb-1000px-w-300ppi.png);
+
+
+/* Mask group */
+
+position: absolute;
+width: 78.69px;
+height: 39.9px;
+left: 88.56px;
+top: 14.19px;
+
+
+
+/* iris-iris-logotype-full-color-rgb-1000px-w-300ppi 1 */
+
+position: absolute;
+width: 78.69px;
+height: 39.9px;
+left: 88.56px;
+top: 14.19px;
+
+background: url(iris-iris-logotype-full-color-rgb-1000px-w-300ppi.png);
+
+
+/* Rectangle 1 */
+
+position: absolute;
+width: 60.45px;
+height: 19.29px;
+left: 97.94px;
+top: 20.33px;
+
+background: #FFFFFF;
+
+
+/* menu items */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 1px;
+
+width: 199px;
+height: 204px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* menu-item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 10px;
+gap: 10px;
+
+width: 199px;
+min-width: 38px;
+height: 40px;
+
+border-radius: 0px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* dashboard-icon */
+
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 9.72%;
+bottom: 12.5%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 31.94%;
+right: 54.17%;
+top: 54.17%;
+bottom: 12.5%;
+
+border: 1.5px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 59.72%;
+right: 31.94%;
+top: 54.17%;
+bottom: 45.83%;
+
+border: 1.5px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 9.72%;
+bottom: 12.5%;
+
+border: 1.5px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 76.39%;
+right: 23.61%;
+top: 15.28%;
+bottom: 70.73%;
+
+border: 1.5px solid #FFFFFF;
+
+
+/* content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 161px;
+height: 34px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* title */
+
+margin: 0 auto;
+width: 161px;
+height: 22px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 22px;
+/* identical to box height, or 157% */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* dashboard-icon */
+
+margin: 0 auto;
+display: none;
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* menu-item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 10px;
+gap: 10px;
+
+width: 199px;
+min-width: 38px;
+height: 40px;
+
+border-radius: 0px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* market-icon */
+
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group */
+
+position: absolute;
+left: 11.11%;
+right: 11.11%;
+top: 11.11%;
+bottom: 11.11%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 21.84%;
+right: 78.16%;
+top: 52.68%;
+bottom: 11.11%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 78.16%;
+right: 21.84%;
+top: 52.68%;
+bottom: 11.11%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.14%;
+right: 11.15%;
+top: 11.11%;
+bottom: 60.73%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 40.61%;
+right: 40.61%;
+top: 62.07%;
+bottom: 12.45%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.11%;
+right: 11.11%;
+top: 88.89%;
+bottom: 11.11%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 151px;
+height: 40px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 1;
+
+
+/* title */
+
+margin: 0 auto;
+width: 151px;
+height: 22px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 22px;
+/* identical to box height, or 157% */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* dashboard-icon */
+
+margin: 0 auto;
+display: none;
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* menu-item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 10px;
+gap: 10px;
+
+width: 199px;
+min-width: 38px;
+height: 40px;
+
+border-radius: 0px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* market-icon */
+
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group */
+
+position: absolute;
+left: 11.11%;
+right: 11.11%;
+top: 11.11%;
+bottom: 11.11%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 21.84%;
+right: 78.16%;
+top: 52.68%;
+bottom: 11.11%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 78.16%;
+right: 21.84%;
+top: 52.68%;
+bottom: 11.11%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.14%;
+right: 11.15%;
+top: 11.11%;
+bottom: 60.73%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 40.61%;
+right: 40.61%;
+top: 62.07%;
+bottom: 12.45%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.11%;
+right: 11.11%;
+top: 88.89%;
+bottom: 11.11%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 151px;
+height: 40px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 1;
+
+
+/* title */
+
+margin: 0 auto;
+width: 151px;
+height: 22px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 22px;
+/* identical to box height, or 157% */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* dashboard-icon */
+
+margin: 0 auto;
+display: none;
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* menu-item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 10px;
+gap: 10px;
+
+width: 199px;
+min-width: 38px;
+height: 40px;
+
+border-radius: 0px;
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* market-icon */
+
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group */
+
+position: absolute;
+left: 11.11%;
+right: 11.11%;
+top: 11.11%;
+bottom: 11.11%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 21.84%;
+right: 78.16%;
+top: 52.68%;
+bottom: 11.11%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 78.16%;
+right: 21.84%;
+top: 52.68%;
+bottom: 11.11%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.14%;
+right: 11.15%;
+top: 11.11%;
+bottom: 60.73%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 40.61%;
+right: 40.61%;
+top: 62.07%;
+bottom: 12.45%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.11%;
+right: 11.11%;
+top: 88.89%;
+bottom: 11.11%;
+
+border: 1.44828px solid #FFFFFF;
+
+
+/* content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 151px;
+height: 40px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 1;
+
+
+/* title */
+
+margin: 0 auto;
+width: 151px;
+height: 22px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 22px;
+/* identical to box height, or 157% */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* dashboard-icon */
+
+margin: 0 auto;
+display: none;
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* menu-item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 6px 12px;
+gap: 10px;
+
+width: 213px;
+min-width: 38px;
+height: 40px;
+
+background: linear-gradient(92.2deg, rgba(255, 255, 255, 0.24) 5.62%, rgba(153, 153, 153, 0) 108.9%);
+border-radius: 16px;
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* web-icon */
+
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group */
+
+position: absolute;
+left: 13.89%;
+right: 8.33%;
+top: 13.62%;
+bottom: 13.62%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 22.67%;
+right: 69.8%;
+top: 22.4%;
+bottom: 70.07%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 35.22%;
+right: 57.26%;
+top: 22.4%;
+bottom: 70.07%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 13.89%;
+right: 13.35%;
+top: 38.71%;
+bottom: 61.29%;
+
+border: 1.35px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 13.89%;
+right: 13.35%;
+top: 13.62%;
+bottom: 23.66%;
+
+border: 1.35px solid #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 59.05%;
+right: 8.33%;
+top: 53.77%;
+bottom: 13.62%;
+
+border: 1.35px solid #FFFFFF;
+
+
+/* content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 161px;
+height: 34px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* title */
+
+margin: 0 auto;
+width: 161px;
+height: 22px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 22px;
+/* identical to box height, or 157% */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* bottom options */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 4px;
+
+margin: 0 auto;
+width: 199px;
+height: 80px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Frame 4 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+
+width: 199px;
+height: 80px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* menu-item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 10px;
+gap: 10px;
+
+width: 199px;
+min-width: 38px;
+height: 40px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* LightIt-icon */
+
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group */
+
+position: absolute;
+left: 11.11%;
+right: 11.11%;
+top: 10.8%;
+bottom: 13.58%;
+
+
+
+/* Vector */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 46.76%;
+right: 46.76%;
+top: 10.8%;
+bottom: 78.39%;
+
+background: #FFFFFF;
+border: 0.777778px solid #FFFFFF;
+
+
+/* Vector */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 68.91%;
+right: 21.55%;
+top: 21.24%;
+bottom: 69.22%;
+
+background: #FFFFFF;
+border: 0.777778px solid #FFFFFF;
+
+
+/* Vector */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 78.09%;
+right: 11.11%;
+top: 46.45%;
+bottom: 47.07%;
+
+background: #FFFFFF;
+border: 0.777778px solid #FFFFFF;
+
+
+/* Vector */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 21.55%;
+right: 68.91%;
+top: 21.24%;
+bottom: 69.22%;
+
+background: #FFFFFF;
+border: 0.777778px solid #FFFFFF;
+
+
+/* Vector */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 11.11%;
+right: 78.09%;
+top: 46.45%;
+bottom: 47.07%;
+
+background: #FFFFFF;
+border: 0.777778px solid #FFFFFF;
+
+
+/* Vector */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 26.24%;
+right: 26.23%;
+top: 25.93%;
+bottom: 13.58%;
+
+background: #FFFFFF;
+border: 0.777778px solid #FFFFFF;
+
+
+/* content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 0px;
+gap: 8px;
+
+width: 161px;
+height: 34px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* title */
+
+margin: 0 auto;
+width: 161px;
+height: 22px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 22px;
+/* identical to box height, or 157% */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* new-icon */
+
+margin: 0 auto;
+display: none;
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* menu-item */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 10px;
+gap: 10px;
+
+width: 199px;
+min-width: 38px;
+height: 40px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Settings-icon */
+
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group */
+
+position: absolute;
+left: 11.11%;
+right: 11.11%;
+top: 5.55%;
+bottom: 16.68%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 32.99%;
+right: 19.61%;
+top: 17.65%;
+bottom: 28.75%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.11%;
+right: 11.11%;
+top: 5.55%;
+bottom: 16.68%;
+
+background: #FFFFFF;
+
+
+/* content */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding: 0px 0px 3px;
+gap: 8px;
+
+width: 161px;
+height: 34px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* title */
+
+margin: 0 auto;
+width: 161px;
+height: 10px;
+
+font-family: 'New Science';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 22px;
+/* or 157% */
+/* leading-trim and text-edge are draft CSS properties.
+
+Read more: https://drafts.csswg.org/css-inline-3/#leading-trim
+*/
+leading-trim: both;
+text-edge: cap;
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 1;
+
+
+/* new-icon */
+
+margin: 0 auto;
+display: none;
+width: 18px;
+height: 18px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+

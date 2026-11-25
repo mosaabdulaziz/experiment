@@ -1,0 +1,3 @@
+# Installed one line at a time, in this order: onnxruntime-gpu after insightface (which pulls in the CPU runtime).
+insightface
+onnxruntime-gpu>=1.19

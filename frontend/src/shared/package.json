@@ -1,0 +1,11 @@
+{
+  "name": "@iris/shared",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The shell: product registry, product switch, shared styles.",
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "dependencies": {}
+}

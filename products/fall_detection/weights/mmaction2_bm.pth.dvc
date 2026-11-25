@@ -1,0 +1,5 @@
+outs:
+- md5: ca7c4b3b6dc238daf202fb6f404d6306
+  size: 12479895
+  hash: md5
+  path: mmaction2_bm.pth

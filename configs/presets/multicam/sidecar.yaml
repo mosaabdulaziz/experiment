@@ -1,0 +1,140 @@
+# Preset: the multi-camera product (products/multicam/sidecar.yaml) on recorded clips played
+# from file:// instead of RTSP -- only the differences from the product are listed.
+extends: ../../../products/multicam/sidecar.yaml
+
+
+# Simulated cameras: test_streamer/stream_recordings.py loops each upload
+# through ffmpeg (-c copy, original codecs) and publishes it to go2rtc's RTSP
+# ingest as raw-<cam-id>; go2rtc derives <cam-id> (original + on-demand H.264
+# transcode for browsers) which the sidecar consumes over real RTSP, so
+# recording uses Smart Video Record (recorder: auto -> rtsp:// => svr). See
+# test_streamer/README.md. To switch back to direct file playback, restore the
+# file:// URIs (the upload names are in test_streamer/stream_recordings.py's
+# CAM_FILES).
+sources:
+    # Pull the raw ingest directly (rtsp://go2rtc:8554/raw-cam-N) so DeepStream
+    # always sees the ORIGINAL codec. The derived cam-N streams are the
+    # browser-facing ones (go2rtc.yaml reorders them transcode-first).
+    # Bypass go2rtc — use file:// directly to avoid RTSP corruption (especially HEVC)
+    # - {id: cam-01, uri: "rtsp://go2rtc:8554/raw-cam-1"}
+    # - {id: cam-02, uri: "rtsp://go2rtc:8554/raw-cam-2"}
+    # - {id: cam-03, uri: "rtsp://go2rtc:8554/raw-cam-3"}
+    # - {id: cam-04, uri: "rtsp://go2rtc:8554/raw-cam-4"}
+    # - {id: cam-05, uri: "rtsp://go2rtc:8554/raw-cam-5"}
+    # - {id: cam-06, uri: "rtsp://go2rtc:8554/raw-cam-6"}
+    # - {id: cam-07, uri: "rtsp://go2rtc:8554/raw-cam-7"}
+    # - {id: cam-08, uri: "rtsp://go2rtc:8554/raw-cam-8"}
+    # - {id: cam-09, uri: "rtsp://go2rtc:8554/raw-cam-9"}
+    # - {id: cam-10, uri: "rtsp://go2rtc:8554/raw-cam-10"}
+    # - {id: cam-11, uri: "rtsp://go2rtc:8554/raw-cam-11"}
+    # - {id: cam-12, uri: "rtsp://go2rtc:8554/raw-cam-12"}
+    # - {id: cam-13, uri: "rtsp://go2rtc:8554/raw-cam-13"}
+    - {id: cam-01, uri: "file:///workspace/iris/products/el-mohandes/videos/1-D41-enter.mp4"}
+    - {id: cam-02, uri: "file:///workspace/iris/products/el-mohandes/videos/2-D16_clip.mp4"}
+    - {id: cam-03, uri: "file:///workspace/iris/products/el-mohandes/videos/3-D52-enter.mp4"}
+    - {id: cam-04, uri: "file:///workspace/iris/products/el-mohandes/videos/4-ch05_clip.mp4"}
+    - {id: cam-05, uri: "file:///workspace/iris/products/el-mohandes/videos/5-CH23-enter.mp4"}
+    - {id: cam-06, uri: "file:///workspace/iris/products/el-mohandes/videos/D01-crop.mp4"}
+    - {id: cam-07, uri: "file:///workspace/iris/products/el-mohandes/videos/D05-crop.mp4"}
+    - {id: cam-08, uri: "file:///workspace/iris/products/el-mohandes/videos/D09-crop.mp4"}
+    - {id: cam-09, uri: "file:///workspace/iris/products/el-mohandes/videos/D11-crop.mp4"}
+    - {id: cam-10, uri: "file:///workspace/iris/products/el-mohandes/videos/D15-crop.mp4"}
+    - {id: cam-11, uri: "file:///workspace/iris/products/el-mohandes/videos/D18-crop.mp4"}
+    - {id: cam-12, uri: "file:///workspace/iris/products/el-mohandes/videos/D20-crop.mp4"}
+    - {id: cam-13, uri: "file:///workspace/iris/products/el-mohandes/videos/D21-crop.mp4"}
+# Preview-publish rate (JPEGs written to iris:jpeg:<id> for the website).
+# With analysis_fps active the preview is capped at the analysis rate (the
+# probe publishes from the analysis branch); with process_fps only, it runs at
+# stream_fps on every frame.
+stream_fps: 10
+# ── Rate limiting: analysis_fps (videorate) vs process_fps (pgie interval) ─
+# Two independent knobs — alternatives, never combined (when analysis_fps > 0
+# the code forces infer_interval = 1).
+#
+# analysis_fps — a GStreamer videorate + capsfilter between each source's tee
+# and the mux caps the WHOLE analysis branch (nvinfer, nvtracker,
+# nvvideoconvert, probe → preview) at ~analysis_fps frames/s per source. This
+# is the biggest per-stream GPU saving (inference + tracker + convert + probe
+# all scale down). Trade-offs: the website preview runs at ~analysis_fps too
+# (coherent but low-fps for small values), and the actual rate is PTS-
+# quantized for non-integer source/analysis ratios (24 fps source → af=10
+# measures ~10; 25 fps source → af=10 measures ~8.4). Decode still runs at the
+# source's full rate (videorate is post-decode). Production default: 10.
+# 0 = disabled (direct tee->mux link).
+#
+# process_fps — nvinfer `interval`: inference on every Nth batch
+# (N = stream_fps / process_fps); skipped batches propagate the last
+# detections, so the pipeline stays full-rate and the preview stays smooth at
+# stream_fps while only inference is reduced. Use this instead when preview
+# smoothness at native rate matters more than the extra tracker/convert
+# savings. 0 = infer every frame.
+# process_fps — throttles nvinfer inference to every Nth frame (N=stream_fps/process_fps)
+# WITHOUT inserting a videorate element. This is the correct throttle knob for
+# file:// sources because analysis_fps (videorate) + mux_sync_inputs=1 causes a
+# DEADLOCK for file sources (videorate re-times PTS which confuses the sync logic,
+# especially at file-loop boundaries when different-duration files reset PTS at
+# different times). process_fps=5 at stream_fps=10 → infer every 2nd frame.
+process_fps: 5
+
+# Multi-Target Multi-Camera (MTMC) Vehicle Tracking.
+# Assigns a stable cross-camera global_id to each tracked vehicle using Re-ID
+# embeddings (torchvision ResNet50 / visual crops) and persistent cross-camera
+# vehicle association.  ResNet50 acts as BOTH a coarse gate (reject obviously-
+# different vehicles below reid_gate_threshold, near-zero false negatives) and
+# the fine matcher (merge above reid_sim_threshold).  The global_id is published
+# to iris:meta:<id> and rendered on the annotated JPEG stream so the operator
+# can visually follow a vehicle across cameras.
+mtmc:
+  enabled: true
+  iou_threshold: 0.20           # frame-to-frame IoU for per-camera IoU tracker (permissive matching)
+  max_unmatched_frames: 500     # match DeepStream's maxShadowTrackingAge (500 frames = ~20s).
+                               # Must be >= tracker shadow age or MTMC expires tracks
+                               # while DeepStream still holds them, causing ID reassignment.
+  min_tracklet_frames: 2        # start tracking & publishing global identity on 2nd frame
+  reid_enabled: true            # load and use the Re-ID model (torchvision ResNet50)
+  reid_checkpoint: ""           # (unused) legacy fast-reid .pth path, kept for back-compat
+  reid_config: ""               # (unused) legacy fast-reid config, kept for back-compat
+  reid_embed_stride: 3          # crop sampling stride within a tracklet (1 = use all)
+  reid_max_crops: 16            # cap crops per tracklet per embed pass
+  reid_batch_size: 32
+  reid_min_crops: 6             # embed a tracklet once it has this many crops (async; or at expiry)
+  tracked_classes: ["vehicle"]
+  reid_gate_threshold: 0.15     # BELOW this = completely different vehicle -> reject (near-0 FN, no false-merge risk)
+  reid_sim_threshold: 0.35      # ABOVE this (and >= gate) = match -> merge into existing global track; between gate & match = ambiguous, keep separate
+  time_tolerance_s: 2.0         # max gap for synchronous overlap
+  min_disappearance_s: 2.0      # vehicle disappearance threshold for cross-camera candidate eligibility
+  # With vlm_arbiter enabled, topology + camera_gaps below are ONLY an eligibility
+  # filter (which camera may follow which, and the min/max travel time). They never
+  # decide a merge: the VLM judges every eligible track, no FIFO/closest-wins rule and
+  # no re-id threshold veto. Re-id similarity just ranks which candidates get asked first.
+  vlm_max_candidates: 3         # max eligible tracks sent to the VLM per new tracklet (bounds API calls)
+  origin_cameras: ["cam-01"]    # track only vehicles that first appear on D41 (cam-01); other cameras only join a D41 vehicle's track, never start one
+  vlm_history_views: 1          # crops sent from EACH earlier camera the candidate passed through (its last camera sends vlm_views)
+  vlm_collect_max_s: 3.0        # wait up to this long for vlm_views crops of a new vehicle (time-spread) before asking the VLM
+  vlm_views: 3                  # crops per vehicle sent to the VLM together, spread over its time on camera (1 = single best crop)
+  max_inactive_ttl_s: 600.0     # retention window for inactive global vehicle tracks (10 min)
+  associate_interval_s: 1.0     # run cross-camera association every N seconds
+  min_embed_frames: 3           # tracklet must have this many embeddings before merge
+  # Unidirectional chain: D41(cam-1) → D52(cam-2) → CH23(cam-3).
+  # topology[cam] = list of VALID NEXT cameras (where vehicles from cam can appear).
+  # is_valid_transition(last_seen_cam, current_cam) checks current_cam in topology[last_seen_cam].
+  #
+  # cam-1 sends to cam-2 only  → vehicles disappear from cam-1, appear on cam-2
+  # cam-2 sends to cam-3 only  → vehicles disappear from cam-2, appear on cam-3
+  # cam-3 sends to nobody      → end of chain
+  # "any: [cameras]": those cameras may follow one another in both directions (cam-03 -> cam-01 is a
+  # vehicle going out through the gate it came in by). Only the minimum travel times below
+  # then filter candidates (a pair listed one way applies the other way too), and the VLM
+  # judges each one. A vehicle that crosses the gate line outwards is matched with a vehicle
+  # inside and that track is closed; an entering one is new. See app/line_counter.py.
+  topology:
+    any: ["cam-01", "cam-02", "cam-03", "cam-04", "cam-05"]   # the five tracked cameras, connected both ways (the preset streams more)
+
+  # Per-camera-pair disappearance timing gaps (min travel time in seconds between camera pairs).
+  # Used when evaluating candidate eligibility for cross-camera association.
+  # If a pair is not listed, min_disappearance_s above is used as fallback.
+  camera_gaps:
+    cam-01->cam-02: 0.0        # D41 → D16 min travel time gate
+    cam-02->cam-03: 5.0        # D16 → D52 min travel time gate
+    cam-03->cam-04: 3.0        # D52 → CH05 min travel time gate
+    cam-04->cam-05: 0.0        # CH05 → CH23 min travel time gate

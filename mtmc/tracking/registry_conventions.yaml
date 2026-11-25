@@ -1,0 +1,100 @@
+# Model registry conventions (sub-task 7 of the MLflow story; spike D2, D3, Q5, Q7). The one place that names the
+# registered models, the products and sites that aliases point at, and the baseline: which version each product runs
+# today. Read and validated by mtmc/tracking/registry.py; tests/test_mlflow_registry.py checks it against the import
+# catalog (mtmc/tracking/imported_models.yaml) and the products/ folders.
+#
+# Aliases (MLflow 3.18 allows [A-Za-z0-9_-], up to 255 chars; `latest` and `v<digits>` are reserved):
+#   candidate                          the version under evaluation, one per registered model
+#   production-<product>               what <product> runs (all its sites, unless a site alias overrides it)
+#   production-<product>-<site>        what one site of <product> runs, for products with per-site sidecar yamls
+# Names are the products/ folder names (= IRIS_PRODUCT values) and the site names products/barber/site.sh takes, kept
+# as they are: `fall_detection` keeps its underscore (allowed in aliases), sites keep their dashes. Input is
+# normalised (case, `_` vs `-`) to these canonical spellings; anything else is refused.
+#
+# Rollback = promote an older version to the same alias. Alias history lives in the manifest's git log (sub-task 8),
+# not in MLflow.
+
+products:
+  attendance: {sites: []}
+  concealment_detection: {sites: []}
+  # bekky = products/barber/sidecar.yaml (the default site), palm-hills = sidecar.palm-hills.yaml. The palm-hills-live
+  # and palm-hills-16oct yamls `extends:` palm-hills and load the same models, so they use production-barber-palm-hills.
+  barber: {sites: [bekky, palm-hills]}
+  fall_detection: {sites: []}
+  multicam: {sites: []}
+  proximity: {sites: []}
+
+# The registered models: one per capability (D2), and the products that load each one. A production alias is only
+# accepted for a product listed here.
+capabilities:
+  vehicle-detector:  {loaded_by: [multicam]}
+  plate-detector:    {loaded_by: [multicam]}
+  plate-ocr:         {loaded_by: [multicam]}
+  vehicle-reid:      {loaded_by: [multicam]}
+  staff-classifier:  {loaded_by: [barber]}
+  staff-clip:        {loaded_by: [barber]}
+  person-reid:       {loaded_by: [barber]}
+  tracker-reid:      {loaded_by: [barber]}
+  person-segmenter:  {loaded_by: [barber, proximity]}
+  kids-car-detector: {loaded_by: [barber]}
+  object-detector:   {loaded_by: [attendance, concealment_detection, fall_detection]}
+  fire-detector:     {loaded_by: [attendance]}
+  face-detector:     {loaded_by: [attendance, barber]}
+  face-recognizer:   {loaded_by: [attendance, barber]}
+  pose-estimator:    {loaded_by: [concealment_detection, fall_detection]}
+  fall-classifier:   {loaded_by: [fall_detection]}
+  depth-estimator:   {loaded_by: [proximity]}
+
+# Which run metrics count as evaluation metrics (regex on the metric name). A source=trained run needs at least one to
+# be registered; their latest values are summarised in the version's `metrics` tag. Matches Ultralytics' val metrics
+# (metrics/mAP50-95B, val/box_loss), the scripts' final/ and eval/ metrics, test sets (palm_test/auroc) and the OCR
+# report's val_acc. Training losses, learning rates and timings do not match.
+evaluation_metrics: '(^|[/_])(final|eval|val|test|metrics)([/_])'
+
+# Baseline (`python -m mtmc.tracking.registry baseline`): every import catalog entry, registered from its import run,
+# with the aliases of the products that load it on main today (Q7: every loaded model; Q5: production = what main's
+# configs load). An empty list registers the version without an alias. Every catalog entry must be listed.
+baseline:
+  vehicle-detector/vehicle_yolo11s_1cls_v3: [production-multicam]
+  plate-detector/plate_640:                 [production-multicam]       # Q5: config_sgie_plate.txt loads it
+  plate-detector/finetuned_1280:            []                          # Q5: non-production (no product config)
+  plate-ocr/v5_arabic_mobile:               [production-multicam]
+  vehicle-reid/torchvision_resnet50:        [production-multicam]
+  staff-classifier/bekky_r2:                [production-barber-bekky]   # appearance's default staff_classifier
+  staff-classifier/palm_hills_r4:           [production-barber-palm-hills]  # sidecar.palm-hills.yaml:24
+  staff-classifier/palm_hills_r3:           []                          # the `just barber-palm-staff r3` rollback
+  # Loaded only with staff_model: clip, the documented rollback in sidecar.yaml; aliased so the manifest covers it.
+  staff-clip/clip_vit_b32:                  [production-barber]
+  person-reid/tao_swin_t:                   [production-barber]
+  tracker-reid/tao_resnet50:                [production-barber]
+  person-segmenter/yolo26l_seg_r384:        [production-barber]
+  kids-car-detector/yolo26n_416:            [production-barber]
+  object-detector/yolo11x:                  [production-attendance, production-concealment_detection, production-fall_detection]
+  fire-detector/fire_smoke_box:             [production-attendance]
+  face-detector/yolov8n_face:               [production-barber]
+  face-detector/face_det_lite:              [production-attendance]
+  face-recognizer/buffalo_l:                [production-barber]
+  face-recognizer/auraface:                 [production-attendance]
+  pose-estimator/yolo26x_pose:              [production-concealment_detection, production-fall_detection]
+  fall-classifier/mmaction2_j_jm:           [production-fall_detection]
+  person-segmenter/yolo26l_seg_736x1280:    [production-proximity]
+  depth-estimator/yolo26m_depth_736x1280:   [production-proximity]
+
+# Deployments (sub-task 8): what one model manifest covers. Each runs one sidecar yaml (every role in it, every
+# setting switch: barber's staff_model, a tracker ReID net that is off) and, where the product has one, its service's
+# yaml (the models the service loads itself, from products/<product>/model_files.py). `manifest` is where
+# `python -m mtmc.tracking.manifest generate` writes it, and must be what those yamls name in `model_manifest:`.
+# Versions resolve through production-<product>-<site>, else production-<product>.
+deployments:
+  - {product: attendance, sidecar: products/attendance/sidecar.yaml,
+     manifest: products/attendance/models.manifest.json}
+  - {product: barber, site: bekky, sidecar: products/barber/sidecar.yaml, service: products/barber/barber.yaml,
+     manifest: products/barber/models.manifest.bekky.json}
+  - {product: barber, site: palm-hills, sidecar: products/barber/sidecar.palm-hills.yaml,
+     service: products/barber/barber.palm-hills.yaml, manifest: products/barber/models.manifest.palm-hills.json}
+  - {product: concealment_detection, sidecar: products/concealment_detection/sidecar.yaml,
+     manifest: products/concealment_detection/models.manifest.json}
+  - {product: fall_detection, sidecar: products/fall_detection/sidecar.yaml,
+     service: products/fall_detection/fall_detection.yaml, manifest: products/fall_detection/models.manifest.json}
+  - {product: multicam, sidecar: products/multicam/sidecar.yaml, manifest: products/multicam/models.manifest.json}
+  - {product: proximity, sidecar: products/proximity/sidecar.yaml, manifest: products/proximity/models.manifest.json}

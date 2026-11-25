@@ -1,0 +1,61 @@
+{
+ "input_hw": [
+  252,
+  126
+ ],
+ "resize": "stretch",
+ "interpolation": "area",
+ "color": "rgb",
+ "mean": [
+  0.485,
+  0.456,
+  0.406
+ ],
+ "std": [
+  0.229,
+  0.224,
+  0.225
+ ],
+ "output": "staff_p = sigmoid(logit / temperature), shape [n, 1]",
+ "temperature": 0.8612,
+ "site": "palm-hills",
+ "threshold": 0.79,
+ "val_points": [
+  {
+   "threshold": 0.5,
+   "staff_recall": 0.9639,
+   "customers_as_staff": 0.0843
+  },
+  {
+   "threshold": 0.7,
+   "staff_recall": 0.9325,
+   "customers_as_staff": 0.0674
+  },
+  {
+   "threshold": 0.791,
+   "staff_recall": 0.8988,
+   "customers_as_staff": 0.0562
+  },
+  {
+   "threshold": 0.9,
+   "staff_recall": 0.7735,
+   "customers_as_staff": 0.0506
+  }
+ ],
+ "palm_test": {
+  "auroc": 0.9921,
+  "at_threshold": {
+   "recall": 0.9013333333333333,
+   "fpr": 0.02654867256637168,
+   "missed": 37,
+   "false": 6
+  }
+ },
+ "source_run": "staff_palm/B_s1",
+ "init": "round-2 weights (staff_dinov2_s.onnx of 2026-10-07)",
+ "lr_scale": 0.3,
+ "timm_id": "vit_small_patch14_dinov2.lvd142m",
+ "best_epoch": 2,
+ "dataset": "Bekky r1+r2 + Palm Hills palm_staff_train 2026-10-14 (946 reviewed frames, 3682 crops)",
+ "sha256": "434e3cfac26e64ff558d7346843b5d5d10da610a2887fd32123c6200e5f32381"
+}

@@ -1,0 +1,5 @@
+outs:
+- md5: 658f439e09e9cfc7b1c2ca3ecbe765a4
+  size: 1013735
+  hash: md5
+  path: golden-barber-faces.before.jsonl

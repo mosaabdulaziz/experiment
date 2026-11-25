@@ -1,0 +1,5 @@
+# TEST CONFIG (A/B VEMA-3D arm): attendance golden replay using libnvds_vema3d_tracker.so.
+extends: golden-attendance.yaml
+
+tracker_lib: "/opt/nvidia/deepstream/deepstream/custom_trackers/libnvds_vema3d_tracker.so"
+tracker_config: "perception/pipeline/config_tracker_vema3d.yml"

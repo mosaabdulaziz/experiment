@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "glintr100.onnx",
+  "sha256": "a7933ea5330113b01c9b60351d8f4c33003f145d8470ac5f0e52ee2effe25c60",
+  "size_bytes": 260694151,
+  "created_at": "2026-11-22T14:50:52+00:00",
+  "run_id": "8158e13e78f8467ab9521426e65bb30e",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "843077df1594cfe9269bb492a5cf9ccd7cce6809",
+  "registered_model": "face-recognizer",
+  "version": "2"
+}

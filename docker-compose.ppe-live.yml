@@ -1,0 +1,29 @@
+# Overlay for `just ppe-live-sim`: the PPE pipeline on one simulated live camera, as compose project
+# PPE_COMPOSE_PROJECT (ppelive) with its own ports and its own data dir (PPE_LIVE_DIR), so it runs beside every other
+# stack on this machine and leaves this checkout's data/ alone. Use only through the ppe-* recipes: they set these
+# variables (scripts/ppe_live_env.sh; the PPE_* settings in .env.example).
+services:
+  go2rtc:
+    volumes: !override
+      - ./configs/presets/ppe/go2rtc-live.yaml:/config/go2rtc.yaml:ro
+    # No WebRTC port: the demo's video is the app's JPEG preview (pipeline_preview), never WebRTC
+    ports: !override
+      - "${GO2RTC_RTSP_PORT}:8554"
+      - "${GO2RTC_API_PORT}:1984"
+
+  deepstream-sidecar:
+    image: ${PPE_SIDECAR_IMAGE:-${COMPOSE_PROJECT_NAME:-ppelive}-deepstream-sidecar:latest}
+    user: "${PPE_UID:-1000}:${PPE_GID:-1000}"   # files written into the checkout stay the user's, removable without sudo
+    environment:
+      - HOME=/tmp
+    volumes:
+      - ${PPE_LIVE_DIR:-./scratch/ppe-live}/data:/workspace/iris/data
+    restart: unless-stopped
+
+  iris:
+    user: "${PPE_UID:-1000}:${PPE_GID:-1000}"
+    environment:
+      - HOME=/tmp
+    volumes:
+      - ${PPE_LIVE_DIR:-./scratch/ppe-live}/data:/app/data
+    restart: unless-stopped

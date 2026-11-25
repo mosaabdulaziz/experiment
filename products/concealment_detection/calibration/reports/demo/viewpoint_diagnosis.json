@@ -1,0 +1,60 @@
+[
+  {
+    "video": "gettyimages1",
+    "primary_track": 1,
+    "frames_used": 332,
+    "shoulder_to_torso_ratio": {
+      "p10": 0.079,
+      "median": 0.383,
+      "p90": 0.626
+    },
+    "torso_length_px": {
+      "p10": 388.282,
+      "median": 497.043,
+      "p90": 523.436
+    },
+    "shoulder_width_px": {
+      "p10": 41.185,
+      "median": 195.731,
+      "p90": 311.779
+    },
+    "wrist_to_body_in_T": {
+      "p10": 0.148,
+      "median": 0.242,
+      "p90": 0.312
+    },
+    "wrist_projects_inside_torso_quad_frac": 0.371,
+    "idle_or_dwell_frames": 86,
+    "idle_or_dwell_at_body_frac_default_settings": 0.814,
+    "idle_or_dwell_at_body_and_inside_quad_frac": 0.257
+  },
+  {
+    "video": "gettyimages2",
+    "primary_track": 1,
+    "frames_used": 612,
+    "shoulder_to_torso_ratio": {
+      "p10": 0.352,
+      "median": 0.572,
+      "p90": 0.824
+    },
+    "torso_length_px": {
+      "p10": 139.645,
+      "median": 154.541,
+      "p90": 169.02
+    },
+    "shoulder_width_px": {
+      "p10": 54.47,
+      "median": 85.841,
+      "p90": 132.315
+    },
+    "wrist_to_body_in_T": {
+      "p10": 0.047,
+      "median": 0.163,
+      "p90": 0.279
+    },
+    "wrist_projects_inside_torso_quad_frac": 0.534,
+    "idle_or_dwell_frames": 60,
+    "idle_or_dwell_at_body_frac_default_settings": 0.9,
+    "idle_or_dwell_at_body_and_inside_quad_frac": 0.278
+  }
+]

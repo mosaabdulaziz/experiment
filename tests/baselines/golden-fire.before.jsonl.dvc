@@ -1,0 +1,5 @@
+outs:
+- md5: 1251c1eee3819b08be2998e4a85fc85a
+  size: 65946
+  hash: md5
+  path: golden-fire.before.jsonl

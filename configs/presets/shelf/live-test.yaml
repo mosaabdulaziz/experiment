@@ -1,0 +1,17 @@
+# Shelf live: the accepted shelf-demo's test camera (test.mp4, 1920x1080, 25 fps, 120 s; not in the repo: it shows
+# real shoppers) as camera cam-shelf-test, with the demo's two regions R1 and R2 (shelf-demo roi.json, drawn on the
+# 1920x1080 frame). `just shelf-live-sim VIDEO=/path/to/test.mp4` (see live.yaml); the iris-platform bridge maps
+# cam-shelf-test/R1 and /R2 (README.md, "Shelf -> iris-platform").
+extends: live.yaml
+
+sources:
+  - {id: cam-shelf-test, uri: "rtsp://go2rtc:8554/raw-cam-shelf-test", label: "Shelf test camera (test.mp4)"}
+
+modules:
+  shelf_void:
+    roi:
+      cam-shelf-test:
+        size: [1920, 1080]
+        regions:
+          - [[1369, 328], [1684, 352], [1581, 931], [1294, 933], [1357, 327]]   # R1
+          - [[225, 346], [516, 358], [594, 835], [544, 928], [276, 880], [150, 451], [222, 343]]   # R2

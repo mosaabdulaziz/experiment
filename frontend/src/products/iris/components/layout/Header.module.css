@@ -1,0 +1,190 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  height: var(--header-h);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-shrink: 0;
+  gap: 16px;
+  background: rgba(10, 10, 12, 0.55);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.header::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 10%, var(--accent-glow) 50%, transparent 90%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  user-select: none;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: transform 0.2s;
+}
+.brand:hover {
+  transform: translateX(1px);
+}
+.brand svg {
+  filter: drop-shadow(0 0 14px var(--accent-glow));
+  transition: filter 0.3s;
+}
+.brand:hover svg {
+  filter: drop-shadow(0 0 20px var(--accent-glow-2));
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.brandName {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1;
+}
+.brandAccent {
+  color: var(--accent);
+  text-shadow: 0 0 18px var(--accent-glow);
+}
+.brandSub {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.center {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.nav {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: auto;
+  background: var(--glass-bg-soft);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 4px;
+}
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+.navLink:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+}
+.navLinkActive {
+  color: #1b0a02;
+  background: linear-gradient(180deg, var(--accent-soft), var(--accent));
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+.navLinkActive:hover {
+  color: #1b0a02;
+  background: linear-gradient(180deg, #ffc4ac, var(--accent-soft));
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.counter {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  background: var(--glass-bg);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid var(--glass-border);
+  color: var(--text-soft);
+  transition: border-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.badgeLive {
+  color: var(--green);
+  border-color: rgba(107, 242, 168, 0.3);
+  box-shadow: 0 0 16px rgba(107, 242, 168, 0.18);
+}
+.badgeIdle {
+  color: var(--text-dim);
+}
+.badgeAnalyzing {
+  color: var(--yellow);
+  border-color: rgba(255, 209, 102, 0.3);
+  box-shadow: 0 0 16px rgba(255, 209, 102, 0.18);
+}
+.badgeError {
+  color: var(--alert-color);
+  border-color: var(--alert-border);
+  box-shadow: 0 0 16px var(--alert-glow);
+}
+.badgeOff {
+  color: var(--text-dim);
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 10px rgba(107, 242, 168, 0.6);
+  animation: pulse-dot 2s ease infinite;
+}
+.dotMuted {
+  background: var(--text-muted);
+  box-shadow: none;
+  animation: none;
+}
+
+@media (max-width: 768px) {
+  .nav { display: none; }
+  .brandSub { display: none; }
+}

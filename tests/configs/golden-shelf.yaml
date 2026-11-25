@@ -1,0 +1,8 @@
+# TEST CONFIG (not a product): the shelf-void preset (configs/presets/shelf) on a recorded shelf clip read from disk, no loop,
+# one source. See golden-attendance.yaml for why. Clip: tools/make_golden_clips_extra.sh (cut from the shelf demo video).
+extends: ../../configs/presets/shelf/sidecar.yaml
+
+file_loop: false
+
+sources:
+  - {id: cam-1, uri: "file:///workspace/iris/data/uploads/golden/shelf.mp4", label: "golden shelf"}

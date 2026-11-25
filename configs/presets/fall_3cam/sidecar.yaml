@@ -1,0 +1,8 @@
+# Preset: the fall product on three cameras -- an overlay on products/fall_detection/sidecar.yaml.
+# Only the sources differ: the module list, the role and everything else are the product's own.
+extends: ../../../products/fall_detection/sidecar.yaml
+
+sources:
+  - {id: cam-1, uri: "rtsp://go2rtc:8554/raw-cam-1", roles: [fall_detection]}
+  - {id: cam-2, uri: "rtsp://go2rtc:8554/raw-cam-2", roles: [fall_detection]}
+  - {id: cam-3, uri: "rtsp://go2rtc:8554/raw-cam-3", roles: [fall_detection]}

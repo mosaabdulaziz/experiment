@@ -1,0 +1,4 @@
+# Safety role "ppe": the PPE preset (base person detector + the PPE detector on each person). Zones whose `ppe`
+# block is on limit it to those zones; a camera with none covers the whole frame.
+extends: ../../../configs/presets/ppe/sidecar.yaml
+relevant_classes: [person]

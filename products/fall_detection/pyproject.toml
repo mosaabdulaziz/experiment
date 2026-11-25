@@ -1,0 +1,61 @@
+[project]
+name = "fall-detection-service"
+version = "0.1.0"
+description = "Fall detection on the IRIS cameras — the vendor's monitor behind the platform's Redis contracts, never importing its code."
+requires-python = ">=3.11"
+dependencies = [
+    "redis>=5.0",
+    "fastapi>=0.115",
+    "pydantic>=2.0",                # the API's request model is declared against it directly
+    "uvicorn[standard]>=0.32",
+    "pyyaml>=6.0",
+    "numpy>=1.26",
+    "pandas>=2.0",
+    "opencv-contrib-python>=4.9.0",  # one cv2: mmaction2 requires the contrib build, and two opencv wheels overwrite each other's files
+    "torch>=2.9.0",                 # exactly one torch: the cu130 build, the same CUDA generation as the sidecar's (perception/pipeline/Dockerfile)
+    "mmaction2>=1.2.0",           # the vendor's ST-GCN classifier (the `mmaction` import)
+    "mmengine>=0.10.0",
+    "mmcv-lite>=2.1.0,<2.2.0",    # mmaction2 1.2.0 declares mmcv<2.2.0 for its own compatibility
+    "importlib-metadata>=8.0",    # mmaction reads its own version through it
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-timeout>=2.3",        # the vendor's own tests hang on a model download without it
+    "httpx>=0.27",
+    "ultralytics>=8.4.0",         # the vendor's CLI and its own tests — not a runtime dependency
+    "torchvision>=0.24.0",        # ultralytics' own dependency, from the same index as torch
+    "onnx>=1.17",                 # the pose model's export writes an ONNX
+    "onnxscript>=0.3",            # torch's ONNX exporter translates the graph through it
+    "onnxruntime>=1.18",          # the export's proof runs the graph (CPU; it needs no GPU)
+]
+
+[tool.uv]
+required-version = ">=0.13.6,<0.14"  # uv 0.13.x: one lock format, so the lock never churns (DEPENDENCIES.md, "uv")
+package = false
+# mmcv-lite depends on the plain `opencv-python`, which installs the same `cv2` files as the
+# contrib build above: two opencv distributions overwrite each other. An override replaces a
+# requirement outright, so this drops the plain one from the graph and leaves one cv2.
+override-dependencies = ["opencv-python; sys_platform == 'never'"]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu130" }]
+torchvision = [{ index = "pytorch-cu130" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+timeout = 900
+markers = [
+    "real_weights: needs the real checkpoints in weights/ (the OpenMMLab ST-GCN ones and the pose detector's) (slow, CPU ok)",
+]
+filterwarnings = [
+    "ignore:Using `httpx` with `starlette.testclient` is deprecated",
+    "ignore:The anyio.abc.BlockingPortal alias is deprecated",
+]

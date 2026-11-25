@@ -1,0 +1,5 @@
+outs:
+- md5: f2423b45eb3b7dd46d1b093473828862
+  size: 3586341
+  hash: md5
+  path: face_det_lite.onnx

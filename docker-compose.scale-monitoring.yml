@@ -1,0 +1,84 @@
+# Health monitoring for the scale run (project "scale"), beside the stack and the UI:
+#   Grafana (dashboard "IRIS - system health") <- Prometheus <- the sidecar, iris-exporter
+#   (GPU engines through NVML, containers, Redis, go2rtc, footage players, disk, platform),
+#   the IRIS app and node-exporter.  Reached at  https://<host>:<UI_HTTPS_PORT>/grafana/
+#   docker compose -p scale -f docker-compose.yml -f docker-compose.scale.yml \
+#                  -f docker-compose.scale-ui.yml -f docker-compose.scale-monitoring.yml \
+#                  up -d --build iris-exporter prometheus grafana node-exporter
+services:
+  iris-exporter:
+    build: ./monitoring/exporter
+    image: ${COMPOSE_PROJECT_NAME:-scale}-iris-exporter:latest
+    restart: unless-stopped
+    pid: host                       # reads the footage players' command lines
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [utility]
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=utility
+      - COMPOSE_PROJECT=${COMPOSE_PROJECT_NAME:-scale}
+      - REDIS_URL=redis://redis:6379
+      - GO2RTC_URL=http://go2rtc:1984
+      - UI_URL=http://ui:5173
+      - PLATFORM_DB_DSN=postgresql://iris:iris@ui-postgres:5432/iris
+      - PLAYER_PROC=/proc
+      - DISK_PATHS=/data:data,/footage:footage
+      - EVENTS_LOG=/events/events.log
+      - PROM_URL=http://prometheus:9090
+      - CAMERAS=cam-01,cam-02,cam-03,cam-04,cam-05,cam-06,cam-07,cam-08,cam-09,cam-10,cam-11,cam-12,cam-13,cam-14,cam-15
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data:/data:ro
+      - ./data/flight:/events                # events.log: alerts, GPU throttles, stalls (read-write)
+      - /sys:/host/sys:ro                    # AC adapter and CPU temperature next to a throttle
+      - ${FOOTAGE_DIR:-/data}:/footage:ro
+
+  prometheus:
+    volumes:
+      - ./monitoring/prometheus.scale.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/alerts.scale.yml:/etc/prometheus/alerts.yml:ro
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=14d
+
+  grafana:
+    depends_on: [loki]
+    environment:
+      GF_SERVER_ROOT_URL: https://${PUBLIC_HOST:-localhost}:${UI_HTTPS_PORT:-35443}/grafana/
+      GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/iris-scale.json
+      GF_USERS_DEFAULT_THEME: dark
+
+  # Logs next to the metrics: promtail ships every container's log of this project to Loki, and
+  # Grafana shows them (and marks warnings/errors on the graphs) beside the numbers.
+  loki:
+    image: grafana/loki:3.2.0@sha256:882e30c20683a48a8b7ca123e6c19988980b4bd13d2ff221dfcbef0fdc631694
+    restart: unless-stopped
+    command: ["-config.file=/etc/loki/loki.yml"]
+    volumes:
+      - ./monitoring/loki.scale.yml:/etc/loki/loki.yml:ro
+      - loki-data:/loki
+
+  promtail:
+    image: grafana/promtail:3.2.0@sha256:a77ce6cc7d6f1a05611adeaef863935f66d68640d9d0ef2feb190c8f0edac19e
+    restart: unless-stopped
+    depends_on: [loki]
+    command: ["-config.file=/etc/promtail/promtail.yml"]
+    volumes:
+      - ./monitoring/promtail.scale.yml:/etc/promtail/promtail.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - promtail-positions:/positions
+
+  node-exporter:
+    ports: !override
+      - "${NODE_EXPORTER_PORT:-39100}:9100"
+
+volumes:
+  loki-data:
+  promtail-positions:

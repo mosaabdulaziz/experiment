@@ -1,0 +1,19 @@
+# The safety stack's cameras: the one place a camera is defined (the UI renames cameras and toggles features; it
+# does not add or remove them). `features` is the camera's default set; the UI's toggles override it.
+#
+# A camera is either a real one, `rtsp: <url>` (credentials as ${VAR}, from .env -- never in the repo), or a demo
+# clip, `clip: <file>` in SAFETY_DEMO_CLIPS, which `just safety-demo` loops into go2rtc as if it were a camera.
+#
+# The internal demo (milestone 1): four cameras. Warehouse bay A runs proximity and PPE -- two role sidecars on one
+# camera; the others run one feature each. Proximity, intrusion and overcrowding raise nothing until a zone is drawn
+# for them (Cameras -> Edit zones); PPE, fall and fire cover the whole frame without one.
+#   warehouse-bay-1.mp4  /data/IRIS/data/hpc-warehouse-yt/clips (public warehouse footage, the proximity demo's)
+#   fall-video.mp4       the samples-fall bundle (data/uploads/fall/video.mp4)
+#   chirla-office.mp4    the samples-attendance bundle (CHIRLA camera_3_2023-07-26-13-21-40_h264.mp4: an office
+#                        with 6-8 people at the start, then people walking between the desks and the door)
+#   bucketfire.mp4       the samples-fire bundle (data/uploads/fire/part1/bucketfire.mp4)
+cameras:
+  - {id: bay-a, name: "Warehouse bay A", clip: warehouse-bay-1.mp4, features: [proximity, ppe]}
+  - {id: rest-room, name: "Rest room", clip: fall-video.mp4, features: [fall]}
+  - {id: office, name: "Office", clip: chirla-office.mp4, features: [zones]}
+  - {id: store, name: "Store room", clip: bucketfire.mp4, features: [fire]}

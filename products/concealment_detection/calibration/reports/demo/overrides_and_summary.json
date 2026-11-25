@@ -1,0 +1,658 @@
+[
+  {
+    "video": "gettyimages1.mp4",
+    "camera": "getty-cam-1",
+    "frames": 343,
+    "fps": 24.0,
+    "primary_tid": 1,
+    "stages_seen": {
+      "IDLE": 0,
+      "DWELL": 48,
+      "AT_BODY": 49,
+      "REACH": 64,
+      "COOLDOWN": 153
+    },
+    "alert_emitted": true,
+    "all_events": [
+      {
+        "track_id": 1,
+        "pts": 6.375,
+        "target_kind": "clothing",
+        "body_zone_name": "under_arm",
+        "tier": "high"
+      },
+      {
+        "track_id": 5,
+        "pts": 9.417,
+        "target_kind": "clothing",
+        "body_zone_name": "chest",
+        "tier": "high"
+      }
+    ],
+    "distinct_person_tracks": 7,
+    "track_frame_counts": {
+      "1": 343,
+      "2": 285,
+      "3": 47,
+      "4": 284,
+      "5": 56,
+      "6": 43,
+      "8": 2
+    },
+    "primary_wrist_conf_mean": 0.697,
+    "primary_wrist_conf_mean_reach_or_at_body": 0.939,
+    "overrides": [
+      "Zone: hand-drawn 'aisle-1-bottle-shelf' (deployment input, not from config)",
+      "Tracker: ByteTrack (Ultralytics), not DeepStream nvtracker",
+      "Thresholds: repo defaults, no overrides"
+    ],
+    "run_label": "gettyimages1 | yolo11m-pose + ByteTrack | DEFAULT config",
+    "event": {
+      "candidate_id": "",
+      "pts": 6.375,
+      "target_kind": "clothing",
+      "body_zone_name": "under_arm",
+      "tier": "high",
+      "stage_timeline": [
+        [
+          "DWELL",
+          2.62
+        ],
+        [
+          "REACH",
+          2.67
+        ],
+        [
+          "AT_BODY",
+          3.12
+        ],
+        [
+          "REACH",
+          3.33
+        ],
+        [
+          "AT_BODY",
+          3.92
+        ],
+        [
+          "REACH",
+          4.17
+        ],
+        [
+          "AT_BODY",
+          5.17
+        ],
+        [
+          "RETURNED",
+          6.38
+        ]
+      ]
+    },
+    "out_mp4": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo11m_default_gettyimages1.mp4",
+    "out_keyframes_png": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo11m_default_gettyimages1_keyframes.png",
+    "model": "yolo11m",
+    "config": "default"
+  },
+  {
+    "video": "gettyimages1.mp4",
+    "camera": "getty-cam-1",
+    "frames": 343,
+    "fps": 24.0,
+    "primary_tid": 1,
+    "stages_seen": {
+      "IDLE": 0,
+      "DWELL": 48,
+      "AT_BODY": 49,
+      "REACH": 64,
+      "COOLDOWN": 148
+    },
+    "alert_emitted": true,
+    "all_events": [
+      {
+        "track_id": 1,
+        "pts": 6.167,
+        "target_kind": "clothing",
+        "body_zone_name": "chest",
+        "tier": "high"
+      },
+      {
+        "track_id": 5,
+        "pts": 9.417,
+        "target_kind": "clothing",
+        "body_zone_name": "chest",
+        "tier": "high"
+      }
+    ],
+    "distinct_person_tracks": 7,
+    "track_frame_counts": {
+      "1": 343,
+      "2": 285,
+      "3": 47,
+      "4": 284,
+      "5": 56,
+      "6": 43,
+      "8": 2
+    },
+    "primary_wrist_conf_mean": 0.688,
+    "primary_wrist_conf_mean_reach_or_at_body": 0.942,
+    "overrides": [
+      "Zone: hand-drawn 'aisle-1-bottle-shelf' (deployment input, not from config)",
+      "Tracker: ByteTrack (Ultralytics), not DeepStream nvtracker",
+      "OVERRIDE short_track_grace_s: 1.5 -> 0.0",
+      "OVERRIDE stream: YOLO 'handbag' relabelled 'basket' (store basket exemption)"
+    ],
+    "run_label": "gettyimages1 | yolo11m-pose + ByteTrack | TUNED config",
+    "event": {
+      "candidate_id": "",
+      "pts": 6.167,
+      "target_kind": "clothing",
+      "body_zone_name": "chest",
+      "tier": "high",
+      "stage_timeline": [
+        [
+          "DWELL",
+          2.62
+        ],
+        [
+          "REACH",
+          2.67
+        ],
+        [
+          "AT_BODY",
+          3.12
+        ],
+        [
+          "REACH",
+          3.33
+        ],
+        [
+          "AT_BODY",
+          3.92
+        ],
+        [
+          "REACH",
+          4.17
+        ],
+        [
+          "AT_BODY",
+          5.17
+        ],
+        [
+          "RETURNED",
+          6.17
+        ]
+      ]
+    },
+    "out_mp4": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo11m_tuned_gettyimages1.mp4",
+    "out_keyframes_png": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo11m_tuned_gettyimages1_keyframes.png",
+    "model": "yolo11m",
+    "config": "tuned"
+  },
+  {
+    "video": "gettyimages2.mp4",
+    "camera": "getty-cam-2",
+    "frames": 658,
+    "fps": 29.97002997002997,
+    "primary_tid": 1,
+    "stages_seen": {
+      "IDLE": 0,
+      "REACH": 29,
+      "AT_BODY": 33,
+      "COOLDOWN": 105
+    },
+    "alert_emitted": true,
+    "all_events": [
+      {
+        "track_id": 1,
+        "pts": 3.504,
+        "target_kind": "clothing",
+        "body_zone_name": "waist",
+        "tier": "high"
+      },
+      {
+        "track_id": 1,
+        "pts": 12.179,
+        "target_kind": "clothing",
+        "body_zone_name": "waist",
+        "tier": "high"
+      }
+    ],
+    "distinct_person_tracks": 3,
+    "track_frame_counts": {
+      "1": 616,
+      "2": 26,
+      "3": 577
+    },
+    "primary_wrist_conf_mean": 0.791,
+    "primary_wrist_conf_mean_reach_or_at_body": 0.802,
+    "overrides": [
+      "Zone: hand-drawn 'aisle-2-center-rack' (deployment input, not from config)",
+      "Tracker: ByteTrack (Ultralytics), not DeepStream nvtracker",
+      "Thresholds: repo defaults, no overrides"
+    ],
+    "run_label": "gettyimages2 | yolo11m-pose + ByteTrack | DEFAULT config",
+    "event": {
+      "candidate_id": "",
+      "pts": 3.504,
+      "target_kind": "clothing",
+      "body_zone_name": "waist",
+      "tier": "high",
+      "stage_timeline": [
+        [
+          "DWELL",
+          2.57
+        ],
+        [
+          "REACH",
+          2.57
+        ],
+        [
+          "AT_BODY",
+          2.77
+        ],
+        [
+          "RETURNED",
+          3.5
+        ]
+      ]
+    },
+    "out_mp4": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo11m_default_gettyimages2.mp4",
+    "out_keyframes_png": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo11m_default_gettyimages2_keyframes.png",
+    "model": "yolo11m",
+    "config": "default"
+  },
+  {
+    "video": "gettyimages2.mp4",
+    "camera": "getty-cam-2",
+    "frames": 658,
+    "fps": 29.97002997002997,
+    "primary_tid": 1,
+    "stages_seen": {
+      "IDLE": 0,
+      "REACH": 77,
+      "DWELL": 152,
+      "AT_BODY": 190,
+      "COOLDOWN": 203
+    },
+    "alert_emitted": true,
+    "all_events": [
+      {
+        "track_id": 1,
+        "pts": 6.773,
+        "target_kind": "personal_bag",
+        "body_zone_name": "personal_bag",
+        "tier": "high"
+      },
+      {
+        "track_id": 1,
+        "pts": 18.018,
+        "target_kind": "personal_bag",
+        "body_zone_name": "personal_bag",
+        "tier": "high"
+      }
+    ],
+    "distinct_person_tracks": 3,
+    "track_frame_counts": {
+      "1": 616,
+      "2": 26,
+      "3": 577
+    },
+    "primary_wrist_conf_mean": 0.768,
+    "primary_wrist_conf_mean_reach_or_at_body": 0.867,
+    "overrides": [
+      "Zone: hand-drawn 'aisle-2-center-rack' (deployment input, not from config)",
+      "Tracker: ByteTrack (Ultralytics), not DeepStream nvtracker",
+      "OVERRIDE short_track_grace_s: 1.5 -> 0.0",
+      "OVERRIDE reach_excursion_torsos: 0.32 -> 0.38",
+      "OVERRIDE body_zone_radius_torsos: 0.5 -> 0.05"
+    ],
+    "run_label": "gettyimages2 | yolo11m-pose + ByteTrack | TUNED config",
+    "event": {
+      "candidate_id": "",
+      "pts": 6.773,
+      "target_kind": "personal_bag",
+      "body_zone_name": "personal_bag",
+      "tier": "high",
+      "stage_timeline": [
+        [
+          "DWELL",
+          2.57
+        ],
+        [
+          "REACH",
+          2.57
+        ],
+        [
+          "REACH",
+          5.91
+        ],
+        [
+          "AT_BODY",
+          6.34
+        ],
+        [
+          "RETURNED",
+          6.77
+        ]
+      ]
+    },
+    "out_mp4": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo11m_tuned_gettyimages2.mp4",
+    "out_keyframes_png": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo11m_tuned_gettyimages2_keyframes.png",
+    "model": "yolo11m",
+    "config": "tuned"
+  },
+  {
+    "video": "gettyimages1.mp4",
+    "camera": "getty-cam-1",
+    "frames": 343,
+    "fps": 24.0,
+    "primary_tid": 1,
+    "stages_seen": {
+      "IDLE": 0,
+      "REACH": 10,
+      "AT_BODY": 32,
+      "DWELL": 48,
+      "COOLDOWN": 183
+    },
+    "alert_emitted": true,
+    "all_events": [
+      {
+        "track_id": 1,
+        "pts": 7.625,
+        "target_kind": "clothing",
+        "body_zone_name": "under_arm",
+        "tier": "high"
+      },
+      {
+        "track_id": 12,
+        "pts": 9.333,
+        "target_kind": "clothing",
+        "body_zone_name": "chest",
+        "tier": "medium"
+      }
+    ],
+    "distinct_person_tracks": 13,
+    "track_frame_counts": {
+      "1": 343,
+      "2": 214,
+      "3": 53,
+      "4": 343,
+      "6": 1,
+      "9": 2,
+      "12": 73,
+      "13": 6,
+      "18": 71,
+      "20": 18,
+      "24": 54,
+      "25": 4,
+      "30": 5
+    },
+    "primary_wrist_conf_mean": 0.405,
+    "primary_wrist_conf_mean_reach_or_at_body": 0.468,
+    "overrides": [
+      "Zone: hand-drawn 'aisle-1-bottle-shelf' (deployment input, not from config)",
+      "Tracker: ByteTrack (Ultralytics), not DeepStream nvtracker",
+      "Thresholds: repo defaults, no overrides"
+    ],
+    "run_label": "gettyimages1 | yolo26x-pose + ByteTrack | DEFAULT config",
+    "event": {
+      "candidate_id": "",
+      "pts": 7.625,
+      "target_kind": "clothing",
+      "body_zone_name": "under_arm",
+      "tier": "high",
+      "stage_timeline": [
+        [
+          "DWELL",
+          6.42
+        ],
+        [
+          "REACH",
+          6.42
+        ],
+        [
+          "AT_BODY",
+          6.42
+        ],
+        [
+          "RETURNED",
+          7.62
+        ]
+      ]
+    },
+    "out_mp4": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo26x_default_gettyimages1.mp4",
+    "out_keyframes_png": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo26x_default_gettyimages1_keyframes.png",
+    "model": "yolo26x",
+    "config": "default"
+  },
+  {
+    "video": "gettyimages1.mp4",
+    "camera": "getty-cam-1",
+    "frames": 343,
+    "fps": 24.0,
+    "primary_tid": 1,
+    "stages_seen": {
+      "IDLE": 0,
+      "DWELL": 48,
+      "AT_BODY": 49,
+      "REACH": 79,
+      "COOLDOWN": 178
+    },
+    "alert_emitted": true,
+    "all_events": [
+      {
+        "track_id": 1,
+        "pts": 7.417,
+        "target_kind": "clothing",
+        "body_zone_name": "chest",
+        "tier": "high"
+      },
+      {
+        "track_id": 12,
+        "pts": 9.333,
+        "target_kind": "clothing",
+        "body_zone_name": "chest",
+        "tier": "high"
+      }
+    ],
+    "distinct_person_tracks": 13,
+    "track_frame_counts": {
+      "1": 343,
+      "2": 214,
+      "3": 53,
+      "4": 343,
+      "6": 1,
+      "9": 2,
+      "12": 73,
+      "13": 6,
+      "18": 71,
+      "20": 18,
+      "24": 54,
+      "25": 4,
+      "30": 5
+    },
+    "primary_wrist_conf_mean": 0.4,
+    "primary_wrist_conf_mean_reach_or_at_body": 0.573,
+    "overrides": [
+      "Zone: hand-drawn 'aisle-1-bottle-shelf' (deployment input, not from config)",
+      "Tracker: ByteTrack (Ultralytics), not DeepStream nvtracker",
+      "OVERRIDE short_track_grace_s: 1.5 -> 0.0",
+      "OVERRIDE stream: YOLO 'handbag' relabelled 'basket' (store basket exemption)"
+    ],
+    "run_label": "gettyimages1 | yolo26x-pose + ByteTrack | TUNED config",
+    "event": {
+      "candidate_id": "",
+      "pts": 7.417,
+      "target_kind": "clothing",
+      "body_zone_name": "chest",
+      "tier": "high",
+      "stage_timeline": [
+        [
+          "DWELL",
+          6.21
+        ],
+        [
+          "REACH",
+          6.21
+        ],
+        [
+          "AT_BODY",
+          6.21
+        ],
+        [
+          "RETURNED",
+          7.42
+        ]
+      ]
+    },
+    "out_mp4": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo26x_tuned_gettyimages1.mp4",
+    "out_keyframes_png": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo26x_tuned_gettyimages1_keyframes.png",
+    "model": "yolo26x",
+    "config": "tuned"
+  },
+  {
+    "video": "gettyimages2.mp4",
+    "camera": "getty-cam-2",
+    "frames": 658,
+    "fps": 29.97002997002997,
+    "primary_tid": 1,
+    "stages_seen": {
+      "IDLE": 0,
+      "AT_BODY": 20,
+      "COOLDOWN": 53,
+      "DWELL": 293
+    },
+    "alert_emitted": true,
+    "all_events": [
+      {
+        "track_id": 1,
+        "pts": 1.768,
+        "target_kind": "clothing",
+        "body_zone_name": "waist",
+        "tier": "medium"
+      },
+      {
+        "track_id": 1,
+        "pts": 13.08,
+        "target_kind": "clothing",
+        "body_zone_name": "waist",
+        "tier": "high"
+      }
+    ],
+    "distinct_person_tracks": 3,
+    "track_frame_counts": {
+      "1": 606,
+      "2": 622,
+      "7": 4
+    },
+    "primary_wrist_conf_mean": 0.894,
+    "primary_wrist_conf_mean_reach_or_at_body": 0.955,
+    "overrides": [
+      "Zone: hand-drawn 'aisle-2-center-rack' (deployment input, not from config)",
+      "Tracker: ByteTrack (Ultralytics), not DeepStream nvtracker",
+      "Thresholds: repo defaults, no overrides"
+    ],
+    "run_label": "gettyimages2 | yolo26x-pose + ByteTrack | DEFAULT config",
+    "event": {
+      "candidate_id": "",
+      "pts": 1.768,
+      "target_kind": "clothing",
+      "body_zone_name": "waist",
+      "tier": "medium",
+      "stage_timeline": [
+        [
+          "REACH",
+          1.13
+        ],
+        [
+          "AT_BODY",
+          1.13
+        ],
+        [
+          "RETURNED",
+          1.77
+        ]
+      ]
+    },
+    "out_mp4": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo26x_default_gettyimages2.mp4",
+    "out_keyframes_png": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo26x_default_gettyimages2_keyframes.png",
+    "model": "yolo26x",
+    "config": "default"
+  },
+  {
+    "video": "gettyimages2.mp4",
+    "camera": "getty-cam-2",
+    "frames": 658,
+    "fps": 29.97002997002997,
+    "primary_tid": 1,
+    "stages_seen": {
+      "IDLE": 0,
+      "REACH": 84,
+      "AT_BODY": 118,
+      "COOLDOWN": 133,
+      "DWELL": 408
+    },
+    "alert_emitted": true,
+    "all_events": [
+      {
+        "track_id": 1,
+        "pts": 4.438,
+        "target_kind": "clothing",
+        "body_zone_name": "waist",
+        "tier": "high"
+      },
+      {
+        "track_id": 1,
+        "pts": 18.151,
+        "target_kind": "personal_bag",
+        "body_zone_name": "personal_bag",
+        "tier": "high"
+      }
+    ],
+    "distinct_person_tracks": 3,
+    "track_frame_counts": {
+      "1": 606,
+      "2": 622,
+      "7": 4
+    },
+    "primary_wrist_conf_mean": 0.87,
+    "primary_wrist_conf_mean_reach_or_at_body": 0.853,
+    "overrides": [
+      "Zone: hand-drawn 'aisle-2-center-rack' (deployment input, not from config)",
+      "Tracker: ByteTrack (Ultralytics), not DeepStream nvtracker",
+      "OVERRIDE short_track_grace_s: 1.5 -> 0.0",
+      "OVERRIDE reach_excursion_torsos: 0.32 -> 0.38",
+      "OVERRIDE body_zone_radius_torsos: 0.5 -> 0.05"
+    ],
+    "run_label": "gettyimages2 | yolo26x-pose + ByteTrack | TUNED config",
+    "event": {
+      "candidate_id": "",
+      "pts": 4.438,
+      "target_kind": "clothing",
+      "body_zone_name": "waist",
+      "tier": "high",
+      "stage_timeline": [
+        [
+          "DWELL",
+          2.8
+        ],
+        [
+          "REACH",
+          2.8
+        ],
+        [
+          "AT_BODY",
+          3.94
+        ],
+        [
+          "RETURNED",
+          4.44
+        ]
+      ]
+    },
+    "out_mp4": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo26x_tuned_gettyimages2.mp4",
+    "out_keyframes_png": "F:\\IRIS\\surveillance-new\\products\\concealment_detection\\calibration\\reports\\demo\\demo_rgb_yolo26x_tuned_gettyimages2_keyframes.png",
+    "model": "yolo26x",
+    "config": "tuned"
+  }
+]

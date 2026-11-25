@@ -1,0 +1,8 @@
+# TEST CONFIG (not a product): the barber pipeline profile (person masks, appearance/ReID, customer faces, face
+# regions) on a 90 s excerpt of the shop recording, from disk, no loop, one source. Clip: tools/make_golden_clips.sh.
+extends: ../../products/barber/sidecar.yaml
+
+file_loop: false
+
+sources:
+  - {id: barber-c, uri: "file:///workspace/iris/data/uploads/golden/barber.mp4", roles: [barber]}

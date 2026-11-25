@@ -1,0 +1,6 @@
+# Shelf live: demo.mp4 (supermarket aisle, 1280x720, 30 fps, 21 s) as camera cam-shelf-demo (`just shelf-live-sim`;
+# see live.yaml).
+extends: live.yaml
+
+sources:
+  - {id: cam-shelf-demo, uri: "rtsp://go2rtc:8554/raw-cam-shelf-demo", label: "Shelf live (demo.mp4)"}

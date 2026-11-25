@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "yolo11x.onnx",
+  "sha256": "ee680c13ede47444f4bb2c64213661ad53194af1620bc99853d8c83433c7433c",
+  "size_bytes": 227924411,
+  "created_at": "2026-11-05T09:11:57+00:00",
+  "run_id": "2c8de240100742ffa0ca8a109546a151",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "object-detector",
+  "version": "1"
+}

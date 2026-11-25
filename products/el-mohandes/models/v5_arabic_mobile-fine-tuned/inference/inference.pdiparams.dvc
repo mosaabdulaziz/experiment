@@ -1,0 +1,5 @@
+outs:
+- md5: b9e012674f6b481e963b1260bcb97161
+  size: 7573873
+  hash: md5
+  path: inference.pdiparams

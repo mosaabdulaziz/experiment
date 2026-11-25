@@ -1,0 +1,60 @@
+# The safety product: one tool for proximity, zone intrusion/overcrowding, PPE, fall and fire/smoke, with feature
+# toggles per camera. Each feature runs in its own ROLE sidecar (its own tuned detector); several role sidecars can
+# share a camera because they run with role-scoped Redis keys (<camera>@<role>; perception/engine/sources.py).
+#
+# tools/safety_controller.py reads this file, the cameras (cameras.yaml) and the toggles the UI saves
+# (<data>/safety/cameras_state.json), writes <data>/safety/generated/<role>.yaml for each role (and the fall service's
+# config and go2rtc's), and starts, restarts or stops only the role sidecars whose cameras changed. See README.md.
+
+# The features, in the order the UI lists them; each is a role sidecar of the same name.
+features: [proximity, zones, ppe, fall, fire]
+
+# feature -> the sidecar config its role extends, relative to the repo root. The generated configs live in
+# <data>/safety/generated and point back up to these (../../../), which resolves in the sidecars (/workspace/iris)
+# and in the app (/app) alike: both mount the stack's data dir at <root>/data.
+roles:
+  proximity: products/safety/roles/proximity.yaml
+  zones: products/safety/roles/zones.yaml
+  ppe: products/safety/roles/ppe.yaml
+  fall: products/safety/roles/fall.yaml
+  fire: products/safety/roles/fire.yaml
+
+# Set on every role sidecar.
+common:
+  role_scoped_keys: true
+  # One mux size for every role: the zones' points are stored in mux pixels and every role reads the same zones
+  # file. Proximity's (its seg model is tuned at 1280x720), capture likewise (the fall service's pose space).
+  mux_width: 1280
+  mux_height: 720
+  capture_width: 1280
+  capture_height: 720
+  # Clips only (each role records the clips of its own alerts, in its own folder); no continuous segments.
+  record_enabled: false
+  # Every camera comes through go2rtc's relay, which drops a camera's RTCP clock: nvstreammux stamps each frame's
+  # arrival on this machine's clock instead (attach-sys-ts), which places the alert clips' boxes without the
+  # inference delay (FrameView.arrived). The base config's true is for cameras attendance reads directly.
+  rtcp_camera_clock: false
+  # PPE, pose (falls), fire and zones write the boxes of the objects their alerts are about to the overlay stream, and
+  # the app draws them on the alert clips (perception/lib/overlay_boxes.py). Off in every other product.
+  overlay_boxes: true
+  # A camera that stays dead after the stall watch restarted its source twice ends the sidecar (exit 71) and the
+  # role's restart policy brings it back, as barber's does: 2026-11-10 the store camera's feed stopped and came back,
+  # and the fire sidecar got its bytes again but no frame out of the mux through every source restart. ~105 s after
+  # the last frame; the role's other cameras get a ~15 s gap. See perception/pipeline/sidecar.yaml.
+  source_stall_max_failed_restarts: 2
+
+# The model files the stack loads (DVC-tracked, relative to the repo root; a folder means each file in it).
+# `just safety-models` puts them in this checkout; keep this list in step with the roles' configs.
+models:
+  - perception/models/DeepStream-Yolo/yolo11x.onnx                   # zones, ppe, fall, fire: the person detector
+  - perception/models/DeepStream-Yolo-Seg/yolo26l-seg-736x1280.onnx  # proximity: people and vehicles, with masks
+  - perception/models/depth/yolo26m-depth-736x1280.onnx              # proximity: the distance check
+  - perception/models/DeepStream-Yolo-PPE/voxdroid_yolov8s_css.onnx  # ppe: helmet and vest on each person
+  - perception/models/DeepStream-Yolo-Fire/fire_smoke_box.onnx       # fire: the fire/smoke detector
+  - perception/models/DeepStream-Yolo-Pose/yolo26x-pose.onnx         # fall: pose on each person
+  - products/fall_detection/weights                                  # fall: the fall service's checkpoints
+
+# The fall decision runs in the fall product's service, beside its role sidecar: the controller renders its config
+# (the fall role's cameras, key_role fall, the stack's zones file) on top of this one.
+fall_service:
+  extends: products/safety/fall_detection.yaml

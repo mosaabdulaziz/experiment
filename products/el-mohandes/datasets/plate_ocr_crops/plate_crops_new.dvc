@@ -1,0 +1,6 @@
+outs:
+- md5: 88a3e736acd36f613bcfb0afef19d7dc.dir
+  size: 8858999
+  nfiles: 3468
+  hash: md5
+  path: plate_crops_new

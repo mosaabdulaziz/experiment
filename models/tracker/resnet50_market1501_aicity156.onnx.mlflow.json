@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "resnet50_market1501_aicity156.onnx",
+  "sha256": "0e21d09278508ec835955f422a9fdd3cd59b2a6ecdef98d705f388f33cebac2b",
+  "size_bytes": 96398132,
+  "created_at": "2026-11-05T09:11:38+00:00",
+  "run_id": "93acb34a2e364d30bad59b7877e70f3e",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "tracker-reid",
+  "version": "1"
+}

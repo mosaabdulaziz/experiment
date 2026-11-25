@@ -1,0 +1,1844 @@
+{
+ "limits": {
+  "attendance": {
+   "noisy_steps": [],
+   "source_fps": 20.0,
+   "ceiling_fps_1cam": 28.5,
+   "headroom_1cam": 1.43,
+   "realtime_cameras_tested_ok": 1,
+   "cameras_tested": [
+    1,
+    2
+   ],
+   "aggregate_ceiling_fps": 26.1,
+   "aggregate_ceiling_cameras": 2,
+   "cameras_by_ceiling": 1.3,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      28.5
+     ],
+     "min_cam_median": 28.5,
+     "min_cam_p10": 27.4,
+     "aggregate_fps": 28.5,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 98.0,
+     "power_w": 59.81,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1936,
+     "boot_s": 8.1,
+     "stage_ms": {
+      "gpu.decode": 26.76,
+      "gpu.infer.pgie": 18.93,
+      "gpu.infer.pgie_fire": 11.91,
+      "gpu.infer.sgie_face": 3.77,
+      "gpu.jpeg": 48.23
+     },
+     "entries": 796
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 20.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 58.0,
+     "power_w": 54.36,
+     "throttled_fraction": 0.548,
+     "gpu_added_mib": 1936,
+     "boot_s": 8.0,
+     "stage_ms": {
+      "gpu.decode": 22.14,
+      "gpu.infer.pgie": 27.11,
+      "gpu.infer.pgie_fire": 1.79,
+      "gpu.infer.sgie_face": 17.39,
+      "gpu.jpeg": 23.66
+     },
+     "entries": 796
+    },
+    "n2-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      13.05,
+      13.05
+     ],
+     "min_cam_median": 13.05,
+     "min_cam_p10": 12.1,
+     "aggregate_fps": 26.1,
+     "drops": 193.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.89,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 2021,
+     "boot_s": 8.3,
+     "stage_ms": {
+      "gpu.decode": 53.0,
+      "gpu.infer.pgie": 45.73,
+      "gpu.infer.pgie_fire": 28.26,
+      "gpu.infer.sgie_face": 16.16,
+      "gpu.jpeg": 52.82
+     },
+     "entries": 1591
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      12.9,
+      12.7
+     ],
+     "min_cam_median": 12.7,
+     "min_cam_p10": 12.1,
+     "aggregate_fps": 25.6,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.85,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 2023,
+     "boot_s": 8.3,
+     "stage_ms": {
+      "gpu.decode": 36.84,
+      "gpu.infer.pgie": 50.27,
+      "gpu.infer.pgie_fire": 27.52,
+      "gpu.infer.sgie_face": 8.15,
+      "gpu.jpeg": 48.4
+     },
+     "entries": 1140
+    }
+   }
+  },
+  "barber": {
+   "noisy_steps": [],
+   "source_fps": 25.0,
+   "ceiling_fps_1cam": 93.95,
+   "headroom_1cam": 3.76,
+   "realtime_cameras_tested_ok": 2,
+   "cameras_tested": [
+    1,
+    2,
+    4
+   ],
+   "aggregate_ceiling_fps": 86.0,
+   "aggregate_ceiling_cameras": 4,
+   "cameras_by_ceiling": 3.4,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      93.95
+     ],
+     "min_cam_median": 93.95,
+     "min_cam_p10": 93.8,
+     "aggregate_fps": 93.95,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.95,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 2816,
+     "boot_s": 10.2,
+     "stage_ms": {
+      "gpu.decode": 11.07,
+      "gpu.infer.pgie": 5.26,
+      "gpu.infer.sgie_face": 0.39
+     },
+     "entries": 893
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      25.0
+     ],
+     "min_cam_median": 25.0,
+     "min_cam_p10": 25.0,
+     "aggregate_fps": 25.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 39.0,
+     "power_w": 28.36,
+     "throttled_fraction": 0.012,
+     "gpu_added_mib": 2814,
+     "boot_s": 9.8,
+     "stage_ms": {
+      "gpu.decode": 42.44,
+      "gpu.infer.pgie": 10.11,
+      "gpu.infer.sgie_face": 22.75
+     },
+     "entries": 1139
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      25.0,
+      25.0
+     ],
+     "min_cam_median": 25.0,
+     "min_cam_p10": 25.0,
+     "aggregate_fps": 50.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 49.0,
+     "power_w": 47.22,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 3331,
+     "boot_s": 49.6,
+     "stage_ms": {
+      "gpu.decode": 34.31,
+      "gpu.infer.pgie": 18.73,
+      "gpu.infer.sgie_face": 18.94
+     },
+     "entries": 2235
+    },
+    "n4-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 4,
+     "per_cam_median": [
+      21.5,
+      21.5,
+      21.5,
+      21.5
+     ],
+     "min_cam_median": 21.5,
+     "min_cam_p10": 21.2,
+     "aggregate_fps": 86.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.69,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 4018,
+     "boot_s": 11.5,
+     "stage_ms": {
+      "gpu.decode": 32.82,
+      "gpu.infer.pgie": 27.94,
+      "gpu.infer.sgie_face": 1.24
+     },
+     "entries": 3930
+    },
+    "n4-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 4,
+     "per_cam_median": [
+      20.2,
+      20.2,
+      20.2,
+      20.2
+     ],
+     "min_cam_median": 20.2,
+     "min_cam_p10": 19.8,
+     "aggregate_fps": 80.8,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 97.0,
+     "power_w": 59.63,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 4066,
+     "boot_s": 54.7,
+     "stage_ms": {
+      "gpu.decode": 29.06,
+      "gpu.infer.pgie": 17.9,
+      "gpu.infer.sgie_face": 0.95
+     },
+     "entries": 3869
+    }
+   }
+  },
+  "fall_detection": {
+   "noisy_steps": [],
+   "source_fps": 25.0,
+   "ceiling_fps_1cam": 17.9,
+   "headroom_1cam": 0.72,
+   "realtime_cameras_tested_ok": 0,
+   "cameras_tested": [
+    1
+   ],
+   "aggregate_ceiling_fps": 17.9,
+   "aggregate_ceiling_cameras": 1,
+   "cameras_by_ceiling": 0.7,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      17.9
+     ],
+     "min_cam_median": 17.9,
+     "min_cam_p10": 17.6,
+     "aggregate_fps": 17.9,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.78,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 2960,
+     "boot_s": 7.0,
+     "stage_ms": {
+      "gpu.decode": 42.95,
+      "gpu.infer.pgie": 37.85,
+      "gpu.infer.sgie_pose": 31.13,
+      "gpu.jpeg": 75.5
+     },
+     "entries": 264
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      17.6
+     ],
+     "min_cam_median": 17.6,
+     "min_cam_p10": 17.2,
+     "aggregate_fps": 17.6,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.7,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 2960,
+     "boot_s": 6.7,
+     "stage_ms": {
+      "gpu.decode": 35.91,
+      "gpu.infer.pgie": 32.57,
+      "gpu.infer.sgie_pose": 36.47,
+      "gpu.jpeg": 54.41
+     },
+     "entries": 213
+    }
+   }
+  },
+  "fire": {
+   "noisy_steps": [],
+   "source_fps": 30.0,
+   "ceiling_fps_1cam": 30.6,
+   "headroom_1cam": 1.02,
+   "realtime_cameras_tested_ok": 1,
+   "cameras_tested": [
+    1,
+    2
+   ],
+   "aggregate_ceiling_fps": 27.4,
+   "aggregate_ceiling_cameras": 2,
+   "cameras_by_ceiling": 0.9,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      30.6
+     ],
+     "min_cam_median": 30.6,
+     "min_cam_p10": 30.3,
+     "aggregate_fps": 30.6,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 98.0,
+     "power_w": 59.84,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1932,
+     "boot_s": 8.5,
+     "stage_ms": {
+      "gpu.decode": 27.4,
+      "gpu.infer.pgie": 17.65,
+      "gpu.infer.pgie_fire": 9.84,
+      "gpu.infer.sgie_face": 0.93,
+      "gpu.jpeg": 50.98
+     },
+     "entries": 624
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      30.0
+     ],
+     "min_cam_median": 30.0,
+     "min_cam_p10": 30.0,
+     "aggregate_fps": 30.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 95.0,
+     "power_w": 59.795,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1932,
+     "boot_s": 7.9,
+     "stage_ms": {
+      "gpu.decode": 24.24,
+      "gpu.infer.pgie": 28.13,
+      "gpu.infer.pgie_fire": 6.64,
+      "gpu.infer.sgie_face": 17.59,
+      "gpu.jpeg": 31.09
+     },
+     "entries": 624
+    },
+    "n2-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      13.7,
+      13.7
+     ],
+     "min_cam_median": 13.7,
+     "min_cam_p10": 13.5,
+     "aggregate_fps": 27.4,
+     "drops": 605.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.89,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 2015,
+     "boot_s": 8.6,
+     "stage_ms": {
+      "gpu.decode": 56.47,
+      "gpu.infer.pgie": 43.25,
+      "gpu.infer.pgie_fire": 21.74,
+      "gpu.infer.sgie_face": 3.28,
+      "gpu.jpeg": 63.06
+     },
+     "entries": 1247
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      12.85,
+      13.0
+     ],
+     "min_cam_median": 12.85,
+     "min_cam_p10": 12.6,
+     "aggregate_fps": 25.85,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.015,
+     "throttled_fraction": 0.946,
+     "gpu_added_mib": 2015,
+     "boot_s": 8.5,
+     "stage_ms": {
+      "gpu.decode": 28.25,
+      "gpu.infer.pgie": 44.09,
+      "gpu.infer.pgie_fire": 23.77,
+      "gpu.infer.sgie_face": 1.73,
+      "gpu.jpeg": 35.84
+     },
+     "entries": 679
+    }
+   }
+  },
+  "ppe": {
+   "noisy_steps": [],
+   "source_fps": 30.0,
+   "ceiling_fps_1cam": 25.0,
+   "headroom_1cam": 0.83,
+   "realtime_cameras_tested_ok": 0,
+   "cameras_tested": [
+    1
+   ],
+   "aggregate_ceiling_fps": 25.0,
+   "aggregate_ceiling_cameras": 1,
+   "cameras_by_ceiling": 0.8,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      25.0
+     ],
+     "min_cam_median": 25.0,
+     "min_cam_p10": 25.0,
+     "aggregate_fps": 25.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.695,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1294,
+     "boot_s": 7.1,
+     "stage_ms": {
+      "gpu.decode": 25.86,
+      "gpu.infer.pgie": 29.17,
+      "gpu.infer.pgie_ppe": 11.31,
+      "gpu.jpeg": 51.42
+     },
+     "entries": 230
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      25.05
+     ],
+     "min_cam_median": 25.05,
+     "min_cam_p10": 24.9,
+     "aggregate_fps": 25.05,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 98.0,
+     "power_w": 59.94,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1294,
+     "boot_s": 6.7,
+     "stage_ms": {
+      "gpu.decode": 22.7,
+      "gpu.infer.pgie": 18.08,
+      "gpu.infer.pgie_ppe": 13.96,
+      "gpu.jpeg": 44.74
+     },
+     "entries": 209
+    }
+   }
+  },
+  "shelf": {
+   "noisy_steps": [],
+   "source_fps": 30.0,
+   "ceiling_fps_1cam": 29.2,
+   "headroom_1cam": 0.97,
+   "realtime_cameras_tested_ok": 1,
+   "cameras_tested": [
+    1,
+    2
+   ],
+   "aggregate_ceiling_fps": 25.8,
+   "aggregate_ceiling_cameras": 2,
+   "cameras_by_ceiling": 0.9,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      29.2
+     ],
+     "min_cam_median": 29.2,
+     "min_cam_p10": 29.0,
+     "aggregate_fps": 29.2,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 98.0,
+     "power_w": 59.855,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 988,
+     "boot_s": 6.7,
+     "stage_ms": {
+      "gpu.decode": 28.57,
+      "gpu.infer.pgie": 17.93,
+      "gpu.infer.pgie_shelf": 9.12,
+      "gpu.jpeg": 50.55
+     },
+     "entries": 215
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      29.25
+     ],
+     "min_cam_median": 29.25,
+     "min_cam_p10": 29.2,
+     "aggregate_fps": 29.25,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 97.0,
+     "power_w": 59.795,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1064,
+     "boot_s": 6.6,
+     "stage_ms": {
+      "gpu.decode": 28.24,
+      "gpu.infer.pgie": 16.22,
+      "gpu.infer.pgie_shelf": 12.64,
+      "gpu.jpeg": 43.91
+     },
+     "entries": 213
+    },
+    "n2-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      12.9,
+      12.9
+     ],
+     "min_cam_median": 12.9,
+     "min_cam_p10": 12.8,
+     "aggregate_fps": 25.8,
+     "drops": 237.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.895,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1067,
+     "boot_s": 7.0,
+     "stage_ms": {
+      "gpu.decode": 59.92,
+      "gpu.infer.pgie": 60.52,
+      "gpu.infer.pgie_shelf": 18.08,
+      "gpu.jpeg": 53.32
+     },
+     "entries": 430
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      11.9,
+      12.2
+     ],
+     "min_cam_median": 11.9,
+     "min_cam_p10": 11.8,
+     "aggregate_fps": 24.1,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 58.87,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1091,
+     "boot_s": 30.2,
+     "stage_ms": {
+      "gpu.decode": 25.69,
+      "gpu.infer.pgie": 38.69,
+      "gpu.infer.pgie_shelf": 29.17,
+      "gpu.jpeg": 47.75
+     },
+     "entries": 212
+    }
+   }
+  },
+  "zones": {
+   "noisy_steps": [],
+   "source_fps": 20.0,
+   "ceiling_fps_1cam": 28.8,
+   "headroom_1cam": 1.44,
+   "realtime_cameras_tested_ok": 1,
+   "cameras_tested": [
+    1,
+    2
+   ],
+   "aggregate_ceiling_fps": 26.3,
+   "aggregate_ceiling_cameras": 2,
+   "cameras_by_ceiling": 1.3,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      28.8
+     ],
+     "min_cam_median": 28.8,
+     "min_cam_p10": 27.5,
+     "aggregate_fps": 28.8,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.815,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1944,
+     "boot_s": 11.9,
+     "stage_ms": {
+      "gpu.decode": 24.08,
+      "gpu.infer.pgie": 18.35,
+      "gpu.infer.pgie_fire": 11.15,
+      "gpu.infer.sgie_face": 3.28,
+      "gpu.jpeg": 48.36
+     },
+     "entries": 806
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 20.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 59.0,
+     "power_w": 54.92,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1936,
+     "boot_s": 8.3,
+     "stage_ms": {
+      "gpu.decode": 15.92,
+      "gpu.infer.pgie": 27.17,
+      "gpu.infer.pgie_fire": 1.75,
+      "gpu.infer.sgie_face": 17.39,
+      "gpu.jpeg": 23.58
+     },
+     "entries": 806
+    },
+    "n2-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      13.15,
+      13.15
+     ],
+     "min_cam_median": 13.15,
+     "min_cam_p10": 12.2,
+     "aggregate_fps": 26.3,
+     "drops": 603.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.885,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 2023,
+     "boot_s": 8.6,
+     "stage_ms": {
+      "gpu.decode": 51.61,
+      "gpu.infer.pgie": 46.95,
+      "gpu.infer.pgie_fire": 25.28,
+      "gpu.infer.sgie_face": 14.4,
+      "gpu.jpeg": 63.51
+     },
+     "entries": 1601
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      13.2,
+      13.3
+     ],
+     "min_cam_median": 13.2,
+     "min_cam_p10": 12.2,
+     "aggregate_fps": 26.5,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.83,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 2023,
+     "boot_s": 8.9,
+     "stage_ms": {
+      "gpu.decode": 38.54,
+      "gpu.infer.pgie": 49.23,
+      "gpu.infer.pgie_fire": 26.56,
+      "gpu.infer.sgie_face": 9.26,
+      "gpu.jpeg": 46.76
+     },
+     "entries": 1144
+    }
+   }
+  },
+  "proximity": {
+   "noisy_steps": [],
+   "source_fps": 20.0,
+   "ceiling_fps_1cam": 76.95,
+   "headroom_1cam": 3.85,
+   "realtime_cameras_tested_ok": 2,
+   "cameras_tested": [
+    1,
+    2,
+    4
+   ],
+   "aggregate_ceiling_fps": 74.8,
+   "aggregate_ceiling_cameras": 4,
+   "cameras_by_ceiling": 3.7
+  }
+ },
+ "models": {
+  "damoyolo_s": {
+   "noisy_steps": [],
+   "source_fps": 20.0,
+   "ceiling_fps_1cam": 232.4,
+   "headroom_1cam": 11.62,
+   "realtime_cameras_tested_ok": 2,
+   "cameras_tested": [
+    1,
+    2
+   ],
+   "aggregate_ceiling_fps": 239.3,
+   "aggregate_ceiling_cameras": 2,
+   "cameras_by_ceiling": 12.0,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      232.4
+     ],
+     "min_cam_median": 232.4,
+     "min_cam_p10": 232.4,
+     "aggregate_fps": 232.4,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.5,
+     "power_w": 55.305,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1632,
+     "boot_s": 22.1,
+     "stage_ms": {
+      "gpu.decode": 3.65,
+      "gpu.infer.pgie": 2.06,
+      "gpu.infer.pgie_fire": 2.49,
+      "gpu.infer.sgie_face": 1.18,
+      "gpu.jpeg": 5.33
+     },
+     "entries": 764
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 20.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 10.0,
+     "power_w": 12.45,
+     "throttled_fraction": 0.0,
+     "gpu_added_mib": 1540,
+     "boot_s": 7.8,
+     "stage_ms": {
+      "gpu.decode": 27.38,
+      "gpu.infer.pgie": 2.47,
+      "gpu.infer.pgie_fire": 1.66,
+      "gpu.infer.sgie_face": 42.63,
+      "gpu.jpeg": 0.52
+     },
+     "entries": 797
+    },
+    "n2-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      119.65,
+      119.65
+     ],
+     "min_cam_median": 119.65,
+     "min_cam_p10": 85.6,
+     "aggregate_fps": 239.3,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 58.2,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1717,
+     "boot_s": 8.2,
+     "stage_ms": {
+      "gpu.decode": 6.41,
+      "gpu.infer.pgie": 4.59,
+      "gpu.infer.pgie_fire": 3.42,
+      "gpu.infer.sgie_face": 3.02,
+      "gpu.jpeg": 6.57
+     },
+     "entries": 1591
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      20.0,
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 40.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 16.0,
+     "power_w": 16.84,
+     "throttled_fraction": 0.0,
+     "gpu_added_mib": 1748,
+     "boot_s": 31.8,
+     "stage_ms": {
+      "gpu.decode": 27.42,
+      "gpu.infer.pgie": 3.97,
+      "gpu.infer.pgie_fire": 2.57,
+      "gpu.infer.sgie_face": 40.23,
+      "gpu.jpeg": 0.76
+     },
+     "entries": 1593
+    }
+   },
+   "first_boot_s_with_engine_build": 22.1,
+   "precision": "fp16"
+  },
+  "yolo11l": {
+   "noisy_steps": [],
+   "source_fps": 20.0,
+   "ceiling_fps_1cam": 52.1,
+   "headroom_1cam": 2.6,
+   "realtime_cameras_tested_ok": 2,
+   "cameras_tested": [
+    1,
+    2
+   ],
+   "aggregate_ceiling_fps": 48.2,
+   "aggregate_ceiling_cameras": 2,
+   "cameras_by_ceiling": 2.4,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      52.1
+     ],
+     "min_cam_median": 52.1,
+     "min_cam_p10": 51.5,
+     "aggregate_fps": 52.1,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 97.0,
+     "power_w": 59.89,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1820,
+     "boot_s": 29.5,
+     "stage_ms": {
+      "gpu.decode": 14.3,
+      "gpu.infer.pgie": 6.82,
+      "gpu.infer.pgie_fire": 5.47,
+      "gpu.infer.sgie_face": 1.77,
+      "gpu.jpeg": 27.2
+     },
+     "entries": 798
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 20.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 29.0,
+     "power_w": 33.94,
+     "throttled_fraction": 0.973,
+     "gpu_added_mib": 1786,
+     "boot_s": 8.2,
+     "stage_ms": {
+      "gpu.decode": 24.24,
+      "gpu.infer.pgie": 12.67,
+      "gpu.infer.pgie_fire": 1.63,
+      "gpu.infer.sgie_face": 32.18,
+      "gpu.jpeg": 9.03
+     },
+     "entries": 798
+    },
+    "n2-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      24.1,
+      24.1
+     ],
+     "min_cam_median": 24.1,
+     "min_cam_p10": 22.5,
+     "aggregate_fps": 48.2,
+     "drops": 77.0,
+     "stalls": 0.0,
+     "gpu_util": 98.0,
+     "power_w": 59.85,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1851,
+     "boot_s": 8.4,
+     "stage_ms": {
+      "gpu.decode": 26.49,
+      "gpu.infer.pgie": 22.84,
+      "gpu.infer.pgie_fire": 13.94,
+      "gpu.infer.sgie_face": 8.31,
+      "gpu.jpeg": 30.64
+     },
+     "entries": 1595
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      20.0,
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 40.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 63.0,
+     "power_w": 57.76,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1866,
+     "boot_s": 37.1,
+     "stage_ms": {
+      "gpu.decode": 28.2,
+      "gpu.infer.pgie": 27.51,
+      "gpu.infer.pgie_fire": 2.99,
+      "gpu.infer.sgie_face": 16.44,
+      "gpu.jpeg": 12.44
+     },
+     "entries": 1595
+    }
+   },
+   "first_boot_s_with_engine_build": 29.5,
+   "precision": "fp32"
+  },
+  "yolo11l-fp16": {
+   "noisy_steps": [],
+   "source_fps": 20.0,
+   "ceiling_fps_1cam": 150.95,
+   "headroom_1cam": 7.55,
+   "realtime_cameras_tested_ok": 2,
+   "cameras_tested": [
+    1,
+    2
+   ],
+   "aggregate_ceiling_fps": 134.5,
+   "aggregate_ceiling_cameras": 2,
+   "cameras_by_ceiling": 6.7,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      150.95
+     ],
+     "min_cam_median": 150.95,
+     "min_cam_p10": 136.5,
+     "aggregate_fps": 150.95,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 54.78,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1686,
+     "boot_s": 27.6,
+     "stage_ms": {
+      "gpu.decode": 5.02,
+      "gpu.infer.pgie": 1.68,
+      "gpu.infer.pgie_fire": 3.02,
+      "gpu.infer.sgie_face": 1.53,
+      "gpu.jpeg": 11.03
+     },
+     "entries": 799
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 20.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 13.0,
+     "power_w": 15.92,
+     "throttled_fraction": 0.0,
+     "gpu_added_mib": 1626,
+     "boot_s": 7.8,
+     "stage_ms": {
+      "gpu.decode": 23.43,
+      "gpu.infer.pgie": 4.41,
+      "gpu.infer.pgie_fire": 1.33,
+      "gpu.infer.sgie_face": 40.58,
+      "gpu.jpeg": 1.28
+     },
+     "entries": 799
+    },
+    "n2-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      67.25,
+      67.25
+     ],
+     "min_cam_median": 67.25,
+     "min_cam_p10": 57.7,
+     "aggregate_fps": 134.5,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.88,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1747,
+     "boot_s": 8.0,
+     "stage_ms": {
+      "gpu.decode": 10.41,
+      "gpu.infer.pgie": 5.48,
+      "gpu.infer.pgie_fire": 6.33,
+      "gpu.infer.sgie_face": 4.25,
+      "gpu.jpeg": 9.93
+     },
+     "entries": 1597
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      20.0,
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 40.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 23.0,
+     "power_w": 23.98,
+     "throttled_fraction": 0.438,
+     "gpu_added_mib": 1888,
+     "boot_s": 42.7,
+     "stage_ms": {
+      "gpu.decode": 28.43,
+      "gpu.infer.pgie": 7.58,
+      "gpu.infer.pgie_fire": 2.44,
+      "gpu.infer.sgie_face": 37.05,
+      "gpu.jpeg": 2.36
+     },
+     "entries": 1597
+    }
+   },
+   "first_boot_s_with_engine_build": 27.6,
+   "precision": "fp16 (forced)"
+  },
+  "yolo11m": {
+   "noisy_steps": [],
+   "source_fps": 20.0,
+   "ceiling_fps_1cam": 188.0,
+   "headroom_1cam": 9.4,
+   "realtime_cameras_tested_ok": 2,
+   "cameras_tested": [
+    1,
+    2
+   ],
+   "aggregate_ceiling_fps": 139.4,
+   "aggregate_ceiling_cameras": 2,
+   "cameras_by_ceiling": 7.0,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      188.0
+     ],
+     "min_cam_median": 188.0,
+     "min_cam_p10": 188.0,
+     "aggregate_fps": 188.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 56.48,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1656,
+     "boot_s": 24.9,
+     "stage_ms": {
+      "gpu.decode": 4.4,
+      "gpu.infer.pgie": 1.82,
+      "gpu.infer.pgie_fire": 3.25,
+      "gpu.infer.sgie_face": 1.01,
+      "gpu.jpeg": 7.24
+     },
+     "entries": 799
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 20.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 12.0,
+     "power_w": 14.57,
+     "throttled_fraction": 0.0,
+     "gpu_added_mib": 1592,
+     "boot_s": 7.8,
+     "stage_ms": {
+      "gpu.decode": 26.4,
+      "gpu.infer.pgie": 3.62,
+      "gpu.infer.pgie_fire": 1.23,
+      "gpu.infer.sgie_face": 40.34,
+      "gpu.jpeg": 0.73
+     },
+     "entries": 799
+    },
+    "n2-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      69.7,
+      69.7
+     ],
+     "min_cam_median": 69.7,
+     "min_cam_p10": 60.0,
+     "aggregate_fps": 139.4,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.56,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1707,
+     "boot_s": 8.0,
+     "stage_ms": {
+      "gpu.decode": 8.15,
+      "gpu.infer.pgie": 4.8,
+      "gpu.infer.pgie_fire": 6.11,
+      "gpu.infer.sgie_face": 3.33,
+      "gpu.jpeg": 8.03
+     },
+     "entries": 1597
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      20.0,
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 40.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 21.0,
+     "power_w": 21.49,
+     "throttled_fraction": 0.014,
+     "gpu_added_mib": 1858,
+     "boot_s": 34.6,
+     "stage_ms": {
+      "gpu.decode": 27.2,
+      "gpu.infer.pgie": 6.13,
+      "gpu.infer.pgie_fire": 2.37,
+      "gpu.infer.sgie_face": 38.43,
+      "gpu.jpeg": 1.68
+     },
+     "entries": 1597
+    }
+   },
+   "first_boot_s_with_engine_build": 24.9,
+   "precision": "fp16"
+  },
+  "yolo11s": {
+   "noisy_steps": [],
+   "source_fps": 20.0,
+   "ceiling_fps_1cam": 237.8,
+   "headroom_1cam": 11.89,
+   "realtime_cameras_tested_ok": 2,
+   "cameras_tested": [
+    1,
+    2
+   ],
+   "aggregate_ceiling_fps": 241.8,
+   "aggregate_ceiling_cameras": 2,
+   "cameras_by_ceiling": 12.1,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      237.8
+     ],
+     "min_cam_median": 237.8,
+     "min_cam_p10": 237.8,
+     "aggregate_fps": 237.8,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 100.0,
+     "power_w": 50.03,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1654,
+     "boot_s": 23.6,
+     "stage_ms": {
+      "gpu.decode": 3.41,
+      "gpu.infer.pgie": 2.26,
+      "gpu.infer.pgie_fire": 2.05,
+      "gpu.infer.sgie_face": 1.04,
+      "gpu.jpeg": 3.99
+     },
+     "entries": 775
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 20.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 10.0,
+     "power_w": 12.0,
+     "throttled_fraction": 0.0,
+     "gpu_added_mib": 1560,
+     "boot_s": 7.7,
+     "stage_ms": {
+      "gpu.decode": 20.96,
+      "gpu.infer.pgie": 2.43,
+      "gpu.infer.pgie_fire": 1.71,
+      "gpu.infer.sgie_face": 42.33,
+      "gpu.jpeg": 0.5
+     },
+     "entries": 796
+    },
+    "n2-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      120.9,
+      120.9
+     ],
+     "min_cam_median": 120.9,
+     "min_cam_p10": 83.8,
+     "aggregate_fps": 241.8,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 58.295,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1685,
+     "boot_s": 8.2,
+     "stage_ms": {
+      "gpu.decode": 6.43,
+      "gpu.infer.pgie": 4.72,
+      "gpu.infer.pgie_fire": 4.39,
+      "gpu.infer.sgie_face": 3.46,
+      "gpu.jpeg": 6.64
+     },
+     "entries": 1587
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      20.0,
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 40.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 15.0,
+     "power_w": 15.775,
+     "throttled_fraction": 0.0,
+     "gpu_added_mib": 1758,
+     "boot_s": 30.4,
+     "stage_ms": {
+      "gpu.decode": 26.77,
+      "gpu.infer.pgie": 3.31,
+      "gpu.infer.pgie_fire": 2.64,
+      "gpu.infer.sgie_face": 41.06,
+      "gpu.jpeg": 0.69
+     },
+     "entries": 1589
+    }
+   },
+   "first_boot_s_with_engine_build": 23.6,
+   "precision": "fp16"
+  },
+  "yolo11x": {
+   "noisy_steps": [],
+   "source_fps": 20.0,
+   "ceiling_fps_1cam": 28.35,
+   "headroom_1cam": 1.42,
+   "realtime_cameras_tested_ok": 1,
+   "cameras_tested": [
+    1,
+    2
+   ],
+   "aggregate_ceiling_fps": 26.0,
+   "aggregate_ceiling_cameras": 2,
+   "cameras_by_ceiling": 1.3,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      28.35
+     ],
+     "min_cam_median": 28.35,
+     "min_cam_p10": 27.1,
+     "aggregate_fps": 28.35,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 98.0,
+     "power_w": 59.83,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1938,
+     "boot_s": 8.1,
+     "stage_ms": {
+      "gpu.decode": 25.49,
+      "gpu.infer.pgie": 18.21,
+      "gpu.infer.pgie_fire": 11.93,
+      "gpu.infer.sgie_face": 3.64,
+      "gpu.jpeg": 48.52
+     },
+     "entries": 796
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 20.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 57.0,
+     "power_w": 54.72,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1936,
+     "boot_s": 8.1,
+     "stage_ms": {
+      "gpu.decode": 28.18,
+      "gpu.infer.pgie": 27.17,
+      "gpu.infer.pgie_fire": 1.79,
+      "gpu.infer.sgie_face": 17.32,
+      "gpu.jpeg": 23.61
+     },
+     "entries": 796
+    },
+    "n2-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      13.0,
+      13.0
+     ],
+     "min_cam_median": 13.0,
+     "min_cam_p10": 12.2,
+     "aggregate_fps": 26.0,
+     "drops": 255.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.91,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 2023,
+     "boot_s": 8.5,
+     "stage_ms": {
+      "gpu.decode": 53.27,
+      "gpu.infer.pgie": 45.39,
+      "gpu.infer.pgie_fire": 28.15,
+      "gpu.infer.sgie_face": 15.19,
+      "gpu.jpeg": 53.24
+     },
+     "entries": 1591
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      12.9,
+      13.1
+     ],
+     "min_cam_median": 12.9,
+     "min_cam_p10": 12.0,
+     "aggregate_fps": 26.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.79,
+     "throttled_fraction": 0.986,
+     "gpu_added_mib": 2023,
+     "boot_s": 8.5,
+     "stage_ms": {
+      "gpu.decode": 39.36,
+      "gpu.infer.pgie": 47.08,
+      "gpu.infer.pgie_fire": 29.15,
+      "gpu.infer.sgie_face": 8.58,
+      "gpu.jpeg": 46.66
+     },
+     "entries": 1145
+    }
+   },
+   "first_boot_s_with_engine_build": 8.1,
+   "precision": "fp32 (the product's default)"
+  },
+  "yolo11x-fp16": {
+   "noisy_steps": [],
+   "source_fps": 20.0,
+   "ceiling_fps_1cam": 90.4,
+   "headroom_1cam": 4.52,
+   "realtime_cameras_tested_ok": 2,
+   "cameras_tested": [
+    1,
+    2
+   ],
+   "aggregate_ceiling_fps": 82.2,
+   "aggregate_ceiling_cameras": 2,
+   "cameras_by_ceiling": 4.1,
+   "runs": {
+    "n1-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      90.4
+     ],
+     "min_cam_median": 90.4,
+     "min_cam_p10": 85.6,
+     "aggregate_fps": 90.4,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 98.0,
+     "power_w": 59.875,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1720,
+     "boot_s": 30.2,
+     "stage_ms": {
+      "gpu.decode": 8.08,
+      "gpu.infer.pgie": 3.52,
+      "gpu.infer.pgie_fire": 3.97,
+      "gpu.infer.sgie_face": 1.64,
+      "gpu.jpeg": 19.59
+     },
+     "entries": 796
+    },
+    "n1-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 1,
+     "per_cam_median": [
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 20.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 19.0,
+     "power_w": 21.78,
+     "throttled_fraction": 0.082,
+     "gpu_added_mib": 1688,
+     "boot_s": 8.3,
+     "stage_ms": {
+      "gpu.decode": 24.8,
+      "gpu.infer.pgie": 7.45,
+      "gpu.infer.pgie_fire": 1.53,
+      "gpu.infer.sgie_face": 37.41,
+      "gpu.jpeg": 4.11
+     },
+     "entries": 796
+    },
+    "n2-max": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      41.1,
+      41.1
+     ],
+     "min_cam_median": 41.1,
+     "min_cam_p10": 37.0,
+     "aggregate_fps": 82.2,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 99.0,
+     "power_w": 59.81,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1817,
+     "boot_s": 8.3,
+     "stage_ms": {
+      "gpu.decode": 15.4,
+      "gpu.infer.pgie": 9.25,
+      "gpu.infer.pgie_fire": 9.52,
+      "gpu.infer.sgie_face": 4.77,
+      "gpu.jpeg": 16.33
+     },
+     "entries": 1591
+    },
+    "n2-rt": {
+     "ran": true,
+     "noisy": false,
+     "noise_reasons": [],
+     "cameras": 2,
+     "per_cam_median": [
+      20.0,
+      20.0
+     ],
+     "min_cam_median": 20.0,
+     "min_cam_p10": 20.0,
+     "aggregate_fps": 40.0,
+     "drops": 0.0,
+     "stalls": 0.0,
+     "gpu_util": 35.0,
+     "power_w": 38.27,
+     "throttled_fraction": 1.0,
+     "gpu_added_mib": 1960,
+     "boot_s": 48.5,
+     "stage_ms": {
+      "gpu.decode": 26.95,
+      "gpu.infer.pgie": 13.54,
+      "gpu.infer.pgie_fire": 2.8,
+      "gpu.infer.sgie_face": 31.01,
+      "gpu.jpeg": 5.26
+     },
+     "entries": 1591
+    }
+   },
+   "first_boot_s_with_engine_build": 30.2,
+   "precision": "fp16 (forced)"
+  }
+ },
+ "engines": {
+  "yolo11s-fp16": {
+   "gpu_ms_median": 1.39856,
+   "throughput_qps": 704.101,
+   "latency_ms_median": 1.39856
+  },
+  "yolo11m-fp16": {
+   "gpu_ms_median": 3.125,
+   "throughput_qps": 316.081,
+   "latency_ms_median": 3.125
+  },
+  "yolo11l-fp16": {
+   "gpu_ms_median": 4.10742,
+   "throughput_qps": 240.318,
+   "latency_ms_median": 4.10742
+  },
+  "yolo11x-fp16": {
+   "gpu_ms_median": 7.77692,
+   "throughput_qps": 126.829,
+   "latency_ms_median": 7.77692
+  },
+  "damoyolo_s-fp16": {
+   "gpu_ms_median": 1.87244,
+   "throughput_qps": 528.632,
+   "latency_ms_median": 1.87244
+  },
+  "yolo11l-fp32": {
+   "gpu_ms_median": 10.8198,
+   "throughput_qps": 91.5693,
+   "latency_ms_median": 10.8198
+  },
+  "yolo11x-fp32": {
+   "gpu_ms_median": 23.1482,
+   "throughput_qps": 42.7159,
+   "latency_ms_median": 23.1482
+  }
+ },
+ "af5": {
+  "attendance@af5": {
+   "noisy_steps": [],
+   "source_fps": 5.0,
+   "ceiling_fps_1cam": null,
+   "headroom_1cam": null,
+   "realtime_cameras_tested_ok": 4,
+   "cameras_tested": [
+    1,
+    4,
+    8
+   ],
+   "aggregate_ceiling_fps": null,
+   "aggregate_ceiling_cameras": 1,
+   "cameras_by_ceiling": null
+  },
+  "barber@af5": {
+   "noisy_steps": [],
+   "source_fps": 5.0,
+   "ceiling_fps_1cam": null,
+   "headroom_1cam": null,
+   "realtime_cameras_tested_ok": 8,
+   "cameras_tested": [
+    1,
+    4,
+    8
+   ],
+   "aggregate_ceiling_fps": null,
+   "aggregate_ceiling_cameras": 1,
+   "cameras_by_ceiling": null
+  },
+  "fall_detection@af5": {
+   "noisy_steps": [],
+   "source_fps": 5.0,
+   "ceiling_fps_1cam": null,
+   "headroom_1cam": null,
+   "realtime_cameras_tested_ok": 1,
+   "cameras_tested": [
+    1,
+    4
+   ],
+   "aggregate_ceiling_fps": null,
+   "aggregate_ceiling_cameras": 1,
+   "cameras_by_ceiling": null
+  },
+  "fire@af5": {
+   "noisy_steps": [],
+   "source_fps": 5.0,
+   "ceiling_fps_1cam": null,
+   "headroom_1cam": null,
+   "realtime_cameras_tested_ok": 4,
+   "cameras_tested": [
+    1,
+    4,
+    8
+   ],
+   "aggregate_ceiling_fps": null,
+   "aggregate_ceiling_cameras": 1,
+   "cameras_by_ceiling": null
+  },
+  "ppe@af5": {
+   "noisy_steps": [],
+   "source_fps": 5.0,
+   "ceiling_fps_1cam": null,
+   "headroom_1cam": null,
+   "realtime_cameras_tested_ok": 4,
+   "cameras_tested": [
+    1,
+    4,
+    8
+   ],
+   "aggregate_ceiling_fps": null,
+   "aggregate_ceiling_cameras": 1,
+   "cameras_by_ceiling": null
+  },
+  "shelf@af5": {
+   "noisy_steps": [],
+   "source_fps": 5.0,
+   "ceiling_fps_1cam": null,
+   "headroom_1cam": null,
+   "realtime_cameras_tested_ok": 4,
+   "cameras_tested": [
+    1,
+    4,
+    8
+   ],
+   "aggregate_ceiling_fps": null,
+   "aggregate_ceiling_cameras": 1,
+   "cameras_by_ceiling": null
+  },
+  "zones@af5": {
+   "noisy_steps": [],
+   "source_fps": 5.0,
+   "ceiling_fps_1cam": null,
+   "headroom_1cam": null,
+   "realtime_cameras_tested_ok": 4,
+   "cameras_tested": [
+    1,
+    4,
+    8
+   ],
+   "aggregate_ceiling_fps": null,
+   "aggregate_ceiling_cameras": 1,
+   "cameras_by_ceiling": null
+  }
+ },
+ "note": "un-paced 1-camera ceilings and real-time camera counts per use case (720p H.264 file sources); the attendance detector swapped per model; trtexec GPU time per frame at batch 1"
+}

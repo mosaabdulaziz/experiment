@@ -1,0 +1,29 @@
+# Preset: the shared IRIS pipeline with empty-shelf detection switched on -- an overlay on the shared pipeline file,
+# which itself starts no module (modules: {}). Opt-in, one camera set, nothing else changed:
+#
+#   SIDECAR_CONFIG=configs/presets/shelf/sidecar.yaml just up
+#
+# The void detector runs on the full frame after the tracker, at 640 (config_infer_shelf_640.txt);
+# perception/modules/shelf_void/README.md says why.
+# Pipeline only: there is no config.yaml here, so it is not a `just switch` preset; the app runs as configured.
+# To add it to a product instead, add `shelf_void:` (with these settings) under that product's `modules:`. The model has NO
+# licence (trained with Ultralytics, AGPL-3.0): see perception/models/DeepStream-Yolo-Shelf/README.md.
+extends: ../../../perception/pipeline/sidecar.yaml
+
+modules:
+  shelf_void:
+    # The void detector at 640, the accepted shelf-demo's input size and NMS (the module's default config is the
+    # heat map's 1280): perception/models/DeepStream-Yolo-Shelf/README.md, "640 input".
+    config: /workspace/iris/perception/models/DeepStream-Yolo-Shelf/config_infer_shelf_640.txt
+    # The accepted shelf-demo's per-region tracker, person pause and situation (perception/modules/shelf_void/README.md,
+    # "stability: tracker"), not the heat map: a void must stay in place 2 s, seen in >= 50% of the frames.
+    stability: tracker
+    tracker:
+      conf: 0.08            # the demo's confidence filter (--conf; catalog `confidence`)
+    # Heat-map settings, used only with `stability: heatmap`.
+    # Mux px^2. The module's default (400, the standalone value on 1280x720) let two dark gaps between bottles
+    # behind the wire rack of demo.mp4 raise (609 and 493 px^2 in the 1080x720 mux); the real voids are >= 2,760.
+    min_area: 800
+    # The left void of demo.mp4 switches between its own box and a merged one at IoU 0.30, right at the default
+    # 0.3, so it re-alerted every loop or two (perception/modules/shelf_void/README.md, "Results on video").
+    match_iou: 0.2

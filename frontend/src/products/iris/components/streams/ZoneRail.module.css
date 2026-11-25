@@ -1,0 +1,175 @@
+.rail {
+  width: 232px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-left: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+}
+
+.head {
+  flex-shrink: 0;
+  padding: 12px 14px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 10px;
+}
+
+.empty {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-dim);
+  padding: 8px 4px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid transparent;
+  border-left: 3px solid transparent;
+  background: var(--glass-bg-soft);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.row:hover {
+  background: var(--surface3);
+}
+.row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+/* Selected zone lights up: accent left-border + raised surface, mirroring the active
+   polygon on the canvas. */
+.rowSelected {
+  background: var(--surface3);
+  border-color: var(--glass-border-hi);
+  border-left-color: var(--accent);
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.rowBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.nameInput {
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 1px 0;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.nameInput:hover:not(:disabled),
+.nameInput:focus {
+  border-bottom-color: var(--glass-border-hi);
+}
+.nameInput:focus {
+  border-bottom-color: var(--accent);
+}
+.nameInput:disabled {
+  opacity: 0.6;
+}
+
+.summary {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.delete {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.delete:hover:not(:disabled) {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+.delete:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.add {
+  flex-shrink: 0;
+  margin: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px dashed var(--glass-border-hi);
+  background: var(--glass-bg-soft);
+  color: var(--text-soft);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.add:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent-glow-2);
+  background: var(--accent-dim);
+}
+.add:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* On a narrow modal (mobile), the rail drops below the canvas as a horizontal strip. */
+@media (max-width: 860px) {
+  .rail {
+    width: auto;
+    border-left: none;
+    border-top: 1px solid var(--glass-border);
+    max-height: 40%;
+  }
+}

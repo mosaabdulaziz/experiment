@@ -1,0 +1,13 @@
+[core]
+    remote = work
+    autostage = true
+[cache]
+    type = "reflink,copy"
+['remote "onedrive"']
+    url = ../.data-remote/dvc-store
+['remote "minio"']
+    url = s3://iris-dvc
+    endpointurl = http://minio.iris.invalid:9000
+['remote "work"']
+    url = ssh://iris@10.2.0.60/data/IRIS/repo-data/dvc-store
+    port = 22

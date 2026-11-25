@@ -1,0 +1,181 @@
+# What is versioned with DVC, grouped by what it is for. tools/data/catalog.py reads this to
+#   - pull a group:        just data-pull <group>...     (no argument = the groups marked default)
+#   - check coverage:      every *.dvc in the repo must match exactly one group (CI + `just data-catalog-check`)
+#   - write DATA.md:  the table of artifacts, sizes and use cases
+# `paths` are globs from the repo root matched against the .dvc pointer files; the first group that matches wins.
+# `stages` are dvc.yaml stages pulled by name.
+# `folder` is where the group sits in the browsable view of the store (tools/data/export_view.py): <use case>/<kind>.
+
+groups:
+  models-fall:
+    folder: fall/models
+    default: true
+    use_case: fall detection
+    description: The pose model (yolo26x-pose ONNX for the sidecar, yolo11n-pose ONNX for the export self-test), the pose checkpoints (.pt) and the skeleton action-recognition checkpoints (mmaction2_*, pyskl_*.pth) the fall product loads. Vendor weights; the product's boot gate checks the two its config loads by SHA-256.
+    paths: ["perception/models/DeepStream-Yolo-Pose/**/*.dvc", "products/fall_detection/weights/*.dvc"]
+
+  models-ppe:
+    folder: ppe/models
+    default: true
+    use_case: PPE compliance (helmet and hi-vis vest)
+    description: The VoxDroid YOLOv8s Construction Site Safety detector (ONNX) of the ppe module. AGPL-3.0 weights, approved for non-commercial use only (perception/models/DeepStream-Yolo-PPE/README.md).
+    paths: ["perception/models/DeepStream-Yolo-PPE/*.dvc"]
+
+  models-shelf:
+    folder: shelf/models
+    default: true
+    use_case: empty shelf space (supermarket voids)
+    description: The K-saif YOLO11n empty/product detector of the shelf_void module -- the ONNX at 1280 and at 640 input (detect_product_empty_space_640.onnx) and the .pt checkpoint they were exported from (detect_product_empty_space.pt). NO licence in its source repository and trained with Ultralytics (AGPL-3.0); demo use until the team decides (perception/models/DeepStream-Yolo-Shelf/README.md).
+    paths: ["perception/models/DeepStream-Yolo-Shelf/*.dvc"]
+
+  models-perception:
+    folder: shared/models
+    default: true
+    use_case: every product (DeepStream sidecar)
+    description: Detector, face, fire, segmentation, staff-classifier and kids-car weights the nvinfer configs and perception modules load,
+      and the InsightFace buffalo_l pack (perception/models/insightface/models/buffalo_l, insightface v0.7 release) that
+      face_recognition, customer_faces, the app's face registration and the attendance enrollment CLIs load. InsightFace's
+      pretrained models are licensed for non-commercial research only (flagged to the lead).
+    paths: ["perception/models/**/*.dvc"]
+
+  models-barber:
+    folder: barber/models
+    default: true
+    use_case: barber (re-ID, tracker, segmentation)
+    description: The re-ID and tracker ONNX and the segmentation weights `just barber-up` otherwise downloads and exports (sha-pinned in perception/pipeline/models.*.sha256, which stay the way to regenerate them).
+    paths: ["models/**/*.dvc"]
+
+  golden:
+    folder: shared/golden
+    default: true
+    use_case: golden replay (perception/TESTING.md)
+    description: The clips the golden configs replay and the recorded baselines. enter-3.mp4 is a plain sample (attendance and zones configs); the other clips are the outputs of the golden_clips and golden_proximity_clip stages in dvc.yaml.
+    paths: ["tests/baselines/*.dvc", "data/uploads/attendance/enter-3.mp4.dvc", "benchmarks/baselines/*/golden.dvc"]
+    stages: [golden_clips, golden_proximity_clip]
+
+  benchmark-raw:
+    folder: shared/benchmarks
+    default: false
+    use_case: "regression benchmark (just regress)"
+    description: The raw data behind a machine's recorded baseline in benchmarks/baselines/<machine>/ -- run files, the 3 h soaks, the host recorder with the sidecar
+      container logs, capacity and detector-size results, the overnight run. Not needed to run or compare a baseline; needed to rebuild one or to look behind a number.
+      The recorded golden outputs of a baseline (benchmarks/baselines/<machine>/golden) are in the `golden` group.
+    paths: ["benchmarks/raw/*.dvc"]
+
+  bundles:
+    folder: attendance/bundle
+    default: true
+    use_case: attendance
+    description: The supervisor bundle `just bootstrap` unpacks (face photos and attendance.db seed).
+    paths: ["data/attendance-supervisor-bundle.tar.gz.dvc"]
+
+  training-artifacts:
+    folder: el-mohandes/training-artifacts
+    default: false
+    use_case: El-Mohandes -- plate OCR and vehicle detector provenance
+    description: Training records behind the client's deployed models -- the Arabic plate OCR logs and resume checkpoint, and the vehicle detector runs (best.pt, results.csv, args). The deployed vehicle_1280_1cls/best.pt is the best.pt of run vehicle_yolo11s_1cls_v3, trained on the vehicle_detection_1cls dataset.
+    paths: ["products/el-mohandes/models/v5_arabic_mobile-fine-tuned/training.dvc",
+            "products/el-mohandes/models/v5_arabic_mobile-fine-tuned/training.log.dvc",
+            "products/el-mohandes/models/v5_arabic_mobile-fine-tuned/launcher.log.dvc",
+            "products/el-mohandes/models/v5_arabic_mobile-fine-tuned/epoch-metrics.json.dvc",
+            "products/el-mohandes/models/v5_arabic_mobile-resume-last.dvc",
+            "products/el-mohandes/runs/**/*.dvc"]
+
+  el-mohandes-models:
+    folder: el-mohandes/models
+    default: true
+    use_case: El-Mohandes -- multicam vehicles, plates, plate OCR
+    description: The client's finetuned models the multicam sidecar runs -- the vehicle detector (vehicle_1280_1cls), the licence-plate detector (finetuned, and its 640 export) and the Arabic plate OCR. They were finetuned on the client's footage.
+    paths: ["products/el-mohandes/models/**/*.dvc"]
+
+
+  models-mtmc:
+    folder: multicam/models
+    default: true
+    use_case: multicam (any client)
+    description: The re-ID backbone the multicam tracker uses (mtmc/models/reid). Pretrained, not client-specific.
+    paths: ["mtmc/models/**/*.dvc"]
+
+  el-mohandes-datasets:
+    folder: el-mohandes/datasets
+    default: false
+    use_case: El-Mohandes -- training (plate detection, plate OCR, vehicle detection)
+    description: The client's training sets. Plate OCR sets come from the Plate-OCR hand-over; the vehicle and plate detection sets were exported from the training server.
+    paths: ["products/el-mohandes/datasets/**/*.dvc"]
+
+  samples-attendance:
+    folder: attendance/samples
+    default: false
+    use_case: attendance replay
+    description: Entrance/exit and camera_* clips, the camera_5 annotations and the CHIRLA face crops.
+    paths: ["data/uploads/attendance/**/*.dvc"]
+
+  el-mohandes-samples:
+    folder: el-mohandes/samples
+    default: false
+    use_case: El-Mohandes -- multicam replay and MTMC scripts
+    description: The client's camera footage -- full-resolution clips (products/el-mohandes/videos) and the lighter re-encodes used for RTSP replay (data/uploads/el-mohandes). Same names, different files.
+    paths: ["products/el-mohandes/videos/*.dvc", "data/uploads/el-mohandes/*.dvc"]
+
+  samples-multicam:
+    folder: multicam/samples
+    default: false
+    use_case: multicam (any client)
+    description: The public AI City benchmark clips.
+    paths: ["data/uploads/multicam/*.dvc"]
+
+  samples-fall:
+    folder: fall/samples
+    default: false
+    use_case: fall detection demo
+    description: The fall product's demo clip.
+    paths: ["data/uploads/fall/**/*.dvc"]
+
+  samples-ppe:
+    folder: ppe/samples
+    default: false
+    use_case: PPE demo
+    description: The two PPE demo test videos (test.mp4 17 MB, test2.mp4 489 MB) that `just ppe-live-sim` loops into a simulated camera.
+    paths: ["data/uploads/ppe/*.dvc"]
+
+  samples-shelf:
+    folder: shelf/samples
+    default: false
+    use_case: empty-shelf demo
+    description: The supermarket-aisle demo clip (demo.mp4, 21 s, 1280x720) that `just shelf-live-sim` loops into a simulated camera.
+    paths: ["data/uploads/shelf/*.dvc"]
+
+  samples-barber:
+    folder: barber/samples
+    default: false
+    use_case: barber replay
+    description: The 32-minute barber-shop recording.
+    paths: ["data/uploads/barber/**/*.dvc"]
+
+  samples-fire:
+    folder: fire/samples
+    default: false
+    use_case: fire/smoke replay
+    description: Fire and smoke sample clips.
+    paths: ["data/uploads/fire/**/*.dvc"]
+
+  samples-safety:
+    folder: safety/samples
+    default: false
+    use_case: safe-walk / zone violations
+    description: Safe-walk violation clips.
+    paths: ["data/uploads/safety/**/*.dvc"]
+
+  samples-proximity:
+    folder: proximity/samples
+    default: false
+    use_case: pedestrian-vehicle proximity replay
+    description: The Camera189 site recording (forklift placement) the proximity golden clip is cut from.
+    paths: ["data/uploads/proximity/*.dvc"]
+
+  samples-misc:
+    folder: misc/samples
+    default: false
+    use_case: manual tests and benchmarks
+    description: Red-light footage, video11 and other one-off clips.
+    paths: ["data/uploads/misc/*.dvc"]

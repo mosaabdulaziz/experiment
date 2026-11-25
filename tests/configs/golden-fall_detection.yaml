@@ -1,0 +1,8 @@
+# TEST CONFIG (not a product): the fall product's pipeline (the pose module) on a recorded fall clip
+# read from disk, no loop, one source. See golden-attendance.yaml for why. Clip: tools/make_golden_clips.sh.
+extends: ../../products/fall_detection/sidecar.yaml
+
+file_loop: false
+
+sources:
+  - {id: cam-1, uri: "file:///workspace/iris/data/uploads/golden/fall.mp4", roles: [fall_detection], label: "golden fall"}

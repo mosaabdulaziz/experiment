@@ -1,0 +1,127 @@
+# "Something cannot keep up" rules for the scale run. Prometheus evaluates them and exposes the
+# firing ones as the series ALERTS{alertstate="firing"}, which the dashboard lists at the top
+# ("Active problems"). No notification is sent: the dashboard and the [backpressure] log lines
+# (Loki) are where they show. `for:` keeps a single spike from counting.
+groups:
+  - name: components-keeping-up
+    rules:
+      - alert: FramePublisherShedding
+        expr: sum(rate(iris_gauge{name=~"pub_shed_total_cam-.*"}[2m])) > 2
+        for: 3m
+        labels: {severity: warning, component: frame-publisher,
+                 summary: "The publisher cannot draw/encode every requested preview: frames are skipped (their detections are still published)"}
+      - alert: DetectionDataLost
+        expr: sum(rate(iris_gauge{name=~"pub_drops_total_cam-.*"}[2m])) > 0
+        for: 1m
+        labels: {severity: critical, component: frame-publisher,
+                 summary: "Detection metadata is being LOST: even the meta-only safety queue overflowed"}
+      - alert: FramePublisherLag
+        expr: max(iris_gauge{name=~"pub_wait_ms_cam-.*"}) > 1000
+        for: 2m
+        labels: {severity: warning, component: frame-publisher,
+                 summary: "Frames wait over 1 s in the publisher queue before being drawn and published"}
+      - alert: AnalysisQueuesPinned
+        # Full queues alone are normal here (10-11 of 15 were full even at 46 % GPU, and with previews off);
+        # they only mean trouble when the cameras are also analysed below the footage rate.
+        expr: >
+          (count(iris_gauge{name=~"mux_queue_[0-9]+"} >= scalar(iris_gauge{name="mux_queue_cap"}))
+           / count(iris_gauge{name=~"mux_queue_[0-9]+"}) > 0.8)
+          and on() (min(iris_gauge{name=~"fps_cam-.*"}) < 17)
+        for: 3m
+        labels: {severity: warning, component: inference,
+                 summary: "Analysis queues are full AND a camera runs below 17 fps (footage 20): the GPU/probe stage cannot keep up"}
+      - alert: GStreamerDroppingLateFrames
+        expr: rate(iris_gauge{name="qos_dropped_total"}[2m]) > 0.2
+        for: 2m
+        labels: {severity: warning, component: gstreamer,
+                 summary: "A GStreamer element drops frames as too late (QoS): the stage behind it is slower than its input"}
+      - alert: CameraSilent
+        expr: iris_camera_meta_age_seconds > 30
+        for: 1m
+        labels: {severity: critical, component: camera,
+                 summary: "The pipeline has published nothing for this camera for over 30 s"}
+      - alert: SourceNoData
+        expr: increase(iris_gauge{name=~"bus_nodata_total_cam-.*"}[10m]) > 0
+        labels: {severity: warning, component: camera,
+                 summary: "This camera's source reported 'No data from source for 10 s' and was reset: its decoder/source stalled inside the sidecar (see the [source-stall] events)"}
+      - alert: DecoderThreadSleepLoop
+        expr: iris_gauge{name="decoder_threads_sleeping"} > 0
+        for: 20s
+        labels: {severity: critical, component: decoder,
+                 summary: "A decoder thread sits in a nanosleep loop: the signature of the wedge that froze the sidecar earlier"}
+      - alert: CameraSlow
+        expr: iris_gauge{name=~"fps_cam-.*"} < 12
+        for: 3m
+        labels: {severity: warning, component: camera,
+                 summary: "This camera is analysed below 12 fps (the footage runs at 20)"}
+      - alert: SidecarMainLoopStalled
+        expr: iris_gauge{name="flight_main_lag_s"} > 10
+        for: 30s
+        labels: {severity: critical, component: sidecar,
+                 summary: "The sidecar's main loop is blocked: nothing can restart or repair a camera (see data/flight/)"}
+      - alert: SidecarStarved
+        expr: iris_gauge{name="flight_sched_delay_ms"} > 1000
+        for: 1m
+        labels: {severity: warning, component: sidecar,
+                 summary: "Threads wake over 1 s late: the sidecar process is starved of CPU"}
+      - alert: TrackletUnderTwoIds
+        expr: iris_gauge{name="mtmc_alias_conflicts_total"} > 0
+        labels: {severity: critical, component: association,
+                 summary: "One tracker id was found under two global ids: its crops and sightings would be split (must never happen; see the INVARIANT line in the sidecar log)"}
+      - alert: ReIdEmbeddingBacklog
+        expr: iris_gauge{name="q_embed_depth"} > 50
+        for: 2m
+        labels: {severity: warning, component: association,
+                 summary: "Re-ID embeddings queue up: vehicle matching falls behind the cameras"}
+      - alert: VLMBacklog
+        expr: iris_gauge{name="vlm_queue_depth"} > 15
+        for: 2m
+        labels: {severity: warning, component: vlm,
+                 summary: "More than 15 association questions wait for the VLM"}
+      - alert: VLMSlow
+        expr: iris_gauge{name="vlm_compare_max_s"} > 30
+        for: 5m
+        labels: {severity: warning, component: vlm,
+                 summary: "The slowest of the last 20 VLM calls took over 30 s"}
+      - alert: TrackingLoopSlow
+        expr: max_over_time(iris_tracking_loop_age_seconds[1m]) > 4
+        for: 1m
+        labels: {severity: warning, component: app,
+                 summary: "The tracking loop turns slower than every 4 s: truck sightings reach the platform late and trucks flicker 'unseen' (visible window is 5 s)"}
+      - alert: PlatformFeedBacklog
+        expr: iris_truck_feed_backlog > 500
+        for: 2m
+        labels: {severity: warning, component: platform,
+                 summary: "The truck-tracking platform is not reading the feed: batches pile up in Redis"}
+      - alert: PlatformDown
+        expr: iris_platform_ready == 0
+        for: 1m
+        labels: {severity: critical, component: platform, summary: "The truck-tracking API does not answer"}
+      - alert: GPUSaturated
+        expr: max(iris_gpu_util_percent) > 95
+        for: 5m
+        labels: {severity: warning, component: gpu, summary: "GPU core above 95 % for 5 min: no headroom"}
+      - alert: DecoderSaturated
+        expr: max(iris_gpu_decoder_util_percent) > 95
+        for: 2m
+        labels: {severity: critical, component: gpu, summary: "Hardware video decoders above 95 %: frames will be lost"}
+      - alert: GPUThrottleRecurring
+        expr: sum(increase(iris_gpu_throttle_events_total[30m])) >= 3
+        labels: {severity: warning, component: gpu,
+                 summary: "The GPU throttled 3 or more times in 30 min (see events.log for the power limit, AC and temperatures at each)"}
+      - alert: GPUThrottled
+        expr: max(iris_gpu_throttle{reason=~"sw_power_cap|hw_slowdown|sw_thermal|hw_thermal|hw_power_brake"}) > 0
+        for: 1m
+        labels: {severity: critical, component: gpu, summary: "The GPU is slowing itself down (power cap, heat or hardware slowdown)"}
+      - alert: ContainerDown
+        expr: iris_container_up == 0
+        for: 1m
+        labels: {severity: critical, component: container, summary: "A container of the stack is not running"}
+      - alert: DiskLow
+        expr: iris_disk_free_ratio < 0.05
+        for: 5m
+        labels: {severity: critical, component: disk, summary: "Less than 5 % free on a disk the run writes to"}
+      - alert: MonitoringBlind
+        expr: iris_probe_up == 0
+        for: 2m
+        labels: {severity: warning, component: monitoring, summary: "A source the exporter reads is unreachable: part of the dashboard is blind"}

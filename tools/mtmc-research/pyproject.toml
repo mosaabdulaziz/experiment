@@ -1,0 +1,48 @@
+# The mtmc/ research tools (multi-camera tracking experiments, Re-ID benchmarks, plate OCR batches; mtmc/README.md),
+# locked in uv.lock beside this file (DEPENDENCIES.md). Its own project, not a group of the root lock: Re-ID runs on the
+# GPU, so it needs CUDA torch, while the root lock (the app image) has the CPU build. Run from the repo root, so that
+# `python -m mtmc....` finds the package:
+#
+#   uv run --locked --project tools/mtmc-research python -m mtmc.run_pipeline --scene S01
+#
+# Locked to the sidecar's CUDA torch (perception/uv.lock) and, where the sidecar has no say, to the app image's versions
+# (deps/baseline/); the rest (motmetrics, pytrec-eval, sahi, transformers, ...) to what resolved on 2026-11-03.
+[project]
+name = "iris-mtmc-research"
+version = "0.1.0"
+description = "The mtmc/ research tools: dependencies only."
+requires-python = "==3.12.*"  # the sidecar's Python (the DeepStream 9.0 base), whose CUDA torch this shares
+dependencies = [
+    "torch",                    # CUDA, from the cu130 index below: the same build as the sidecar's mtmc target
+    "torchvision",
+    "ultralytics",              # detectors (annotate_videos, benchmark_models, batch_detect_plates, ...)
+    "numpy",
+    "opencv-python",            # the GUI build: select_roi.py opens windows
+    "pillow",
+    "pyyaml",
+    "redis",                    # the live tools (mtmc_live, mtmc_redis, visualize_redis, capture_live_detections)
+    "onnxruntime",              # plate OCR (CPU, as plate_ocr.py asks for)
+    "sahi",                     # sliced detection (batch_detect_plates, benchmark_models)
+    "transformers",             # CLIP / DINOv2 Re-ID baselines, the Qwen3-VL tower
+    # fast-ReID's helpers (helper-repos/multi-camera-tracking/fast-reid) and the evaluation
+    "yacs", "termcolor", "tabulate", "scikit-learn",
+    "pandas", "scipy", "motmetrics", "pytrec-eval",  # pytrec-eval builds from source: a C++ compiler
+    "mlflow==3.18.0",           # mtmc/tracking: the finetune, export, eval and import runs (MLFLOW.md); the server's version
+]
+
+[tool.uv]
+package = false
+required-version = ">=0.13.6,<0.14"  # uv 0.13.x: one lock format, so the lock never churns (DEPENDENCIES.md, "uv")
+# Run on the GPU server only; resolving for other platforms would lock wheels nothing installs.
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
+
+# CUDA torch from PyTorch's cu130 index, as the sidecar (perception/pyproject.toml). `explicit` keeps every other
+# package on PyPI: only the packages named here may come from that index.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu130" }]
+torchvision = [{ index = "pytorch-cu130" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true

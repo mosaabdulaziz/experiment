@@ -1,0 +1,5 @@
+outs:
+- md5: 911e1a0701799f9436aa0e2c6a7b4154
+  size: 337966815
+  hash: md5
+  path: attendance-supervisor-bundle.tar.gz

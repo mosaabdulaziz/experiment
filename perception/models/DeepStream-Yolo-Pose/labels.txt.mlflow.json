@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "labels.txt",
+  "sha256": "992cd4ab6acf6aaff208008dcdca6a449f1c1d4ff3e47aeb98be8343c4879782",
+  "size_bytes": 5,
+  "created_at": "2026-11-05T09:12:17+00:00",
+  "run_id": "c45759574c9d4752b764b6e2eb04ded2",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "pose-estimator",
+  "version": "1"
+}

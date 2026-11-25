@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vema-tracker"
+version = "0.1.0"
+description = "Velocity-EMA Three-Regime Multi-Object Tracker: prototyping, ablation, and SOTA MOT benchmarking."
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+fast = [
+    "scipy>=1.11.0",
+]
+eval = [
+    "scipy>=1.11.0",
+    "matplotlib>=3.8.0",
+    "pytest>=8.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,72 @@
+{
+  "cam-1": {
+    "zones": [
+      {
+        "id": "z0",
+        "name": "Restricted corner",
+        "points": [
+          [
+            400,
+            250
+          ],
+          [
+            800,
+            250
+          ],
+          [
+            800,
+            720
+          ],
+          [
+            400,
+            720
+          ]
+        ],
+        "intrusion": {
+          "mode": "restricted",
+          "classes": [
+            "person"
+          ]
+        },
+        "overcrowding": {
+          "enabled": true,
+          "threshold": 1,
+          "classes": [
+            "person"
+          ]
+        }
+      },
+      {
+        "id": "z1",
+        "name": "Valid area",
+        "points": [
+          [
+            150,
+            300
+          ],
+          [
+            700,
+            300
+          ],
+          [
+            700,
+            700
+          ],
+          [
+            150,
+            700
+          ]
+        ],
+        "intrusion": {
+          "mode": "valid",
+          "classes": [
+            "person"
+          ]
+        },
+        "overcrowding": {
+          "enabled": false
+        }
+      }
+    ]
+  }
+}

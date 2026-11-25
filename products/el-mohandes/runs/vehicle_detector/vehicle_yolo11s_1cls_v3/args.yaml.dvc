@@ -1,0 +1,5 @@
+outs:
+- md5: a86ed5a372e8307445c9863a0713ad33
+  size: 1865
+  hash: md5
+  path: args.yaml

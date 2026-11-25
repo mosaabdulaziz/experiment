@@ -1,0 +1,13 @@
+[project]
+name = "iris-mlflow-server"
+version = "0.1.0"
+description = "The central MLflow tracking server (sub-task 1 of the MLflow story): mlflow server + its Postgres driver"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "mlflow[auth]==3.18.0",      # same major/minor as the tracking helper's client (mtmc/tracking); [auth] = basic auth
+    "psycopg[binary]==3.3.8",    # the driver SQLAlchemy 2.1 uses for postgresql:// (backend and auth store URIs)
+]
+
+[tool.uv]
+package = false
+required-version = ">=0.13.6,<0.14"  # uv 0.13.x everywhere (DEPENDENCIES.md, "uv")

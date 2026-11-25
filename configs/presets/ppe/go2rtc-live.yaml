@@ -1,0 +1,21 @@
+# go2rtc for `just ppe-live-sim` (compose project ppelive): one pushed stream per camera of a live-<name>.yaml
+# (raw-<camera id>) and its browser copy (<camera id>). Same shape as the repo's go2rtc.yaml, without WebRTC: the
+# demo's video is the app's JPEG preview (pipeline_preview), so nothing here is specific to a machine.
+log:
+  level: info
+api:
+  origin: "*"
+rtsp:
+  pkt_size: 1472
+ffmpeg:
+  bin: ffmpeg
+  h264: "-codec:v libx264 -g:v 30 -preset:v superfast -tune:v zerolatency -profile:v main -level:v 4.1"
+streams:
+  raw-cam-ppe-live:
+  raw-cam-ppe-test2:
+  cam-ppe-live:
+    - rtsp://127.0.0.1:8554/raw-cam-ppe-live
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-ppe-live#video=h264
+  cam-ppe-test2:
+    - rtsp://127.0.0.1:8554/raw-cam-ppe-test2
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-ppe-test2#video=h264

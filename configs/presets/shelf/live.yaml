@@ -1,0 +1,12 @@
+# Shared part of the shelf live presets: the shelf preset plus what a simulated live camera needs. Not used alone --
+# each video has its own file naming its camera (live-demo.yaml), started by `just shelf-live-sim`:
+#
+#   just shelf-live-sim                   demo.mp4 -> cam-shelf-demo
+#   just shelf-live-status | shelf-live-logs | shelf-live-down
+#
+# A new video needs a live-<name>.yaml like live-demo.yaml (its source id is the camera) and raw-<camera id> in
+# go2rtc-live.yaml.
+extends: sidecar.yaml
+
+jpeg_quality: 75          # preview only (shared default 50): our one camera's tile is easier to judge by eye
+telemetry_interval: 1.0   # 1 s timing lines, to relate the void detector's inference time to the frame rate

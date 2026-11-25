@@ -1,0 +1,180 @@
+# IRIS DeepStream sidecar config (Stage 1 — batched multi-source)
+redis_url: "redis://redis:6379/0"
+
+sources:
+    - {id: cam-1, uri: "file:///workspace/iris/data/uploads/attendance/camera_5_2023-06-08-12-29-08.avi"}
+    # - {id: cam0, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-exit"}
+  # - {id: cam1, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-enter"}
+
+  # - {id: cam2, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-exit-1"}
+  # - {id: cam3, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-exit-2"}
+  # - {id: cam4, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-exit-3"}
+  # - {id: cam5, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-exit-4"}
+  # - {id: cam6, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-exit-5"}
+
+  # - {id: cam7, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-enter-1"}
+  # - {id: cam8, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-enter-2"}
+  # - {id: cam9, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-enter-3"}
+  # - {id: cam10, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-enter-4"}
+  # - {id: cam11, uri: "rtsp://${RTSP_USER}:${RTSP_PASS}@10.2.0.50:8554/east-entrance-enter-5"}
+  #- {id: cam1, uri: "file:///workspace/iris/data/uploads/misc/YTDown.com_Shorts_Two-Cars-Go-Straight-Through-a-Red-Traff_Media_I01ORKkV-C4_001_720p.mp4"}
+# add more {id, uri} (file:// or rtsp://) up to ~10
+
+pgie_config: "/workspace/iris/perception/models/DeepStream-Yolo/config_infer_primary_yolo11.txt"
+# TRT engines are serialized by nvinfer NEXT TO their ONNX file (derived name
+# <onnx>_b<batch>_gpu<id>_<mode>.engine), so the pgie and face-sgie engines live
+# in perception/models/DeepStream-Yolo/ and perception/models/DeepStream-Yolo-Face/ respectively (both on the
+# workspace volume). engine_dir below is kept only for legacy/back-compat.
+engine_dir: "/workspace/iris/data/deepstream-engines"
+
+# INT8 calibration inputs for the pgie (yolo11s). Only consulted when
+# config_infer_primary_yolo11.txt sets network-mode=1 (INT8); the custom YOLO
+# parser's calibrator (compiled with OPENCV=1) reads these env vars at
+# engine-build time and writes the calibration cache to the config's
+# int8-calib-file. Generate the image list first with:
+#   python3 perception/models/DeepStream-Yolo/tools/gen_int8_calib_table.py --video <source>
+int8_calib_img_path: "/workspace/iris/perception/models/DeepStream-Yolo/calib/calib_images.txt"
+int8_calib_batch_size: 1
+
+# Face detection (secondary GIE, runs on person detections from pgie)
+# NOTE: disabled by default because the face parser .so was never compiled
+# into the DeepStream image.  To enable, build the custom parser first:
+#   cd nvdsinfer_custom_impl_Yolo_face && make CUDA_VER=13.1
+sgie_face_enabled: true
+sgie_face_config: "/workspace/iris/perception/models/DeepStream-Yolo-Face/config_sgie_face.txt"
+autostart: true  # set true to start processing immediately on container launch
+tracker_lib: "/opt/nvidia/deepstream/deepstream/lib/libnvds_nvmultiobjecttracker.so"
+# Repo-owned NvDCF config (perf preset + long shadow tracking so brief detector
+# dropouts keep the same object_id). Relative to the sidecar's cwd; takes effect
+# on the next sidecar restart.
+tracker_config: "perception/pipeline/config_tracker_nvdcf.yml"
+
+mux_width: 1280
+mux_height: 720
+capture_width: 1280
+capture_height: 720
+
+sample_fps: 2
+stream_fps: 25
+jpeg_quality: 80
+stream_maxlen: 64
+conf_threshold: 0.0
+draw_shadow_tracks: true   # draw boxes for shadow-tracked objects (detector missed them this
+                           # frame, tracker still localizing) so boxes don't flicker; false =>
+                           # only detector-confident objects get boxes
+sync_to_clock: true
+file_loop: true
+rtsp_reconnect_interval: 10
+relevant_classes:
+  - car
+  - truck
+  - bus
+  - motorcycle
+  - bicycle
+  - person
+  - traffic light
+  - stop sign
+  - dog
+
+# Face detections are always published alongside their parent person detection;
+# they share the same Redis stream but have label "face" and include face_bbox
+# relative to the parent person bbox.
+face_enabled: true
+face_confidence_threshold: 0.25
+
+# Face recognition via InsightFace (ArcFace embeddings).
+# When enabled, detected faces are matched against the Redis-based gallery
+# (iris:face:gallery) and results published to iris:face_rec:<source_id>.
+face_recognition_enabled: true
+face_recognition_model: "buffalo_l"
+face_recognition_threshold: 0.3      # cosine similarity threshold (0-1, lower = more permissive)
+face_recognition_det_thresh: 0.5     # face detection threshold for the recognizer
+face_recognition_det_size: [640, 640]
+face_recognition_ctx_id: 0           # GPU device ID (0 = first GPU, -1 = CPU)
+
+# Per-track name stability (anti-flicker).  Recognition runs at ~2 fps and the
+# top gallery match can alternate between two identities that both clear the
+# threshold.  Each track keeps a short
+# vote history; the label shown is the majority over that window, and a competing
+# identity must hold >= majority of the votes (and >= min_votes total) before it
+# can displace the current one.  Labels age out after lock_seconds without a sighting.
+face_recognition_vote_ttl: 4.0       # keep votes newer than this many seconds
+face_recognition_min_votes: 1        # votes needed before a label is adopted (1 = lock on first sighting, ties keep the lock)
+face_recognition_majority: 0.6       # share of window a name must hold to win
+face_recognition_lock_seconds: 3.0   # label released after this long with no sighting
+face_recognition_max_jump: 0.35      # spatial guard: if a locked label's track reappears farther than this
+                                     # fraction of the frame diagonal from its last sighting, the track ID was
+                                     # recycled (DeepStream reuses IDs after a track is lost) — release the label
+                                     # so a name can't teleport onto a different person elsewhere in the frame
+
+# Minimum face bounding-box side (pixels, in capture resolution). Faces whose
+# smaller side is below this threshold are discarded entirely — they won't be
+# rendered on the JPEG stream or fed to the face recognizer. Helps filter out
+# low-quality / distant faces that degrade recognition accuracy.
+face_min_pixels: 24
+
+# Automatic face capture from CCTV footage for building the gallery.
+# When enabled, unknown faces (or matches below rec_thresh) that are large
+# enough and have good detection confidence get saved as gallery candidates.
+# These appear in the web UI's Face Gallery page, where an operator can
+# assign them to known persons.
+face_capture_enabled: false
+face_capture_min_pixels: 24           # minimum face side (pixels) to be saved as a capture; matches face_min_pixels since smaller faces never reach the recognizer
+face_capture_min_det_confidence: 0.25  # minimum SGIE detection confidence for capture; matches base face_confidence_threshold
+face_capture_novelty_threshold: 0.25  # cosine-distance: skip if too similar to existing captures
+face_captures_dir: "/workspace/iris/data/face_captures"  # shared volume path for capture thumbnails
+
+# Face enhancement — improves low-quality CCTV crops before recognition and
+# before saving capture/gallery thumbnails. Backends:
+#   preprocess : lightweight OpenCV (Lanczos upscale + CLAHE + unsharp), zero deps
+#   gfpgan     : full GFPGAN restoration (requires torch + gfpgan pkg + ~340MB model)
+#   none       : passthrough
+face_enhancement_enabled: true
+face_enhancement_backend: "preprocess"
+face_enhancement_min_face_size: 48    # faces smaller than this (min side, px) get upscaled
+face_enhancement_target_size: 256     # upscale target for small faces
+face_enhancement_weight: 0.5          # restoration weight (used by gfpgan backend)
+
+# Full-fps preview recording (independent of the detection pipeline)
+record_enabled: true
+record_seconds: 8              # segment length; should match chat.search.round_seconds in config.yaml.
+                               # Also keep config.yaml's alerts.clip.max_wait_seconds greater than
+                               # alerts.clip.pad_seconds + this, or alert clips time out before the
+                               # closing segment is indexed (IRIS warns at startup if it doesn't).
+record_bitrate_kbps: 2000     # target bitrate for the recorded segments, lower for lower bandwidth, higher for better quality.
+record_tmp_dir: "/tmp/iris-segments"
+storage_backend: "local"       # "minio" | "local" -- must match config.yaml's segments.storage_backend
+local_segments_dir: "/workspace/iris/data/segments"  # sidecar's view of the shared data/segments dir; only used when storage_backend: "local"
+segment_debug_logging: true    # log one INFO line per successfully recorded+uploaded+indexed segment; set false once the pipeline is confirmed stable
+pts_parity_logging: false   # log `pts - wall_clock` from both the probe and the segment
+                            # recorder so their time bases can be compared; diagnostic only
+minio_endpoint: "minio:9000"
+minio_bucket: "iris-segments"
+minio_secure: false
+# minio_access_key / minio_secret_key: set via MINIO_ACCESS_KEY / MINIO_SECRET_KEY env vars
+
+# Zone/ROI intrusion detection (nvdsanalytics). Off by default -- not every deployment
+# (e.g. traffic) needs it. This flag takes effect on the next sidecar restart; zone
+# edits themselves hot-reload into the running pipeline (iris:ctrl:zones_version poll).
+analytics_enabled: true
+analytics_config_path: "data/nvdsanalytics_config.txt"   # only read when analytics_enabled: true; lives
+                                                          # under data/ (not perception/pipeline/) so the iris container's
+                                                          # already-shared ./data:/app/data mount carries the
+                                                          # write out to the host without a new bind mount
+zone_alert_classes:                # object classes that count as an intrusion when inside a zone;
+  - person                         # one alert per tracked object_id entering, not per frame it stays
+zone_grace_seconds: 3.0   # re-ID grace: a new tracker id appearing in-zone near a spot where an
+                          # already-alerted id vanished < this many seconds ago inherits its
+                          # alerted status instead of re-firing the alert
+zone_match_radius: 0.5    # spatial match radius for that grace, as a multiple of the larger
+                          # of the two bbox diagonals
+overcrowding_enabled: true        # independent of analytics_enabled, but only takes effect
+                                    # when analytics_enabled is ALSO true (overcrowding needs the
+                                    # same nvdsanalytics element roi-filtering uses). Takes effect
+                                    # on the next sidecar restart, like analytics_enabled.
+overcrowding_threshold: 5          # global object-count threshold across every zoned stream
+overcrowding_alert_classes:        # object classes that count toward the overcrowding threshold
+  - person
+overcrowding_release_seconds: 5.0  # count must stay below threshold this long, continuously,
+                                    # before a new overcrowding alert can fire (debounces
+                                    # flapping when the count hovers right at the threshold)

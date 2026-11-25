@@ -1,0 +1,6 @@
+outs:
+- md5: 35fb6bbba4716b35aef922bda6323684.dir
+  size: 44526407
+  nfiles: 2848
+  hash: md5
+  path: egyptian_filtered

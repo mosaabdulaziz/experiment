@@ -1,0 +1,38 @@
+{
+ "_about": "Person-scale maps (mux px, h = a * foot_row + b) learned 2026-10-28 by the proximity module from one hour of each camera (2026-09-13 12:00-13:00, el-mohandes 1h-videos): one robust fit over the whole hour, one sample per person per second (n samples).",
+ "cam-01": {
+  "a": 0.3267,
+  "b": 18.63,
+  "n": 2856
+ },
+ "cam-02": {
+  "a": 0.369,
+  "b": -19.69,
+  "n": 3515
+ },
+ "cam-03": {
+  "a": 0.2821,
+  "b": -7.48,
+  "n": 4167
+ },
+ "cam-06": {
+  "a": 0.2794,
+  "b": 4.61,
+  "n": 3038
+ },
+ "cam-10": {
+  "a": 0.3508,
+  "b": 2.58,
+  "n": 2856
+ },
+ "cam-11": {
+  "a": 0.3708,
+  "b": 5.79,
+  "n": 5441
+ },
+ "cam-14": {
+  "a": 0.1592,
+  "b": 42.73,
+  "n": 11277
+ }
+}

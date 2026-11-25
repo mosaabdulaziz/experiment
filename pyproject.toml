@@ -1,0 +1,101 @@
+# The root app's, the tests' and the tools' Python dependencies, locked in uv.lock beside this file (DEPENDENCIES.md).
+#
+# This file is the source: requirements.txt, requirements-test.txt and requirements-dev.txt are exports of these groups,
+# for whatever still reads a requirements file (the app Dockerfile, `pip install -r`). Edit a group here, then
+# `just deps-lock` re-locks and rewrites the exports; never edit an export by hand.
+#
+#   app        the app's own requirements (exported as requirements.txt, which the app Dockerfile installs)
+#   app-image  app + what the Dockerfile installs beyond requirements.txt: exactly the app image's packages
+#   test       what CI's core-tests job needs, and nothing heavier (below)
+#   dev        developer extras (DVC is normally a uv tool: DATA.md)
+#   data       the data catalog checks (tools/data/catalog.py, check_pushed.py: CI's data jobs): PyYAML only
+#   tools      face registration (perception/pipeline/register_face.py); wheels only, no compiler needed
+[project]
+name = "iris"
+version = "0.1.0"
+description = "IRIS app, tests and tools: dependencies only."
+requires-python = "==3.11.*"  # the app image's and CI's Python (python:3.11-slim)
+dependencies = []
+
+[dependency-groups]
+app = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.29.0",
+    "opencv-python>=4.9.0",  # the Dockerfile installs it as opencv-python-headless (its sed); insightface brings this one
+    "openai>=1.12.0",
+    "pyyaml>=6.0.2",
+    "aiosqlite>=0.20.0",
+    "python-dotenv>=1.0.1",
+    "Pillow>=10.3.0",
+    "python-multipart>=0.0.9",
+    "numpy>=1.24.0",
+    "ultralytics>=8.3.0",
+    "redis>=5.0.0",
+    "minio>=7.2.0",
+    "fastembed>=0.4.0",  # CPU embeddings for dedup.backend: "local" (app/similarity.py CommentFilter)
+]
+app-image = [
+    { include-group = "app" },
+    "opencv-python-headless",  # the sed in the Dockerfile
+    "torch",                   # CPU torch, installed first ([tool.uv.sources])
+    "torchvision",
+    "insightface",             # InsightFace, installed last
+    "onnxruntime>=1.19",
+]
+# What the test suite needs, and nothing else (measured 2026-09-23): NOT the app group, which lists `ultralytics`, which
+# pulls in torch, and that environment is 5.9 GB. Exactly one module imports ultralytics (app/cv_enricher.py) and no test
+# reaches it; the tests that touch face recognition stub insightface out. This group is about 300 MB and runs the whole
+# suite. If a test ever needs something heavier, add it here deliberately, and expect CI to slow down by however long
+# that package takes to install.
+test = [
+    "fastapi",
+    "uvicorn[standard]",
+    "opencv-python-headless",  # headless: CI has no display, and it is ~4x smaller than opencv-python
+    "pyyaml",
+    "aiosqlite",
+    "python-dotenv",
+    "Pillow",
+    "python-multipart",
+    "numpy",
+    "redis",
+    "minio",
+    "openai",
+    "pytest",
+    "fakeredis",  # the tests never talk to a real Redis
+    "httpx",      # fastapi's TestClient needs it
+    # the MLflow tests (tests/test_mlflow_*.py, the registry, manifest and import tests) run against a temp sqlite store:
+    # the client of the central server (tools/mlflow-server/pyproject.toml), same version (MLFLOW.md)
+    "mlflow==3.18.0",
+]
+dev = [
+    "pytest>=8.0.0",
+    "fakeredis>=2.21.0",
+    "dvc[s3,ssh]==3.67.1",  # versioned data (DATA.md); usually installed as a tool: uv tool install 'dvc[s3,ssh]==3.67.1'
+    "pyyaml>=6.0",
+]
+data = [
+    "pyyaml",  # tools/data/catalog.py, check_pushed.py (CI's data-catalog and dvc-pointers jobs): what they import
+]
+safety = [
+    "pyyaml", "redis",  # tools/safety_controller.py: the safety stack's controller, on the host (`just safety-*`)
+]
+tools = [
+    "redis", "numpy", "opencv-python-headless",  # perception/pipeline/register_face.py
+    "insightface", "onnxruntime>=1.19",
+]
+
+[tool.uv]
+package = false
+required-version = ">=0.13.6,<0.14"  # uv 0.13.x: one lock format, so the lock never churns (DEPENDENCIES.md, "uv")
+default-groups = ["app-image", "test"]
+
+# CPU torch, as the app image installs it (~200 MB instead of ~2.5 GB of CUDA wheels): only torch and torchvision may
+# come from this index (`explicit`).
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+torchvision = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

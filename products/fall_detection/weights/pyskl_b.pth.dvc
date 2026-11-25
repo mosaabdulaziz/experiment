@@ -1,0 +1,5 @@
+outs:
+- md5: d73869cd28099a4e9d2654b91d02ccec
+  size: 12474519
+  hash: md5
+  path: pyskl_b.pth

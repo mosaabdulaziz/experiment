@@ -1,0 +1,53 @@
+%YAML:1.0
+# VEMA-3D tracker config for pedestrian-vehicle proximity monitoring.
+# check_class_match is false so forklifts flipping between car and truck keep one track ID.
+
+# Confidence regimes
+tau_high: 0.60
+tau_low: 0.15
+
+# Kinematic EMA & 3D depth damping
+alpha: 0.80
+gamma: 0.98
+eps_cal: 0.05
+v_var_alpha: 0.85
+ref_fps: 30.0
+dt_aware: true
+
+# Regime II truncation gate
+area_ratio_min: 0.75
+cos_min: 0.0
+min_speed_ratio: 0.05
+
+# Association & Stage 3 ground-plane relocation
+iou_thresh_high: 0.25
+iou_thresh_low: 0.15
+relocation_cost_thresh: 1.60
+biou_rate: 0.05
+biou_max_expansion: 2.0
+lambda_biou: 1.0
+lambda_pos: 0.35
+lambda_dir: 0.25
+sigma_par_scale: 1.5
+sigma_perp_scale: 0.6
+base_pos_sigma_ratio: 0.25
+
+# Track lifecycle (early_term_lost=6 tolerates process_fps=2.5 interval skips)
+probation_frames: 2
+max_lost_frames: 600
+early_term_lost: 6
+min_iou_diff_new: 0.70
+check_class_match: false
+emit_shadow_tracks: true
+
+# 3D pinhole ground-plane model (optional per-camera cam_height / cam_pitch_deg overrides)
+auto_pitch: true
+cam_height: 2.5
+cam_pitch_deg: 10.0
+min_ray_y: 0.02
+max_depth: 80.0
+pos_3d_process_std: 0.22
+lambda_mmd: 0.45
+mmd_gate: 12.0
+img_width: 1280
+img_height: 720

@@ -1,0 +1,5 @@
+outs:
+- md5: e43ca2de2e224a38dc65747ea798f3f3
+  size: 306927767
+  hash: md5
+  path: vehicle_newly_reviewed.zip

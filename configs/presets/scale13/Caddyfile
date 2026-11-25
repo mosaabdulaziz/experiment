@@ -1,0 +1,33 @@
+# HTTPS front for the truck-tracking UI on the shared server. Caddy's own local CA signs the
+# certificate (browsers warn until its root.crt is trusted). Everything the page needs goes
+# through this one origin, so there is no mixed content: the UI, the camera system's API
+# (crops, annotated frames, filter zones, counts) under /iris, go2rtc under /go2rtc, and the Grafana health dashboard under /grafana.
+{
+	auto_https disable_redirects
+	# browsers send no SNI when the address is an IP
+	default_sni {$PUBLIC_HOST}
+}
+
+# two addresses (PUBLIC_HOST, ALT_HOST): e.g. the machine's LAN address for other devices and localhost for itself
+https://{$PUBLIC_HOST}:{$HTTPS_PORT}, https://{$ALT_HOST:127.0.0.1}:{$HTTPS_PORT} {
+	tls internal
+
+	handle_path /iris/* {
+		reverse_proxy iris:8000
+	}
+	handle_path /go2rtc/* {
+		reverse_proxy go2rtc:1984
+	}
+	handle /grafana/* {
+		reverse_proxy grafana:3000
+	}
+	handle {
+		reverse_proxy ui:5173
+	}
+}
+
+# The camera system's own web UI (its SPA, API and streams on one origin): the Hazard Detection tab is at /#/hazards
+https://{$PUBLIC_HOST}:{$IRIS_UI_PORT:35445}, https://{$ALT_HOST:127.0.0.1}:{$IRIS_UI_PORT:35445} {
+	tls internal
+	reverse_proxy iris:8000
+}

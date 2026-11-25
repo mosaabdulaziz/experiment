@@ -1,0 +1,54 @@
+/* In the gap beside the panel: a thin line that lights up in the accent when it is grabbed, and a small grip that
+   shows it can be. */
+.handle {
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  inset-inline-start: -14px;
+  width: 10px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: col-resize;
+  touch-action: none;
+  border-radius: 6px;
+  outline: none;
+}
+.handle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: transparent;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.handle:hover::before,
+.handle:focus-visible::before,
+.handle[data-dragging]::before {
+  background: linear-gradient(180deg, transparent, var(--accent) 15%, var(--accent) 85%, transparent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.grip {
+  position: relative;
+  width: 6px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border-hi);
+  box-shadow: var(--elev-1);
+  transition: border-color 0.2s, background 0.2s;
+}
+.handle:hover .grip,
+.handle:focus-visible .grip,
+.handle[data-dragging] .grip {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* stacked layouts have no side panel to resize */
+@media (max-width: 960px) {
+  .handle { display: none; }
+}

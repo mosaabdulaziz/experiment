@@ -1,0 +1,5 @@
+outs:
+- md5: 2b98424315d973b398fb23beac4e8039
+  size: 9650406
+  hash: md5
+  path: kids_car.onnx

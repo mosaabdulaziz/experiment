@@ -1,0 +1,26 @@
+# Scale-test override (project "scale"): go2rtc gets the 13-stream config. The recordings are
+# played into it by scripts/scale13_streamer.py, running on the host.
+#   docker compose -p scale -f docker-compose.yml -f docker-compose.scale.yml up -d
+services:
+  # Redis holds the tracking state (global ids, the crop index, what the truck feed has reported). It is
+  # ephemeral by default; a full-day run (scale13_deploy.sh day-arm) turns persistence on through .env
+  # (REDIS_AOF=yes, REDIS_SAVE="60 1") so a restart keeps it and the run can be copied out of ./data/redis.
+  redis:
+    command: ["redis-server", "--appendonly", "${REDIS_AOF:-no}", "--save", "${REDIS_SAVE:-}"]
+    volumes:
+      - ./data/redis:/data
+  go2rtc:
+    volumes:
+      - ./configs/presets/scale13/go2rtc.yaml:/config/go2rtc.yaml:ro
+  # The sidecar's flight recorder runs gdb on itself when the GLib main loop stops turning, to record
+  # which C call the main thread is blocked in; that needs ptrace on its own process.
+  deepstream-sidecar:
+    cap_add:
+      - SYS_PTRACE
+    # The scale run is the multi-camera product on the plain service name (the scale scripts
+    # and the monitor address it by that name): its overlay, and the .env the VLM arbiter
+    # reads QWEN_* from (the shared service no longer carries env_file).
+    command: ["python3", "-m", "perception.engine.main", "${SIDECAR_CONFIG:-products/multicam/sidecar.yaml}"]
+    env_file:
+      - path: .env
+        required: false

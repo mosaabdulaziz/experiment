@@ -1,0 +1,5 @@
+outs:
+- md5: be25961a606fec9d0b5c4fcdfae99e85
+  size: 113893579
+  hash: md5
+  path: swin_tiny_market1501_aicity156_featuredim256.onnx

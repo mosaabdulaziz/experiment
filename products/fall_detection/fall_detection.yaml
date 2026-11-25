@@ -1,0 +1,50 @@
+# The fall product's own policy: the scoring block, the classifier's device, the cameras.
+# products/fall_detection/fall_detection.yaml
+#
+# Environment overrides: FALL_DETECTION_CONFIG (another file), FALL_DETECTION_DATA_DIR,
+# FALL_DETECTION_WEIGHTS_DIR, FALL_BACKEND_PORT, REDIS_URL.
+
+# The model manifest (the same file as products/fall_detection/sidecar.yaml names): boot checks both checkpoints
+# against it before the vendor's registry. Until it is generated and committed, a missing file only warns, unless
+# MODEL_MANIFEST_REQUIRED=1.
+model_manifest: products/fall_detection/models.manifest.json
+
+redis_url: "redis://localhost:6379/0"
+host: "0.0.0.0"
+port: 8004
+data_dir: "data"                 # relative to products/fall_detection/
+
+# ── The scoring policy (design §6.1) ────────────────────────────────────────────────────────────────────────
+# The class sets live here and nowhere else: the product's copy of the vendor's code must not
+# hold a second copy of them (design §6.1). The class order is the vendor's (action_classes.names:
+# Standing, Walking, Sitting, Lying, StandUp, SitDown, Fall, Instability).
+#
+# A fall candidate's evaluation is the group its reading's top class falls into; the immobility
+# group is skipped for it, so a fall candidate whose reading says "Lying" evaluates as lying, and
+# one whose reading says "Fall" never evaluates as immobile.
+scoring:
+  confirm_threshold: 0.70        # the confidence in the evaluation needed to skip the human review
+  margin_span: 0.80              # the classifier's decision margin that counts as fully decisive
+  suppress_after_fall_s: 10.0    # a fall's aftermath is suppressed for this long, per track (design §13.3)
+  trust:                         # each weight is its path's ceiling
+    action:    1.00              # the classifier's reading of the state - the evaluation itself
+    kinematic: 0.50              # the collapse kinematics corroborating the reading
+    cold:      0.40              # the same collapse kinematics with no reading to corroborate them
+  evaluations:                   # the state the system concludes, and the classes that support it
+    falling:  [6]                # Fall
+    lying:    [3]                # Lying
+    immobile: [3, 2]             # Lying or Sitting - the immobility detector's own reading
+    unstable: [7]                # Instability
+    upright:  [0, 1, 2, 4, 5]    # Standing, Walking, Sitting, StandUp, SitDown
+
+# ── The classifier (design §8: the boot contract is a gate, not a warning) ───────────────────────────────
+classifier:
+  device: "cuda:0"               # the deployment's RTX 5090; there is no CPU fallback
+  weights_dir: "weights"         # the two ST-GCN checkpoints, verified against the vendor's SHA-256 registry
+  # the classifier's clips are the vendor's own (config.yaml's detector.streams) -- one source per quantity
+
+# ── The cameras this product watches (design §13.1: the pilot runs on cam-1 alone) ────────────────────────
+# Ids only: the product reads the sidecar's meta stream and never opens a camera itself. The RTSP
+# source lives in this product's sidecar.yaml, which the engine opens.
+cameras:
+  - id: cam-1

@@ -1,0 +1,182 @@
+# Preset: single-camera VLM cognitive monitoring on a recorded clip -- an overlay on the shared
+# pipeline file (no multi-camera tracking). Only the differences from it are listed.
+extends: ../../../perception/pipeline/sidecar.yaml
+
+
+# Simulated cameras: test_streamer/stream_recordings.py loops each upload
+# through ffmpeg (-c copy, original codecs) and publishes it to go2rtc's RTSP
+# ingest as raw-<cam-id>; go2rtc derives <cam-id> (original + on-demand H.264
+# transcode for browsers) which the sidecar consumes over real RTSP, so
+# recording uses Smart Video Record (recorder: auto -> rtsp:// => svr). See
+# test_streamer/README.md. To switch back to direct file playback, restore the
+# file:// URIs (the upload names are in test_streamer/stream_recordings.py's
+# CAM_FILES).
+sources:
+    - {id: cam-01, uri: "file:///workspace/iris/products/el-mohandes/videos/D05_20260727144246_clip.mp4"}
+
+pgie_config: "/workspace/iris/perception/models/DeepStream-Yolo/config_infer_primary_yolo11.txt"
+
+# INT8 calibration inputs for the pgie (yolo11s). Only consulted when
+# config_infer_primary_yolo11.txt sets network-mode=1 (INT8); the custom YOLO
+# parser's calibrator (compiled with OPENCV=1) reads these env vars at
+# engine-build time and writes the calibration cache to the config's
+# int8-calib-file. Generate the image list first with:
+#   python3 DeepStream-Yolo/tools/gen_int8_calib_table.py --video <source>
+int8_calib_img_path: "/workspace/iris/mtmc/calib_images.txt"
+
+# Repo-owned NvDCF config (perf preset + long shadow tracking so brief detector
+# dropouts keep the same object_id). Relative to the sidecar's cwd; takes effect
+# on the next sidecar restart.
+tracker_config: "perception/pipeline/config_tracker_nvdcf_vehicle.yml"  # vehicle/MTMC-tuned; perception/pipeline/config_tracker_nvdcf.yml is the attendance-tuned default
+
+mux_width: 1280
+capture_width: 1280
+
+sample_fps: 2
+# Preview-publish rate (JPEGs written to iris:jpeg:<id> for the website).
+# With analysis_fps active the preview is capped at the analysis rate (the
+# probe publishes from the analysis branch); with process_fps only, it runs at
+# stream_fps on every frame.
+stream_fps: 10
+viewer_gated_preview: false
+# ── Rate limiting: analysis_fps (videorate) vs process_fps (pgie interval) ─
+# Two independent knobs — alternatives, never combined (when analysis_fps > 0
+# the code forces infer_interval = 1).
+#
+# analysis_fps — a GStreamer videorate + capsfilter between each source's tee
+# and the mux caps the WHOLE analysis branch (nvinfer, nvtracker,
+# nvvideoconvert, probe → preview) at ~analysis_fps frames/s per source. This
+# is the biggest per-stream GPU saving (inference + tracker + convert + probe
+# all scale down). Trade-offs: the website preview runs at ~analysis_fps too
+# (coherent but low-fps for small values), and the actual rate is PTS-
+# quantized for non-integer source/analysis ratios (24 fps source → af=10
+# measures ~10; 25 fps source → af=10 measures ~8.4). Decode still runs at the
+# source's full rate (videorate is post-decode). Production default: 10.
+# 0 = disabled (direct tee->mux link).
+#
+# process_fps — nvinfer `interval`: inference on every Nth batch
+# (N = stream_fps / process_fps); skipped batches propagate the last
+# detections, so the pipeline stays full-rate and the preview stays smooth at
+# stream_fps while only inference is reduced. Use this instead when preview
+# smoothness at native rate matters more than the extra tracker/convert
+# savings. 0 = infer every frame.
+# process_fps — throttles nvinfer inference to every Nth frame (N=stream_fps/process_fps)
+# WITHOUT inserting a videorate element. This is the correct throttle knob for
+# file:// sources because analysis_fps (videorate) + mux_sync_inputs=1 causes a
+# DEADLOCK for file sources (videorate re-times PTS which confuses the sync logic,
+# especially at file-loop boundaries when different-duration files reset PTS at
+# different times). process_fps=5 at stream_fps=10 → infer every 2nd frame.
+process_fps: 5
+# nvstreammux sync-inputs. =1 time-aligns one frame per source per batch:
+# WITHOUT this, independently-paced sources produce malformed batches where
+# frame PIXELS get cross-attributed between sources (tiles flicker between
+# cameras' video). MUST be 1 to prevent the tile-jumping bug.
+# IMPORTANT: sync-inputs=1 + analysis_fps>0 (videorate) deadlocks for file://
+# sources. Keep analysis_fps=0 when mux_sync_inputs=1 with file sources.
+# sync-inputs=0: batches are created as soon as ANY source has a frame.
+# Required when using RTSP sources through a relay (go2rtc) where sources
+# connect at different times. With sync-inputs=1, a slow source (e.g.
+# cam-01 waiting for go2rtc to receive its stream) blocks ALL other sources
+# in the mux, freezing the entire pipeline.
+mux_sync_inputs: 0
+
+jpeg_quality: 80   # cv2-style quality; the GPU path maps it onto nvJPEG's scale
+                    # (nvjpegenc quality = jpeg_quality - 15, byte-equivalent)
+stream_maxlen: 500
+conf_threshold: 0.0
+rtsp_reconnect_interval: 10
+# Pre-merge behaviour, pinned (these keys arrived with mr/fire-smoke-attendance,
+# whose defaults differ): 800ms jitterbuffer without drop-on-latency (the values
+# the sidecar used to hardcode -- dropping one RTP packet corrupts the GOP behind
+# the go2rtc relay), and nvstreammux attach-sys-ts=true (rtcp_camera_clock off).
+rtsp_latency_ms: 800
+rtsp_drop_on_latency: false
+rtcp_camera_clock: false
+relevant_classes:
+  - license_plate
+  - plate
+  - car
+  - truck
+  - bus
+  - motorcycle
+  - bicycle
+  - person
+  - traffic light
+  - stop sign
+  - dog
+
+svr_cache_seconds: 45         # pre-roll held in RAM, per stream. MUST be greater than
+                              # alerts.clip.pad_seconds in config.yaml or a clip opens after
+                              # its own alert (IRIS warns at startup). DeepStream defaults this
+                              # to 0 -- no pre-roll at all -- so it is always set explicitly.
+                              # Also the deadline for PROACTIVE VLM alerts: those are only known
+                              # once the model answers, and IRIS asks for the recording via
+                              # iris:svr_request:<id> at that point, so a moment older than this
+                              # is out of cache and gets no clip. Raise it if VLM alerts on RTSP
+                              # streams report "the moment is Ns old but the cache holds only".
+                              # Raised 15 -> 45 for the industrial persona: its heavier prompt
+                              # (frames_per_batch=15) runs ~7-10s per analyze() cycle on the local
+                              # model, and perception.queue_depth=3 lets cycles queue up behind a
+                              # slow one, so a fired alert's moment was observed 19-28s old by the
+                              # time the sidecar got the svr_request -- already past the old 15s
+                              # cache, so every alert clip resolved 'unavailable'.
+# minio_access_key / minio_secret_key: set via MINIO_ACCESS_KEY / MINIO_SECRET_KEY env vars
+
+# Zones (intrusion, overcrowding, filter zones): the `zones` module, whose settings all have defaults.
+# Takes effect on the next sidecar restart; zone edits themselves hot-reload (iris:ctrl:zones_version).
+modules:
+  zones: {}
+
+  # Multi-Target Multi-Camera (MTMC) Vehicle Tracking.
+  # Assigns a stable cross-camera global_id to each tracked vehicle using Re-ID
+  # embeddings (torchvision ResNet50 / visual crops) and persistent cross-camera
+  # vehicle association.  ResNet50 acts as BOTH a coarse gate (reject obviously-
+  # different vehicles below reid_gate_threshold, near-zero false negatives) and
+  # the fine matcher (merge above reid_sim_threshold).  The global_id is published
+  # to iris:meta:<id> and rendered on the annotated JPEG stream so the operator
+  # can visually follow a vehicle across cameras.
+  mtmc:
+    config:
+      enabled: false
+      iou_threshold: 0.20           # frame-to-frame IoU for per-camera IoU tracker (permissive matching)
+      max_unmatched_frames: 500     # match DeepStream's maxShadowTrackingAge (500 frames = ~20s).
+                                   # Must be >= tracker shadow age or MTMC expires tracks
+                                   # while DeepStream still holds them, causing ID reassignment.
+      min_tracklet_frames: 2        # start tracking & publishing global identity on 2nd frame
+      reid_enabled: false            # load and use the Re-ID model (torchvision ResNet50)
+      reid_checkpoint: ""           # (unused) legacy fast-reid .pth path, kept for back-compat
+      reid_config: ""               # (unused) legacy fast-reid config, kept for back-compat
+      reid_embed_stride: 3          # crop sampling stride within a tracklet (1 = use all)
+      reid_max_crops: 16            # cap crops per tracklet per embed pass
+      reid_batch_size: 32
+      reid_min_crops: 6             # embed a tracklet once it has this many crops (async; or at expiry)
+      tracked_classes: ["license_plate", "plate", "car", "truck", "bus", "motorcycle", "bicycle"]
+      reid_gate_threshold: 0.15     # BELOW this = completely different vehicle -> reject (near-0 FN, no false-merge risk)
+      reid_sim_threshold: 0.35      # ABOVE this (and >= gate) = match -> merge into existing global track; between gate & match = ambiguous, keep separate
+      time_tolerance_s: 2.0         # max gap for synchronous overlap
+      min_disappearance_s: 2.0      # vehicle disappearance threshold for cross-camera candidate eligibility
+      max_inactive_ttl_s: 600.0     # retention window for inactive global vehicle tracks (10 min)
+      associate_interval_s: 1.0     # run cross-camera association every N seconds
+      min_embed_frames: 3           # tracklet must have this many embeddings before merge
+      # Unidirectional chain: D41(cam-1) → D52(cam-2) → CH23(cam-3).
+      # topology[cam] = list of VALID NEXT cameras (where vehicles from cam can appear).
+      # is_valid_transition(last_seen_cam, current_cam) checks current_cam in topology[last_seen_cam].
+      #
+      # cam-1 sends to cam-2 only  → vehicles disappear from cam-1, appear on cam-2
+      # cam-2 sends to cam-3 only  → vehicles disappear from cam-2, appear on cam-3
+      # cam-3 sends to nobody      → end of chain
+      topology:
+        cam-01: ["cam-02"]        # D41 → D16 (forward only)
+        cam-02: ["cam-03"]        # D16 → D52 (forward only)
+        cam-03: ["cam-04"]        # D52 → CH05 (forward only)
+        cam-04: ["cam-05"]        # CH05 → CH23 (forward only)
+        cam-05: []               # CH23 is last in chain
+
+      # Per-camera-pair disappearance timing gaps (min travel time in seconds between camera pairs).
+      # Used when evaluating candidate eligibility for cross-camera association.
+      # If a pair is not listed, min_disappearance_s above is used as fallback.
+      camera_gaps:
+        cam-01->cam-02: 0.0        # D41 → D16 min travel time gate
+        cam-02->cam-03: 5.0        # D16 → D52 min travel time gate
+        cam-03->cam-04: 3.0        # D52 → CH05 min travel time gate
+        cam-04->cam-05: 0.0        # CH05 → CH23 min travel time gate

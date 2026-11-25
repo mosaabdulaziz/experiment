@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "product": "attendance",
+  "site": null,
+  "generated_at": "2026-11-22T14:55:51+00:00",
+  "generated_from_commit": "843077df1594cfe9269bb492a5cf9ccd7cce6809",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "models": [
+    {
+      "path": "perception/models/DeepStream-Yolo-Face/face_det_lite.onnx",
+      "registered_model": "face-detector",
+      "version": "2",
+      "alias": "production-attendance",
+      "run_id": "24a0f3e1347348a1a7ab95c7875884c3",
+      "sha256": "90cb796301e9206390a279f4aa7bd5174ecf0d0e235f4a71aaa7d2e5199f2015",
+      "size_bytes": 3586341,
+      "loaded_by": "modules.face_detect.config -> onnx-file"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo-Face/labels.txt",
+      "registered_model": "face-detector",
+      "version": "2",
+      "alias": "production-attendance",
+      "run_id": "24a0f3e1347348a1a7ab95c7875884c3",
+      "sha256": "98d57c25a2bed283c090bc2508078faff041262880bec9b6b744e6372d4a5f09",
+      "size_bytes": 5,
+      "loaded_by": "modules.face_detect.config -> labelfile-path"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo-Fire/fire_smoke_box.onnx",
+      "registered_model": "fire-detector",
+      "version": "1",
+      "alias": "production-attendance",
+      "run_id": "39e1b9f652cd496ca27237b58d513107",
+      "sha256": "d5e4b6fd2f53832a16098eabbf6a966b774b1bdc721d34d06293f90ddc83d13d",
+      "size_bytes": 9627478,
+      "loaded_by": "modules.fire_alerts.config -> onnx-file"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo-Fire/labels_fire_smoke_box.txt",
+      "registered_model": "fire-detector",
+      "version": "1",
+      "alias": "production-attendance",
+      "run_id": "39e1b9f652cd496ca27237b58d513107",
+      "sha256": "226684b38809b706c49405fc22f418a447645886be3c29da8a29a8f4d4d1e15c",
+      "size_bytes": 11,
+      "loaded_by": "modules.fire_alerts.config -> labelfile-path"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo/labels.txt",
+      "registered_model": "object-detector",
+      "version": "1",
+      "alias": "production-attendance",
+      "run_id": "2c8de240100742ffa0ca8a109546a151",
+      "sha256": "33c77761e124cc74911346865e3bc1219b87c2db7d0f106e3376bf5ef3785933",
+      "size_bytes": 624,
+      "loaded_by": "pgie_config -> labelfile-path"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo/yolo11x.onnx",
+      "registered_model": "object-detector",
+      "version": "1",
+      "alias": "production-attendance",
+      "run_id": "2c8de240100742ffa0ca8a109546a151",
+      "sha256": "ee680c13ede47444f4bb2c64213661ad53194af1620bc99853d8c83433c7433c",
+      "size_bytes": 227924411,
+      "loaded_by": "pgie_config -> onnx-file"
+    },
+    {
+      "path": "perception/models/insightface/models/auraface/glintr100.onnx",
+      "registered_model": "face-recognizer",
+      "version": "2",
+      "alias": "production-attendance",
+      "run_id": "8158e13e78f8467ab9521426e65bb30e",
+      "sha256": "a7933ea5330113b01c9b60351d8f4c33003f145d8470ac5f0e52ee2effe25c60",
+      "size_bytes": 260694151,
+      "loaded_by": "modules.face_recognition.model"
+    }
+  ]
+}

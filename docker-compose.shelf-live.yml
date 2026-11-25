@@ -1,0 +1,67 @@
+# Overlay for `just shelf-live-sim`: the shelf_void pipeline on one simulated live camera, as compose project
+# SHELF_COMPOSE_PROJECT (shelflive) with its own ports and its own data dir (SHELF_LIVE_DIR), so it runs beside every
+# other stack on this machine and leaves this checkout's data/ alone. Use only through the shelf-* recipes: they set
+# these variables (scripts/shelf_live_env.sh). Same shape as docker-compose.ppe-live.yml.
+services:
+  go2rtc:
+    volumes: !override
+      - ./configs/presets/shelf/go2rtc-live.yaml:/config/go2rtc.yaml:ro
+    # No WebRTC port: the demo's video is the app's JPEG preview (pipeline_preview), never WebRTC
+    ports: !override
+      - "${GO2RTC_RTSP_PORT}:8554"
+      - "${GO2RTC_API_PORT}:1984"
+
+  deepstream-sidecar:
+    image: ${SHELF_SIDECAR_IMAGE:-${COMPOSE_PROJECT_NAME:-shelflive}-deepstream-sidecar:latest}
+    user: "${SHELF_UID:-1000}:${SHELF_GID:-1000}"   # files written into the checkout stay the user's
+    environment:
+      - HOME=/tmp
+      # Passed through from the shell (`IRIS_SIDECAR_ROLE=... just shelf-live-sim`), unset when the shell has none:
+      # then the preset's sidecar_role applies. shelf-iris-bridge gets the same variable the same way, so both always
+      # agree on the role and so on the alert stream names (role_scoped_keys).
+      - IRIS_SIDECAR_ROLE
+    volumes:
+      - ${SHELF_LIVE_DIR:-./scratch/shelf-live}/data:/workspace/iris/data
+    restart: unless-stopped
+
+  iris:
+    image: ${SHELF_IRIS_IMAGE:-${COMPOSE_PROJECT_NAME:-shelflive}-iris:latest}
+    user: "${SHELF_UID:-1000}:${SHELF_GID:-1000}"
+    environment:
+      - HOME=/tmp
+    volumes:
+      - ${SHELF_LIVE_DIR:-./scratch/shelf-live}/data:/app/data
+    restart: unless-stopped
+
+  # Shelf -> iris-platform bridge (README.md, "Shelf -> iris-platform"): reads this stack's shelf alerts from Redis
+  # through its own consumer group (the app still gets every alert) and publishes them to iris-platform's RabbitMQ.
+  # Opt-in (profile), started by name:  shelf_compose up -d --build shelf-iris-bridge
+  # Settings: products/shelf_iris_bridge/.env (from .env.example, git-ignored); mapping: SHELF_IRIS_MAPPING.
+  # Run EITHER this bridge OR the shelf-demo service against one iris-platform, never both.
+  shelf-iris-bridge:
+    image: ${SHELF_BRIDGE_IMAGE:-${COMPOSE_PROJECT_NAME:-shelflive}-shelf-iris-bridge:latest}
+    build: ./products/shelf_iris_bridge
+    profiles: [iris-platform]
+    env_file:
+      - path: ./products/shelf_iris_bridge/.env
+        required: false
+    # The alert streams it reads come from the sidecar's own preset (SIDECAR_CONFIG, the same value the sidecar runs
+    # with; empty = the bridge refuses to start) and the engine's own key helper (perception/engine/sources.py), both
+    # read from the checkout mounted below: iris:alert:<camera>, or <camera>@<role> with role_scoped_keys.
+    environment:
+      - REDIS_URL=${SHELF_BRIDGE_REDIS_URL:-redis://redis:6379/0}
+      - MAPPING_FILE=/config/shelf-iris-mapping.yaml
+      - SIDECAR_CONFIG=${SIDECAR_CONFIG:-}
+      # The sidecar's role, from the shell exactly as deepstream-sidecar gets it (above). Pass-through: unset in the
+      # shell = unset here (the preset's sidecar_role), and an IRIS_SIDECAR_ROLE in the bridge's .env is ignored --
+      # a role the sidecar doesn't have would make the bridge read streams nobody writes.
+      - IRIS_SIDECAR_ROLE
+      - IRIS_ROOT=/workspace/iris
+      - PYTHONPATH=/workspace/iris
+    volumes:
+      - ${SHELF_IRIS_MAPPING:-./products/shelf_iris_bridge/mapping.example.yaml}:/config/shelf-iris-mapping.yaml:ro
+      - ./configs:/workspace/iris/configs:ro
+      - ./perception:/workspace/iris/perception:ro
+    depends_on:
+      - redis
+    restart: unless-stopped

@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "swin_tiny_market1501_aicity156_featuredim256.onnx",
+  "sha256": "37b008d887495d5fbad31c72aadbf381c5456cb619e0e2a9c246a6d48a2932ff",
+  "size_bytes": 113893579,
+  "created_at": "2026-11-05T09:11:32+00:00",
+  "run_id": "241eb1005e1a46cca8b36ca7f4cf1666",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "person-reid",
+  "version": "1"
+}

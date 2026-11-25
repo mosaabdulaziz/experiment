@@ -1,0 +1,80 @@
+{
+ "attendance": {
+  "cpu_cores": 0.64,
+  "anon_max_mib": 1276,
+  "cgroup_peak_mib": 2122,
+  "file_mib": 781,
+  "threads": 109,
+  "net_mb_s": 1.82,
+  "read_mb": 0,
+  "write_mb": 16,
+  "redis_mib": 12,
+  "load1": 1.2,
+  "swap_mib": 1127
+ },
+ "zones": {
+  "cpu_cores": 0.63,
+  "anon_max_mib": 1284,
+  "cgroup_peak_mib": 1470,
+  "file_mib": 144,
+  "threads": 109,
+  "net_mb_s": 1.8,
+  "read_mb": 0,
+  "write_mb": 13,
+  "redis_mib": 12,
+  "load1": 1.0,
+  "swap_mib": 1127
+ },
+ "fire": {
+  "cpu_cores": 0.59,
+  "anon_max_mib": 1223,
+  "cgroup_peak_mib": 1427,
+  "file_mib": 150,
+  "threads": 110,
+  "net_mb_s": 0.99,
+  "read_mb": 9,
+  "write_mb": 13,
+  "redis_mib": 10,
+  "load1": 2.0,
+  "swap_mib": 1127
+ },
+ "multicam": {
+  "cpu_cores": 0.3,
+  "anon_max_mib": 1328,
+  "cgroup_peak_mib": 1943,
+  "file_mib": 558,
+  "threads": 82,
+  "net_mb_s": 0.0,
+  "read_mb": 56,
+  "write_mb": 16,
+  "redis_mib": 7,
+  "load1": 1.2,
+  "swap_mib": 1127
+ },
+ "barber": {
+  "cpu_cores": 0.4,
+  "anon_max_mib": 1424,
+  "cgroup_peak_mib": 1691,
+  "file_mib": 219,
+  "threads": 128,
+  "net_mb_s": 0.04,
+  "read_mb": 3,
+  "write_mb": 20,
+  "redis_mib": 9,
+  "load1": 0.6,
+  "swap_mib": 1127
+ },
+ "barber-faces": {
+  "cpu_cores": 0.69,
+  "anon_max_mib": 1465,
+  "cgroup_peak_mib": 1650,
+  "file_mib": 137,
+  "threads": 128,
+  "net_mb_s": 0.06,
+  "read_mb": 0,
+  "write_mb": 23,
+  "redis_mib": 10,
+  "load1": 1.4,
+  "swap_mib": 1127
+ }
+}

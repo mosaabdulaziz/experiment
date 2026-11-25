@@ -1,0 +1,40 @@
+[property]
+gpu-id=0
+net-scale-factor=0.0039215697906911373
+model-color-format=0
+onnx-file=yolov8n-face.onnx
+# model-engine-file is ONLY the deserialize probe path. When nvinfer must rebuild,
+# TrtModelBuilder::buildModel() ignores this value and serializes to an auto-derived
+# name beside the ONNX: <onnx-path>_b<batch>_gpu<id>_<mode>.engine. So this path MUST
+# resolve to that derived name or every boot rebuilds from ONNX (~25s) and the cache
+# never fills. It is relative to THIS file's directory (perception/models/DeepStream-Yolo-Face/), which
+# is on the workspace volume, so the engine persists across container restarts.
+# face_detect sets the identical value via gie_engine_path.
+model-engine-file=yolov8n-face.onnx_b16_gpu0_fp32.engine
+# cluster-mode=4 => NVDSINFER_CLUSTER_NONE (no built-in clustering). Intentional:
+# nvdsparseface_Yolo.cpp already runs its own NMS (NMS_THRESH 0.45), so enabling
+# nvinfer clustering here would double-suppress detections. Valid values:
+# 0=GROUP_RECTANGLES 1=DBSCAN 2=NMS 3=DBSCAN+NMS 4=NONE. Do NOT "fix" this.
+cluster-mode=4
+labelfile-path=labels.txt
+batch-size=16
+network-mode=0
+num-detected-classes=1
+interval=0
+gie-unique-id=2
+process-mode=2
+network-type=3
+cluster-mode=4
+maintain-aspect-ratio=1
+symmetric-padding=1
+scaling-filter=1
+scaling-compute-hw=0
+force-implicit-batch-dim=0
+operate-on-gie-id=1
+operate-on-class-ids=0
+parse-bbox-instance-mask-func-name=NvDsInferParseYoloFace
+custom-lib-path=/opt/nvidia/deepstream/deepstream-9.0/custom_parsers/libnvdsinfer_custom_impl_Yolo_face.so
+output-instance-mask=1
+
+[class-attrs-all]
+pre-cluster-threshold=0.25

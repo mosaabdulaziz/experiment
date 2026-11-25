@@ -1,0 +1,15 @@
+# Palm Hills on the shop's real cameras (2026-10-15): the clip site (barber.palm-hills.yaml) with live cameras --
+# no clip_duration_s / clear_on_loop, so nothing is wiped at a "loop". Same data_dir (zones, policy, DB) and crops
+# root. go2rtc pulls each raw-ph-* from the shop's recorder (site.sh: the channels; .env: PALM_HILLS_RTSP).
+# ph-4 (Stations close) is left out: R3/R4 are owned by ph-6 since 2026-10-15. Its zones stay in zones.json --
+# put the line back (here and in sidecar.palm-hills-live.yaml) to switch back.
+extends: barber.palm-hills.yaml
+
+cameras:
+  - {id: ph-1, name: "Wash area"}
+  - {id: ph-2, name: "Stations wide"}
+  - {id: ph-3, name: "Reception front"}
+  # - {id: ph-4, name: "Stations close"}
+  - {id: ph-5, name: "Reception lounge"}
+  - {id: ph-6, name: "Pedicure"}
+  - {id: ph-7, name: "VIP room"}

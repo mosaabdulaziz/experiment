@@ -1,0 +1,331 @@
+# Environment & secrets
+.env
+
+# Some Folders
+mtmc/datasets/
+
+# Database
+data/*.db
+data/*.db-shm
+data/*.db-wal
+products/attendance/data/
+products/fall_detection/data/
+
+# Runtime-generated zone config (written by the zone-editor endpoints)
+data/zones_config.txt
+
+# Runtime-generated nvdsanalytics ROI config (regenerated from data/zones_config.txt),
+# plus each sidecar process's copy renumbered to its own stream indices
+data/nvdsanalytics_config.txt
+data/nvdsanalytics_config_worker_*.txt
+data/nvdsanalytics_config_remapped_*.txt
+# tools/zones/validate_reload.py: its reports and the zones-file backups it restores from
+data/zones-reload/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+venv/
+.venv/
+env/
+
+# Built frontend (generated from submodule)
+static/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# claude
+CLAUDE.md
+
+# Model weights (downloaded, not source)
+*.pt
+
+# InsightFace ONNX weights (downloaded, not source — baked into the image at
+# build time by the Dockerfile; the local checkout is a 408 MB download)
+/AuraFace/
+
+# Generated TRT engine files
+*.engine
+*.engine.*
+
+# ONNX duplicates / runtime data files
+yolo11s.onnx
+yolo11s.onnx.data
+yolov8n-face.onnx
+yolov8n-face.onnx.data
+
+# Root labels.txt — duplicate of already-committed perception/models/DeepStream-Yolo-Face/labels.txt
+labels.txt
+# ...except the class lists next to the client's deployed detectors (the nvinfer configs name them)
+!products/el-mohandes/models/*/labels.txt
+
+# Compiled parser artifacts (built by Dockerfile at image-build time)
+*.so
+*.o
+
+# Logs
+data/*.json
+data/*.jpg
+data/benchmark_sidecar_*.log
+data/analysis_calls/
+
+# Uploaded and sample videos (replay cameras, manual tests, benchmarks). They
+# stay on each machine and, later, on the team SharePoint -- never in git:
+# MR !25 review, 2026-10-01. Note this rule only stops NEW files; videos that
+# were already tracked had to be removed with `git rm --cached`.
+# Only the .dvc pointers of the sample videos are tracked (docs/DATA.md); files a user uploads in the UI stay untracked.
+data/uploads/**
+!data/uploads/**/
+!data/uploads/**/*.dvc
+
+# Recorded segments (runtime data)
+data/segments/
+data/clips/
+data/proximity-review/
+data/alert_clips/
+
+# Benchmark results
+benchmark/
+
+# Extra repo docs / plans
+EMBEDDING_SEARCH_PLAN.md
+
+# Upstream perception/models/DeepStream-Yolo extras (not needed -- only the YOLO11 config + parser source, plus
+# config_infer_primary_damoyolo.txt (the DAMO-YOLO swap target -- see
+# docs/superpowers/specs/2026-08-10-deepstream-detector-model-swap-runbook.md), are used.
+# Un-ignore the matching line here too if the PP-YOLOE/YOLOX backup configs from that runbook
+# are ever actually created.
+perception/models/DeepStream-Yolo/.github/
+perception/models/DeepStream-Yolo/README.md
+perception/models/DeepStream-Yolo/deepstream_app_config.txt
+perception/models/DeepStream-Yolo/labels_rfdetr.txt
+perception/models/DeepStream-Yolo/config_infer_primary.txt
+perception/models/DeepStream-Yolo/config_infer_primary_codetr.txt
+perception/models/DeepStream-Yolo/config_infer_primary_dfine.txt
+perception/models/DeepStream-Yolo/config_infer_primary_goldyolo.txt
+perception/models/DeepStream-Yolo/config_infer_primary_ppyoloe.txt
+perception/models/DeepStream-Yolo/config_infer_primary_ppyoloe_plus.txt
+perception/models/DeepStream-Yolo/config_infer_primary_rfdetr.txt
+perception/models/DeepStream-Yolo/config_infer_primary_rtdetr.txt
+perception/models/DeepStream-Yolo/config_infer_primary_rtmdet.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yolo26.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yoloV10.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yoloV12.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yoloV13.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yoloV2.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yoloV5.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yoloV5u.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yoloV6.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yoloV7.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yoloV8.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yoloV9.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yolomaster.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yolonas.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yolonas_custom.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yolor.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yolox.txt
+perception/models/DeepStream-Yolo/config_infer_primary_yolox_legacy.txt
+
+# Upstream perception/models/DeepStream-Yolo-Face extras (only config_sgie_face.txt + .cpp source + .onnx are used)
+perception/models/DeepStream-Yolo-Face/.github/
+perception/models/DeepStream-Yolo-Face/Makefile
+perception/models/DeepStream-Yolo-Face/config_infer_primary_yoloV5_face.txt
+perception/models/DeepStream-Yolo-Face/config_infer_primary_yoloV7_face.txt
+perception/models/DeepStream-Yolo-Face/config_infer_primary_yoloV8_face.txt
+perception/models/DeepStream-Yolo-Face/deepstream.c
+perception/models/DeepStream-Yolo-Face/deepstream.h
+perception/models/DeepStream-Yolo-Face/deepstream.py
+perception/models/DeepStream-Yolo-Face/modules/
+perception/models/DeepStream-Yolo-Face/utils/
+
+# Frontend
+frontend/node_modules/
+# any package's own node_modules (a vitest cache under the barber UI was committed once)
+node_modules/
+frontend/dist/
+frontend/.eslintcache
+frontend/*.tsbuildinfo
+
+# Generated TRT engine files
+*.engine
+*.engine.*
+
+# ONNX runtime data files
+*.onnx.data
+
+# Runtime benchmark/analysis logs
+data/benchmark_sidecar_*.log
+data/analysis_calls/
+data/description_calls/
+
+# Extra repo docs
+EMBEDDING_SEARCH_PLAN.md
+
+# docs
+docs/
+# ...except the fall product's own docs, which are tracked (its design, its
+# requirements, its phase reports and its provenance note). The rule above is
+# for scratch directories; these are deliverables.
+!products/fall_detection/docs/
+!products/concealment_detection/docs/
+
+# Subagent-driven-development scratch workspaces (ledgers, briefs, review packages)
+.superpowers/
+
+# Media
+*.jpg
+*.jpeg
+*.webp
+
+# Models
+*.pt
+*.onnx
+# ...except the barber staff classifier (project A), versioned in git on purpose
+*.pth
+# Barber staff CLIP tokenizer (`just barber-staff-model`, checksummed in perception/pipeline/models.staff.sha256)
+perception/models/staff/tokenizer.json
+
+# INT8 calibration inputs (committed so a fresh clone can build the INT8 engine
+# without re-running gen_int8_calib_table.py, which needs a source video)
+!perception/models/DeepStream-Yolo/calib_images/
+!perception/models/DeepStream-Yolo/calib_images/*.jpg
+
+# Fire/smoke detector artifacts -- needed by the sidecar container from the
+# workspace mount, same as perception/models/DeepStream-Yolo/damoyolo_s.onnx being tracked.
+!perception/models/DeepStream-Yolo-Fire/labels.txt
+
+# Pose detector's class list: the config's labelfile-path points at it, so a fresh clone without it cannot load the
+# GIE (the root `labels.txt` rule would hide it). Same reason as the fire model's. The PPE, pose and fall-detection
+# weights, graphs and sample clips are DVC pointers (DATA.md), not files git tracks.
+!perception/models/DeepStream-Yolo-Pose/labels.txt
+
+benchmarks/fixtures/
+data/datasets/CHIRLA0/annotations
+data/datasets/
+perception/models/DeepStream-Yolo/**
+# DVC pointers for the weights that stay out of git (see DATA.md); `**` + `!**/` is the form dvc's own index understands
+!perception/models/DeepStream-Yolo/**/
+!perception/models/DeepStream-Yolo/**/*.dvc
+# ...and the MLflow sidecars (<model>.mlflow.json: run, sha256, registered version; mtmc/tracking, spike D9), which are
+# versioned next to the .dvc pointers of the models they describe (yolo11x.onnx, labels.txt)
+!perception/models/DeepStream-Yolo/**/*.mlflow.json
+# ...and the vendored upstream code (VENDORED.md): its MIT licence, which covers the parser in
+# nvdsinfer_custom_impl_Yolo/ too, the provenance note, and the ONNX exporter mtmc/export_vehicle_onnx.py wraps.
+!perception/models/DeepStream-Yolo/LICENSE.md
+!perception/models/DeepStream-Yolo/VENDORED.md
+!perception/models/DeepStream-Yolo/utils/export_yolo11.py
+# ...except the vehicle detector the multi-camera pipeline runs on (force-added, like the
+# other DeepStream-Yolo models already tracked): config, ONNX, weights, labels.
+!perception/models/DeepStream-Yolo/config_infer_primary_vehicle_1cls.txt
+# ...and the licence-plate detector run as a secondary GIE on vehicle crops (640 export of
+# products/el-mohandes/models/finetuned/best.pt; the weights stay where they are).
+!perception/models/DeepStream-Yolo/config_sgie_plate.txt
+
+# TensorRT engine binaries (engine-files/): GPU/TRT-version/batch-specific, not
+# portable artifacts — never commit them; rebuilt from the committed ONNX +
+# calib.table on first boot.
+engine-files/
+
+# Benchmark harness runtime artifact (backup of sidecar.yaml it rewrites per cell)
+benchmarks/results/_sidecar.yaml.bak
+
+# MTMC pipeline runtime artifacts (embedding caches, predictions, eval outputs)
+mtmc/output/
+
+
+helper-repos/
+stream_recording.log
+data/streamer.log
+.streamer.pid
+.active_profile
+scratch/
+products/el-mohandes/videos/**
+!products/el-mohandes/videos/**/
+!products/el-mohandes/videos/**/*.dvc
+
+mtmc/vehicle_*.json
+
+# Large archives (downloaded / packaged, not source)
+*.zip
+output/
+
+# CHIRLA sequences converted to h264 for browsing/streaming (2026-09-01) --
+# multi-GB of dataset video, regenerable from /data/IRIS/data/CHIRLA_data
+data/chirla_converted/
+.run/
+
+# MTMC vehicle-detector training data and outputs (tens of GB, local only)
+vehicle_frames/
+fine_tuned_plate_crops_day/
+products/el-mohandes/runs/**
+!products/el-mohandes/runs/**/
+!products/el-mohandes/runs/**/*.dvc
+mtmc/models/potential/
+
+# Hazard Detection results (app/hazards_api.py)
+data/hazards/
+
+# Barber use case: local-only material (spec, wireframes, session notes, measurement scripts)
+Barber_Shop_Monitoring_Use_Case.docx
+products/barber/baber_wireframe/
+products/barber/HANDOFF.md
+products/barber/dev/
+
+# Sidecar short-video recordings (runtime data)
+data/alert_svr/
+
+# Employee/staff face photos: personal biometric material, never committed.
+# (Each product keeps its own under products/<name>/data/face_photos/.)
+data/face_photos/
+
+# DeepStream-Yolo-Seg (barber PGIE): the ONNX is exported locally (export_yolo26_seg.py), not committed
+perception/models/DeepStream-Yolo-Seg/*.onnx
+perception/models/DeepStream-Yolo-Seg/*.onnx.data
+!perception/models/DeepStream-Yolo-Seg/labels.txt
+tests/configs/*_worker_*.txt
+tests/configs/*_remapped_*.txt
+tests/baselines/*.after*.jsonl
+
+# rclone mount of the DVC remote (just data-mount)
+.data-remote/
+
+# huggingface_hub download bookkeeping next to downloaded weights
+mtmc/models/**/.cache/
+
+# Third-party models the pipeline does not load (mtmc/models/THIRD_PARTY.md); local copies only
+mtmc/models/yolov11-license-plate-detection/
+mtmc/models/egyptian-license-plate-detector/
+mtmc/models/paddleocr-onnx/
+mtmc/models/arabic_PP-OCRv3_mobile_rec*/
+datasets/mtmc_legacy/
+
+# regression harness: local run outputs (the baselines under benchmarks/baselines/ are committed)
+benchmarks/runs/
+
+# MLflow offline store (mtmc/tracking): runs logged while the tracking server was unreachable. Sync them to the
+# server; never commit them.
+mlruns-offline/
+
+# VEMA tracker & DeepStream experiment artifacts (datasets, benchmark/AB outputs, compiled binaries)
+vema_tracker/data/
+vema_tracker/results/
+results/
+perception/trackers/*/build/
+*.dll
+*.dylib
+scratch/

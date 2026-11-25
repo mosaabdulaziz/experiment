@@ -1,0 +1,5 @@
+outs:
+- md5: 1f3ced681a43ec7234f12d9712b74d90
+  size: 8629028
+  hash: md5
+  path: vehicle_frame_labels.zip

@@ -1,0 +1,6 @@
+outs:
+- md5: 3e1cd0fdb92b28f3958cd9cb6fe3730e.dir
+  size: 7549073
+  nfiles: 2760
+  hash: md5
+  path: finetuned_plate_crops

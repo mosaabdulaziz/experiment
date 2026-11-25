@@ -1,0 +1,13 @@
+# TEST CONFIG (not a product): attendance rules on one recorded clip (~70 s) read straight from disk, no loop (one source: two file sources
+# at once stall each other on a small GPU, which made repeat runs differ),
+# so the same input produces the same detections on every run. Used by tools/engine_golden.py to check that an
+# engine refactor leaves what the sidecar writes to Redis unchanged.
+#
+#   SIDECAR_CONFIG=tests/configs/golden-attendance.yaml docker compose up -d deepstream-sidecar
+#   python3 tools/engine_golden.py record --out tests/baselines/golden-attendance.before.jsonl
+extends: ../../products/attendance/sidecar.yaml
+
+file_loop: false
+
+sources:
+  - {id: cam-1, uri: "file:///workspace/iris/data/uploads/attendance/enter-3.mp4", roles: [attendance], label: "golden enter-3"}

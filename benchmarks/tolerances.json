@@ -1,0 +1,274 @@
+{
+ "default": {
+  "rel": 0.1,
+  "abs": 0.0
+ },
+ "rules": [
+  {
+   "match": "runtime.fire.*",
+   "gate": false,
+   "why": "fire is flaky: its golden output differs between identical runs"
+  },
+  {
+   "match": "counters.fire.*",
+   "gate": false,
+   "why": "fire is flaky: its golden output differs between identical runs"
+  },
+  {
+   "match": "counters.barber-faces.gpu_util.median",
+   "gate": false,
+   "why": "49% apart between identical runs (28 to 46)"
+  },
+  {
+   "match": "counters.barber-faces.mem_ctrl_util.median",
+   "gate": false,
+   "why": "58% apart between identical runs (9 to 16)"
+  },
+  {
+   "match": "counters.barber.gpu_util.median",
+   "gate": false,
+   "why": "43% apart between identical runs (23 to 35)"
+  },
+  {
+   "match": "counters.multicam.gpu_util.median",
+   "gate": false,
+   "why": "183% apart between identical runs (4 to 15)"
+  },
+  {
+   "match": "counters.multicam.gr_engine_active.median",
+   "gate": false,
+   "why": "43% apart between identical runs (0.106 to 0.162)"
+  },
+  {
+   "match": "counters.multicam.gr_engine_active.p95",
+   "gate": false,
+   "why": "44% apart between identical runs (0.116 to 0.18)"
+  },
+  {
+   "match": "counters.multicam.sm_active.p95",
+   "gate": false,
+   "why": "116% apart between identical runs (0 to 0.63)"
+  },
+  {
+   "match": "counters.multicam.sm_occupancy.p95",
+   "gate": false,
+   "why": "122% apart between identical runs (0 to 0.223)"
+  },
+  {
+   "match": "counters.multicam.tensor_active.p95",
+   "gate": false,
+   "why": "109% apart between identical runs (0 to 0.142)"
+  },
+  {
+   "match": "runtime.attendance.boot_s",
+   "gate": false,
+   "why": "42% apart between identical runs (8.3 to 11.9)"
+  },
+  {
+   "match": "counters.*.dram_active.median",
+   "rel": 0.27,
+   "abs": 0.018,
+   "members": 5
+  },
+  {
+   "match": "counters.*.dram_active.p95",
+   "rel": 2.25,
+   "abs": 0.032,
+   "members": 5
+  },
+  {
+   "match": "counters.*.gpu_util.median",
+   "rel": 0.2,
+   "abs": 11.25,
+   "members": 2
+  },
+  {
+   "match": "counters.*.gr_engine_active.median",
+   "rel": 0.11,
+   "abs": 0.041,
+   "members": 4
+  },
+  {
+   "match": "counters.*.gr_engine_active.p95",
+   "rel": 0.09,
+   "abs": 0.066,
+   "members": 4
+  },
+  {
+   "match": "counters.*.mem_ctrl_util.median",
+   "rel": 1.01,
+   "abs": 4.5,
+   "members": 4
+  },
+  {
+   "match": "counters.*.nvdec_util.median",
+   "rel": 3.0,
+   "abs": 3.0,
+   "members": 5
+  },
+  {
+   "match": "counters.*.nvjpg_util.median",
+   "rel": 0.02,
+   "abs": 0.0,
+   "members": 5
+  },
+  {
+   "match": "counters.*.power_w.median",
+   "rel": 0.21,
+   "abs": 3.735,
+   "members": 5
+  },
+  {
+   "match": "counters.*.sm_active.median",
+   "rel": 0.06,
+   "abs": 0.022,
+   "members": 5
+  },
+  {
+   "match": "counters.*.sm_active.p95",
+   "rel": 0.09,
+   "abs": 0.028,
+   "members": 4
+  },
+  {
+   "match": "counters.*.sm_occupancy.median",
+   "rel": 0.07,
+   "abs": 0.009,
+   "members": 5
+  },
+  {
+   "match": "counters.*.sm_occupancy.p95",
+   "rel": 0.12,
+   "abs": 0.015,
+   "members": 4
+  },
+  {
+   "match": "counters.*.tensor_active.median",
+   "rel": 0.04,
+   "abs": 0.003,
+   "members": 5
+  },
+  {
+   "match": "counters.*.tensor_active.p95",
+   "rel": 0.05,
+   "abs": 0.003,
+   "members": 4
+  },
+  {
+   "match": "runtime.*.boot_s",
+   "rel": 0.11,
+   "abs": 4.5,
+   "members": 4
+  },
+  {
+   "match": "runtime.*.drops",
+   "rel": 0.02,
+   "abs": 0.0,
+   "members": 5
+  },
+  {
+   "match": "runtime.*.fps_median",
+   "rel": 0.02,
+   "abs": 0.0,
+   "members": 5
+  },
+  {
+   "match": "runtime.*.fps_p10",
+   "rel": 0.02,
+   "abs": 0.0,
+   "members": 5
+  },
+  {
+   "match": "runtime.*.gpu_added_mib",
+   "rel": 0.02,
+   "abs": 49.5,
+   "members": 5
+  },
+  {
+   "match": "runtime.*.stage.gpu.decode.avg_ms",
+   "rel": 0.27,
+   "abs": 7.05,
+   "members": 5
+  },
+  {
+   "match": "runtime.*.stage.gpu.decode.busy",
+   "rel": 0.28,
+   "abs": 11.4,
+   "members": 5
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie.avg_ms",
+   "rel": 0.08,
+   "abs": 0.855,
+   "members": 5
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie.busy",
+   "rel": 0.08,
+   "abs": 2.055,
+   "members": 5
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie_fire.avg_ms",
+   "rel": 0.1,
+   "abs": 0.165,
+   "members": 2
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.pgie_fire.busy",
+   "rel": 0.09,
+   "abs": 0.315,
+   "members": 2
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.sgie_face.avg_ms",
+   "rel": 0.11,
+   "abs": 1.86,
+   "members": 4
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.sgie_face.busy",
+   "rel": 0.07,
+   "abs": 2.235,
+   "members": 4
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.sgie_plate.avg_ms",
+   "rel": 0.05,
+   "abs": 2.04,
+   "members": 1
+  },
+  {
+   "match": "runtime.*.stage.gpu.infer.sgie_plate.busy",
+   "rel": 0.05,
+   "abs": 4.17,
+   "members": 1
+  },
+  {
+   "match": "runtime.*.stage.gpu.jpeg.avg_ms",
+   "rel": 0.04,
+   "abs": 0.84,
+   "members": 2
+  },
+  {
+   "match": "runtime.*.stage.gpu.jpeg.busy",
+   "rel": 0.06,
+   "abs": 2.64,
+   "members": 2
+  },
+  {
+   "match": "runtime.*.stages_sum",
+   "rel": 0.1,
+   "abs": 14.52,
+   "members": 5
+  },
+  {
+   "match": "unit.*.time_s",
+   "rel": 0.09,
+   "abs": 6.45,
+   "members": 1
+  }
+ ],
+ "note": "Proposed by 'just regress-noise' from 5 identical runs (unit core + the six golden replays) of commit b69560ea on rtx-5050-laptop, 2026-11-11, display GPU shared, power-capped. Noise is per machine: the numbers are the laptop's, a calmer GPU will have smaller ones. benchmarks/baselines/<machine_id>/tolerances.json, when present, replaces this file for that machine. Rules marked gate:false are metrics that were unstable between identical runs (or belong to a config whose golden output flips): they are shown, never judged. Re-run the noise measurement when the harness, the sidecar image or the machine changes.",
+ "runs": 5
+}

@@ -1,0 +1,6 @@
+outs:
+- md5: 189b832d92e50fa2d7750fb3884f713e.dir
+  size: 7436891
+  nfiles: 5351
+  hash: md5
+  path: camera_5_faces

@@ -1,0 +1,295 @@
+# IRIS — Visual Monitoring Configuration
+# Copy .env.example to .env and set QWEN_API_KEY before running.
+
+camera:                # [deepstream: IGNORED] — capture is owned by the sidecar; sources live in sidecar.yaml. Local backend only.
+  source: 0            # 0 = default webcam | or an RTSP/HTTP URL string
+  width: 1280
+  height: 720
+
+sampling:
+  # interval_seconds + frames_per_batch ALSO apply in deepstream (producer cadence + XREVRANGE count); the rest are local-only.
+  interval_seconds: 4   # How often a batch of frames is sampled and sent for analysis
+  jpeg_quality: 80      # JPEG quality of the frame sent to the API (1-95)
+  frames_per_batch: 10   # Frames sent per analysis call. Higher = better motion recall, higher API cost.
+                        # NOTE: Nemotron-Nano-VL requires a minimum of 8 frames per video block.
+  overlap_frames: 2     # Frames shared between consecutive batches (0 = no overlap). Helps catch events that span a cycle boundary.
+                        # [deepstream: IGNORED — the newest-N Redis pull carries no state; overlap is emergent from sidecar sample_fps vs interval_seconds/frames_per_batch]
+
+perception:
+  backend: "deepstream"          # "local" (in-process camera + ultralytics) | "deepstream" (read from Redis sidecar)
+  redis_url: "redis://redis:6379/0"   # compose service name; use redis://localhost:6379/0 for a native (non-compose) run
+  source_id: "cam0"         # logical stream id; Redis keys are iris:meta:<source_id> and iris:jpeg:<source_id>
+  sidecar_uploads_uri_prefix: "file:///workspace/iris/data/uploads"  # how the sidecar sees IRIS's data/uploads
+  queue_depth: 3                  # per-stream VLM request queue depth (drop-oldest when full)
+  discovery_interval_seconds: 5   # how often IRIS rescans iris:status:* for live streams
+
+api:
+  backend: "local"  # "cloud" (DashScope) | "local" (any OpenAI-compatible server — vLLM, Ollama, LMStudio)
+
+  # ── Cloud / DashScope settings ─────────────────────────────────────────
+  #model: "qwen3-vl-32b-instruct"
+  model: "qwen3.6-35b-a3b"
+  #model: "qwen3.6-plus"
+  base_url: "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
+  max_tokens: 1000
+  timeout_seconds: 20
+  enable_thinking: false  # Set to false for qwen3 models to disable chain-of-thought overhead; omit for qwen2-vl
+
+  # ── Local inference settings (active when backend: "local") ────────────
+  # vLLM example:
+  #   vllm serve nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1 --port 8001 --max-model-len 8192
+  # Ollama example:
+  #   ollama serve  →  base_url: "http://localhost:11434/v1"  model: "llava:13b"
+  local_base_url: "http://host.docker.internal:8001/v1"
+  local_model: "google/gemma-4-12B-it"
+  #local_model: "nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16"
+  local_api_key: "not-needed"
+  local_max_tokens: 512
+  local_timeout_seconds: 60
+  # Frame packaging format sent to the local model:
+  #   image_sequence — N separate image_url blocks (works with all vision models: vLLM, Ollama, LMStudio)
+  #   video_url      — list of frame data URIs under a single video_url block
+  #                    (required for vLLM-served video-native models e.g. Nemotron-Nano-VL)
+  local_visual_format: "video_url"
+
+  # ── Local sampling parameters ─────────────────────────────────────────
+  # Sent per-request to the local backend. Applies to both analyze() and chat().
+  # OpenAI-standard params (temperature, top_p, seed) go as top-level args;
+  # vLLM extensions (top_k, repetition_penalty, min_p) ride in extra_body.
+  local_temperature: 0.1          # 0.0 = greedy (can collapse some models to []); 0.2–0.3 typical for JSON discipline
+  local_top_p: 0.9                # nucleus sampling cutoff
+  local_top_k: 20                 # vLLM extension; null/omit to use model default
+  local_repetition_penalty: 1.05  # vLLM extension; mild repeat discouragement. omit = 1.0
+  local_min_p: 0.0                # vLLM extension; 0.0 = disabled
+  # local_seed: 42                # uncomment for deterministic outputs (debugging)
+  local_serve_batch: 1            # concurrent VLM requests (local backend only); vLLM batches them server-side. 1 = serial (default). Ignored for cloud.
+
+  prompt_log_path: "data/prompt_log.json"  # full prompt logged on every analyze() call; cleared with events clear button
+  prompt_log_max_entries: 50               # prompts are large — keep fewer than cv_debug entries
+  response_log_path: "data/response_log.json"  # parsed analyzer output (event arrays) with timestamps
+  response_log_max_entries: 200
+  debug_calls_path: "data/analysis_calls"  # rolling debug dump of last N analysis calls (frames + prompt + raw response)
+  debug_calls_keep: 3                       # number of calls to retain (slots 0..N-1, oldest overwritten)
+  chat_debug_path: "data/chat_calls"       # rolling debug dump of last N chat requests per mode (full prompt + frames)
+  chat_debug_keep: 3                        # chat requests retained per mode (normal/ and search/, oldest overwritten)
+  desc_debug_path: "data/description_calls"  # rolling debug dump of last N describe_alert calls (8 alert kinds); shared rotation across all kinds
+  desc_debug_keep: 3                          # calls retained, shared rotation across all alert kinds (slots 0..N-1, oldest overwritten)
+
+monitoring:
+  # When false, the VLM analysis cycle is disabled entirely — only the DeepStream
+  # person/face detection pipeline runs (plus zone alerts, recording, and streams).
+  # Chat and VLM-based alerts will not function. Set false to save GPU/API cost
+  # when you only need the detection + tracking pipeline.
+  vlm_enabled: false   # VLM temporarily disabled — no vLLM/Ollama endpoint configured; detection pipeline (zones, recording, streams) runs without it
+
+  # Active persona — determines the AI's role and default monitoring instructions.
+  persona: traffic           # Options: traffic | indoor_security
+  output_language: "english" # Language for AI responses: english | arabic
+  mode: chat                 # Startup working mode: proactive (run analysis) | chat (analysis paused)
+
+  cooldown_seconds: 8       # Minimum seconds between COMMENT events
+  alert_cooldown_seconds: 4  # Minimum seconds between ALERT events
+  max_history: 3             # Recent non-ignore events included in each prompt
+  pending_queue_depth: 2     # Max analysis calls that can queue up while one is running (0 = drop all)  [deepstream: IGNORED — use perception.queue_depth instead]
+
+events:
+  retention_hours: 48
+  db_path: "data/events.db"
+
+chat:
+  max_turns: 8                # Last N user/assistant conversation pairs sent back to the model
+  session_ttl_seconds: 1800   # Idle TTL before a chat session is dropped from memory
+  max_history: 8              # Recent events injected into the chat system prompt
+  chat_buffer_size: 5         # Frames sent per camera in a normal chat turn (stride-picked from the shared history buffer)
+  chat_interval_seconds: 1    # Target spacing (s) between those frames; floored at 1/history.fps (can't sample finer than the history sampler)
+  max_chat_images: 50         # Global cap on total images sent in one cross-stream chat turn across all cameras
+  tools_enabled: false        # enable query_events function-calling; unset = on for cloud, off for local
+  max_tool_calls: 3           # cap on agentic event-DB tool rounds per chat turn
+  history:
+    window_seconds: 100       # length of retained per-stream history for backward search
+    fps: 2                    # history sampling rate; buffer length = window_seconds * fps; sampler interval = 1/fps
+                              # history fps is limited to the stream_fps of the source (sidecar.sample_fps) — if history.fps > stream_fps, it gets duplicate frames.
+  search:
+    enabled: true             # backward frame sweep when the first pass returns NOT_FOUND
+    round_seconds: 8          # footage covered per sweep round (and the fast first-pass window)
+    window_frames: 16         # frames per camera per round (stride-picked; subject to max_chat_images)
+                              # limited to the history fps.
+    max_calls: 12             # hard cap on sweep rounds per turn
+    max_seconds: 45           # wall-clock cap per turn
+    found_min_confidence: 0.7 # reject a FOUND whose self-reported confidence (0-1) is below this; <=0 disables
+  preview:
+    enabled: true             # save a preview clip of the frames that produced a FOUND search result
+    dir: "data/clips"         # where FOUND preview clips are written; tests point this at a tmp dir
+    fps: 4                    # playback fps of a FRAMES-built preview -- used when no recorded segment
+                              # covers the FOUND window (local backend, a gap in the index, or an RTSP
+                              # source under smart-record). More search.window_frames -> smoother clip,
+                              # higher VLM cost. Ignored when real footage is cut instead.
+    ttl_seconds: 1800         # how long a preview clip is kept on disk (data/clips) before it is pruned
+
+segments:  # [deepstream only] full-fps recorded footage for search preview clips
+  enabled: true              # master toggle; recording happens in the sidecar, storage/retrieval here
+  retention_seconds: 300     # how long recorded segments (+ index entries) are kept before deletion.
+                             # Nothing can request footage older than this: the searchable history is
+                             # chat.history.window_seconds (100s), a search turn can take
+                             # chat.search.max_seconds (45s) before the clip lookup runs, plus
+                             # clip_padding_seconds (2s) and one sidecar record_seconds (8s) of
+                             # rotation lag -- ~155s worst case. 1800 stored ~12x more than any code
+                             # path could ever read, and every byte of it was copied and expired.
+  storage_backend: "local"   # "minio" | "local" -- where segment bytes are stored. "local" needs no MinIO service.
+  local_dir: "data/segments" # root directory for local-mode segment bytes; only read when storage_backend: "local"
+  clip_debug_logging: true   # log per-step timing (fetch, build) when constructing a FOUND preview clip; set false once the pipeline is confirmed stable
+  clip_padding_seconds: 2.0  # retrieval padding on each side of the FOUND window when looking up which segments to fetch (decoupled from chat.search.round_seconds)
+  clip_trim_enabled: false   # trim the concatenated clip to clip_trim_seconds of context on each end; false = always return the full concatenated clip
+  clip_trim_seconds: 1.0     # amount trimmed off each end when clip_trim_enabled: true; ignored otherwise
+  minio_endpoint: "minio:9000"     # compose service address; use localhost:9000 for a native (non-compose) run
+  minio_bucket: "iris-segments"    # created on startup if missing
+  minio_secure: false               # set true if MinIO is served over TLS
+  # minio_access_key / minio_secret_key: set via MINIO_ACCESS_KEY / MINIO_SECRET_KEY in .env, not committed here
+
+alerts:  # [deepstream only] preview clips attached to fired alerts
+  # Ask the VLM to adjudicate a fired fire/smoke alert -- is it really fire, or is it
+  # steam, vapour, exhaust, dust, a welding arc or a headlight? Deliberately NOT under
+  # zones.describe_*: fire is the one behaviour with no zone, so filing it there would
+  # mislead. Needs monitoring.vlm_enabled; forced off with a warning otherwise.
+  describe_fire: false
+  clip:
+    enabled: true           # global gate; no-op on the local backend (no segment recorder)
+    pad_seconds: 5.0         # X — the clip spans [T-X, T+X] around the fired moment, so ~10s
+    coalesce_seconds: 2.5    # a new alert within this of a queued job's anchor shares its clip;
+                             # keep below pad_seconds so coalesced alerts keep context both sides
+                             # coalescing is scoped to one zone, since a shared clip draws only one
+    draw_zones: true         # burn the fired zone's outline onto the clip, as a SECOND ffmpeg pass
+                             # over the finished file (build_clip's tuned cut is left untouched);
+                             # any failure keeps the un-overlaid clip rather than losing it
+    zone_free_kinds: [proximity]  # alert kinds whose clips leave the zone out (proximity clips show the
+                             # pair's masks and distance line instead)
+    ttl_seconds: 21600       # 6h — independent of chat.preview.ttl_seconds (30min)
+    max_wait_seconds: 20     # give up waiting for the recorder to cover the window; keep it above
+                             # pad_seconds + sidecar.yaml's record_seconds, since the segment holding
+                             # T+pad is only indexed once it rotates closed (startup warns if not)
+    queue_depth: 8           # max jobs held at once, queued and building together
+
+zones:  # per-stream intrusion-detection polygons, drawn in the frontend's zone editor
+  file_path: "data/zones_config.txt"           # where saved zones (pixel coords, keyed by stream id) are persisted
+  sidecar_config_path: "perception/pipeline/sidecar.yaml"  # read once per request for mux_width/mux_height, to convert 0-1 fractions to pixels
+  describe_intrusions: true            # feed frames from the live analysis buffer around a zone-intrusion alert to the VLM for a description
+                                       # both describe_* keys need monitoring.vlm_enabled: true -- a description IS a VLM
+                                       # call, so they are forced off (with a startup warning) when the VLM is disabled
+  describe_overcrowding: true   # own toggle, independent of describe_intrusions -- reuses
+                                  # describe_frame_count / describe_window_padding_seconds
+  describe_dwell: false                # own toggle, independent of describe_intrusions/describe_overcrowding
+  describe_wrong_way: false
+  describe_congestion: false
+  describe_abandoned_object: false
+  describe_fall: false                 # fall alerts are heuristic (see CLAUDE.md) -- off by default
+  describe_frame_count: 15               # frames sampled from the buffer window for the VLM call
+  describe_window_padding_seconds: 1.0  # how wide a slice of the live analysis buffer to search around the alert's pts, each side
+
+dedup:
+  enabled: false              # Disabled for local-only setup (no DashScope API key).
+                              # Set to true and backend: "local" with `pip install fastembed` for CPU-based dedup.
+  threshold: 0.93             # Cosine similarity threshold for COMMENT dedup (0–1; lower = stricter)
+  alert_threshold: 0.97       # Cosine similarity threshold for ALERT dedup; higher = only near-verbatim repeats suppressed
+  window_seconds: 10           # Only compare against a prior embedding if it was stored within this many seconds
+  backend: "api"              # "api" (DashScope text-embedding-v3) | "local" (fastembed, requires pip install fastembed)
+                              # NOTE: when api.backend is "local", set this to "local" to avoid the DashScope embedding call
+  model: "text-embedding-v3"  # Override embedding model; leave blank to use backend default
+
+preprocessing:          # [deepstream: IGNORED] — applied only in the local Camera; the sidecar encodes frames itself.
+  max_width: 768        # Resize frames to this width before encoding (aspect ratio preserved); 0 = disabled
+  clahe: False          # Apply CLAHE for low-light contrast enhancement
+  clahe_clip_limit: 2.0 # CLAHE contrast clip limit (higher = stronger, more noise risk)
+  clahe_tile_size: 8    # CLAHE tile grid size in pixels
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+
+logging:
+  level: INFO                 # root level for iris.* loggers
+  metrics_enabled: true       # periodic per-stream analysis status table (iris.metrics)
+  metrics_interval_seconds: 15
+  sidecar_level: INFO         # DeepStream sidecar logger level (read in the container)
+
+cv:   # YOLO enrichment. [deepstream: IGNORED — set enabled: false; the sidecar runs YOLO (config in perception/models/DeepStream-Yolo pgie + sidecar.yaml). Local backend only.]
+  enabled: True                  # set to true once ultralytics is installed
+  yolo_model: "yolo11n.pt"        # downloaded automatically on first use (~5 MB)
+  confidence: 0.4                # minimum detection confidence
+  annotate_frames: True          # draw bounding boxes on frames sent to the VLM
+  annotate_stream: False            # draw bounding boxes on the live MJPEG stream in the UI
+  stream_annotation_fps: 20       # frames per second to annotate for the stream (lower = less CPU, lower latency impact)
+  inference_width: 720            # resize frames to this width before inference; 0 = native
+
+  debug_log_path: "data/cv_debug.json"   # written every analysis cycle; cleared with the events clear button
+  debug_max_entries: 200                  # cap to avoid unbounded growth
+  debug_frame_path: "data/debug_frame.jpg"  # middle frame of each batch, always annotated; overwritten each cycle
+
+  # COCO class names to include in the metadata block; null = all classes
+  relevant_classes:
+    - car
+    - truck
+    - bus
+    - motorcycle
+    - bicycle
+    - person
+    - traffic light
+    - stop sign
+    - dog
+
+mtmc:  # Multi-camera vehicle tracking (cross-camera Re-ID + journey tracking)
+  enabled: false   # master switch for the tracking service, its API routes and the truck-tracking feed.
+                   # Off here so attendance/barber/fire never run it; the multicam presets turn it on.
+  cameras: ["cam-01", "cam-02", "cam-03", "cam-04", "cam-05"]  # camera IDs in traversal order
+  camera_names:
+    cam-01: Cam-41
+    cam-02: Cam-16
+    cam-03: Cam-52
+    cam-04: Cam-05
+    cam-05: Cam-23
+  topology:  # the five tracked cameras, connected both ways (must match sidecar mtmc.topology)
+    any: ["cam-01", "cam-02", "cam-03", "cam-04", "cam-05"]
+  rtsp_uris:  # RTSP URIs for appearance crop extraction (sidecar mux URLs)
+    cam-01: "rtsp://localhost:8554/cam-1"
+    cam-02: "rtsp://localhost:8554/cam-2"
+    cam-03: "rtsp://localhost:8554/cam-3"
+    cam-04: "rtsp://localhost:8554/cam-4"
+    cam-05: "rtsp://localhost:8554/cam-5"
+  min_travel_s: 20.0    # minimum seconds between cameras to consider a match
+  sim_threshold: 0.60   # minimum cosine similarity for cross-camera matching
+  embed_interval_s: 1.0 # seconds between embedding extraction passes
+  poll_interval_s: 1.0  # seconds between Redis poll cycles
+
+# Hazard Detection: upload an image or grab a camera frame, analyse it with the VLM
+# (/api/hazards/*). Needs monitoring.vlm_enabled. Off unless a deployment asks for it;
+# the multi-camera presets turn it on because the truck-tracking UI calls it.
+hazards:
+  enabled: false
+
+# Bridge to the truck-tracking platform (see app/truck_feed.py). Publishes what
+# each camera currently sees onto its Redis list `iris:camera-feed`. Vehicles
+# are published as a synthetic plate encoding the global id until plate OCR exists.
+# The tenant ids and camera IPs are placeholders until the platform side is registered.
+truck_feed:
+  enabled: false   # a multicam deployment turns this on (with mtmc.enabled)
+  redis_url: "redis://redis:6379/1"   # db 1 of this stack's Redis: where truck-tracking's API reads (its REDIS_URL)
+  queue_key: "iris:camera-feed"
+  company_id: "El-Mohandes"   # placeholder; non-UUID labels map to a stable UUIDv5. Or env TRUCK_FEED_COMPANY_ID
+  branch_id: "BRANCH-001"     # placeholder, same rule. Or env TRUCK_FEED_BRANCH_ID
+  interval_s: 2.0
+  visible_window_s: 5.0
+  journey_idle_timeout_minutes: 10   # unseen this long -> no longer "on site" (platform default 240)
+  camera_ips:           # our camera id -> IP registered in truck-tracking
+    cam-01: "192.168.1.11"
+    cam-02: "192.168.1.12"
+    cam-03: "192.168.1.13"
+    cam-04: "192.168.1.14"
+    cam-05: "192.168.1.15"
+
+# Origins of other UIs allowed to call this API from the browser (truck-tracking web).
+cors_origins:
+  - "http://localhost:5173"
+  - "http://127.0.0.1:5173"
+
+# Entrance/exit counting lines (drawn in the UI), per camera.
+line_count:
+  file_path: "data/count_lines.json"

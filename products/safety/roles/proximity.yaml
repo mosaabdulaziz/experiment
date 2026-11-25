@@ -1,0 +1,3 @@
+# Safety role "proximity": the proximity product's pipeline (YOLO26l-seg at 1280, depth check), unchanged.
+# Sources, the role and the common settings come from the controller (products/safety/safety.yaml).
+extends: ../../proximity/sidecar.yaml

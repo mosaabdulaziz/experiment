@@ -1,0 +1,3 @@
+# The depth check runs YOLO26m-depth through ONNX Runtime on the GPU (depth.py). Install after insightface (see
+# face_recognition), which would otherwise leave the CPU runtime shadowing it.
+onnxruntime-gpu>=1.19

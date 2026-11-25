@@ -1,0 +1,6 @@
+outs:
+- md5: deb20bbb1f6600f5068fabe1c8e3c765.dir
+  size: 3134432
+  nfiles: 941
+  hash: md5
+  path: ocr_finetune_crops

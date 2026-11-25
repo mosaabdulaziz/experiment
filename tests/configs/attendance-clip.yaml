@@ -1,0 +1,14 @@
+# TEST CONFIG (not a product): attendance on a recorded clip -- sidecar overlay. Plays ONE recorded clip instead of
+# the live cameras, so a run before a refactor can be compared with a run after
+# it on identical input (2026-09-22, monorepo restructure).
+#
+#   SIDECAR_CONFIG=tests/configs/attendance-clip.yaml just up cam-21
+#
+# The clip is data/uploads/face_detection_test001-elevator.mkv (~12.7 min),
+# published as raw-cam-21 by test_streamer. Results go to tests/baselines/.
+# Extends the ATTENDANCE overlay, so a baseline run uses the same rules the
+# product runs -- not just the shared defaults.
+extends: ../../products/attendance/sidecar.yaml
+
+sources:
+  - {id: cam-21, uri: "rtsp://go2rtc:8554/raw-cam-21", roles: [attendance], label: "Elevator"}

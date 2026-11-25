@@ -1,0 +1,5 @@
+outs:
+- md5: 0cc3670a130553cb158f6a05d523e530
+  size: 6525913
+  hash: md5
+  path: fine_tuned_plate_crops_day.zip

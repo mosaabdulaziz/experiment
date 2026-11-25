@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "best.onnx",
+  "sha256": "3474ad4689b4d5488a1e770c710f4da20d718e44a4379f023a692e7b7d16083f",
+  "size_bytes": 37901879,
+  "created_at": "2026-11-05T09:10:24+00:00",
+  "run_id": "0942a5d7b95e469cbc44a301b8757dcb",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "plate-detector",
+  "version": "1"
+}

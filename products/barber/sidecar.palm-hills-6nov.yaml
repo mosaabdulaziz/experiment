@@ -1,0 +1,9 @@
+# Barber sidecar for the 6 Nov recording run (2026-11-10; barber.palm-hills-6nov.yaml): the live site's six sources
+# (no ph-4), with that run's own crops root -- each service sweeps the crops its own DB does not reference.
+extends: sidecar.palm-hills-live.yaml
+
+modules:
+  appearance:
+    crops_dir: "/workspace/iris/data/barber/crops-palm-hills-6nov"
+  customer_faces:
+    crops_dir: "/workspace/iris/data/barber/crops-palm-hills-6nov"

@@ -1,0 +1,12 @@
+[property]
+enable=1
+config-width=1280
+config-height=720
+osd-mode=0
+
+[roi-filtering-stream-0]
+enable=1
+roi-z0=400;250;800;250;800;720;400;720
+roi-z1=150;300;700;300;700;700;150;700
+inverse-roi=0
+class-id=-1

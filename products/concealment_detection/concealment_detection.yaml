@@ -1,0 +1,47 @@
+# Concealment detection service configuration.
+# Thresholds follow the stored "Recommended Balanced" profile in
+# calibration/reports/calibration_results.json except dwell_min_s (2.0 here, 1.6 there)
+# and inward_min_torsos (0.12 here, absent from that run), which were set after it.
+redis_url: "redis://localhost:6379/0"
+host: "0.0.0.0"
+port: 8005
+data_dir: "data"
+zones_path: "zones.yaml"
+
+cameras:
+  - id: "cam-1"
+    location: "cam-1"
+
+detector:
+  min_track_s: 0.25
+  min_keypoints: 6
+  keypoint_conf_threshold: 0.30
+  min_box_height_px: 48.0
+  min_torso_px: 25.0
+  min_core_conf_enter: 0.30
+  min_core_conf_exit: 0.35
+  degrade_max_s: 1.0
+  recover_s: 0.4
+  lost_s: 1.5
+  camera_stale_s: 3.0
+  reid_max_gap_s: 1.5
+  reid_max_dist_torsos: 1.2
+  dwell_min_s: 2.0
+  short_track_grace_s: 1.5
+  reach_excursion_torsos: 0.32
+  reach_window_s: 2.5
+  inward_min_torsos: 0.12
+  body_zone_radius_torsos: 0.50
+  bag_zone_radius_torsos: 0.50
+  max_conceal_elbow_deg: 140.0
+  min_hold_s: 0.35
+  hidden_s: 0.40
+  hidden_conf_drop_fraction: 0.45
+  baseline_window_s: 2.0
+  cooldown_s: 8.0
+  emit_low_tier: false
+
+retention:
+  keep_candidates: 5000
+  review_days: 30
+  queue_maxsize: 128

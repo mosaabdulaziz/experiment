@@ -1,0 +1,6 @@
+# Generated from pyproject.toml (group `dev`) and uv.lock by tools/deps/root_exports.py. Do not edit:
+# change the group in pyproject.toml, then `just deps-lock`. DEPENDENCIES.md.
+pytest==9.2.0
+fakeredis==2.40.0
+dvc[s3,ssh]==3.67.1
+pyyaml==6.0.3

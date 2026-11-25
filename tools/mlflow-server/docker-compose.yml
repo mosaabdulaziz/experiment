@@ -1,0 +1,33 @@
+# The central MLflow server's backend store (sub-task 1 of the MLflow story; README.md beside this file).
+# Started by serverctl.sh as project `iris-mlflow`; only this container and its volume belong to it.
+#   - image pinned by digest (postgres 18.6; already on cmubuntu, so nothing is pulled)
+#   - 127.0.0.1 only: the MLflow server (a host process) is its only client
+#   - the password comes from $IRIS_MLFLOW_HOME/secrets/postgres.env (mode 600, never in the repo)
+name: iris-mlflow
+
+services:
+  postgres:
+    image: postgres:18@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336
+    container_name: iris-mlflow-postgres
+    env_file: ${IRIS_MLFLOW_HOME:?set IRIS_MLFLOW_HOME (serverctl.sh does)}/secrets/postgres.env
+    environment:
+      POSTGRES_USER: mlflow
+      POSTGRES_DB: mlflow                 # tracking + model registry; the basic-auth users live in mlflow_auth
+    ports:
+      - "127.0.0.1:15432:5432"
+    volumes:
+      - iris-mlflow-pgdata:/var/lib/postgresql          # PG 18 images keep PGDATA under /var/lib/postgresql/18/
+      - ./initdb:/docker-entrypoint-initdb.d:ro         # first start only: creates mlflow_auth
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mlflow -d mlflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+
+volumes:
+  iris-mlflow-pgdata:
+    name: iris-mlflow-pgdata

@@ -1,0 +1,32 @@
+# Barber service configuration. Environment overrides: REDIS_URL,
+# BARBER_DATA_DIR, BARBER_CONFIG (another file).
+
+# Reports (2026-10-15): the business and branch on a report and in its file name.
+# The model manifest (the same file as this site's sidecar yaml names): the kids car model is checked against it at
+# startup. Until it is generated and committed, a missing file only warns, unless MODEL_MANIFEST_REQUIRED=1.
+model_manifest: products/barber/models.manifest.bekky.json
+
+place: BekkyBarber
+branch: Madinty
+branch_slug: madinty
+# logo: data/<site>/logo.png   # the shop's logo on reports (png / jpg / svg); unset = a text wordmark
+
+redis_url: "redis://localhost:6379/0"
+# 2026-10-04: chair engine (project 3) live; rollback = engine: shop
+engine: chair
+
+data_dir: "data"                     # relative to products/barber/
+crops_dir: "../../data/barber/crops"   # the sidecar's customer_crops_dir (repo data/)
+
+# The sidecar's mux size -- the coordinate space of person_boxes on iris:meta
+# (sidecar.yaml mux_width/mux_height). Zones are normalized, only this follows it.
+frame:
+  width: 1280    # the camera's own 16:9 (was 1080: the mux squeezed the picture)
+  height: 720
+
+# Three overlapping cameras; zones pair them (see README "Zones"). The test
+# clips are the 109-min synced night footage (6540 s, train2/synced3; test_streamer CAM_FILES).
+cameras:
+  - {id: barber-c, clip_duration_s: 6540, clear_on_loop: true}
+  - {id: barber-l, clip_duration_s: 6540, clear_on_loop: true}
+  - {id: barber-r, clip_duration_s: 6540, clear_on_loop: true}

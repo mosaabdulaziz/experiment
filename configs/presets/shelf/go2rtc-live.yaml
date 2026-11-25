@@ -1,0 +1,21 @@
+# go2rtc for `just shelf-live-sim` (compose project shelflive): one pushed stream per camera of a live-<name>.yaml
+# (raw-<camera id>) and its browser copy (<camera id>). Same shape as configs/presets/ppe/go2rtc-live.yaml, without
+# WebRTC: the demo's video is the app's JPEG preview (pipeline_preview).
+log:
+  level: info
+api:
+  origin: "*"
+rtsp:
+  pkt_size: 1472
+ffmpeg:
+  bin: ffmpeg
+  h264: "-codec:v libx264 -g:v 30 -preset:v superfast -tune:v zerolatency -profile:v main -level:v 4.1"
+streams:
+  raw-cam-shelf-demo:
+  cam-shelf-demo:
+    - rtsp://127.0.0.1:8554/raw-cam-shelf-demo
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-shelf-demo#video=h264
+  raw-cam-shelf-test:
+  cam-shelf-test:
+    - rtsp://127.0.0.1:8554/raw-cam-shelf-test
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-shelf-test#video=h264

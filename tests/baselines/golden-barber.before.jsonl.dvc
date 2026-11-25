@@ -1,0 +1,5 @@
+outs:
+- md5: 9cc660353148d4500bf7804cb3273ca8
+  size: 582243
+  hash: md5
+  path: golden-barber.before.jsonl

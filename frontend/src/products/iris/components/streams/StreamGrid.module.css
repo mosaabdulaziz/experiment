@@ -1,0 +1,325 @@
+.wallWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  gap: 8px;
+}
+
+.wallToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.zonesApplying {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+.zonesApplyingDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+.pipelineBtn {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 5px 14px;
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid var(--glass-border);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s;
+}
+.pipelineBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.pipelineBtnStart {
+  background: var(--accent, #4ade80);
+  color: #000;
+}
+.pipelineBtnStart:hover:not(:disabled) {
+  opacity: 0.85;
+}
+.pipelineBtnStop {
+  background: var(--glass-bg-soft, rgba(255,255,255,0.06));
+  color: var(--text-soft, #94a3b8);
+}
+.pipelineBtnStop:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border-color: #f87171;
+}
+
+.zonesSwitch {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 6px 5px 4px;
+  border: none;
+  background: none;
+  color: var(--text-soft);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.zonesSwitch:hover {
+  color: var(--text);
+}
+.zonesSwitch[aria-checked='true'] {
+  color: var(--accent-soft);
+}
+.zonesSwitch:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.zonesSwitch:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+/* Preview settings: a button that slides its row of controls open to its left */
+.previewMenu {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 1 auto;
+  min-width: 0; /* gives up width to the toolbar's other controls: its row folds instead */
+}
+/* Laid out at its full size the moment it opens (no in-between wrapping) and wiped open from the button leftwards;
+   closing wipes it back, then gives its space up. */
+.previewPanel {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0 12px;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden; /* out of the tab order while closed */
+  clip-path: inset(0 0 0 100%);
+  transition:
+    clip-path 0.28s ease,
+    opacity 0.2s ease,
+    max-width 0s linear 0.28s,
+    max-height 0s linear 0.28s,
+    visibility 0s linear 0.28s;
+}
+.previewPanelOpen {
+  max-width: 820px;
+  max-height: 160px;
+  padding-right: 6px;
+  border-right: 1px solid var(--glass-border);
+  opacity: 1;
+  visibility: visible;
+  clip-path: inset(0 0 0 0);
+  transition:
+    clip-path 0.28s ease,
+    opacity 0.2s ease,
+    max-width 0s,
+    max-height 0s,
+    visibility 0s;
+}
+.previewToggle {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: var(--glass-bg-soft);
+  color: var(--text-soft);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.previewToggle:hover,
+.previewToggle[aria-expanded='true'] {
+  color: var(--accent-soft);
+  border-color: var(--accent);
+}
+.previewToggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.previewChevron {
+  transform: rotate(90deg); /* points left: the row opens that way */
+  transition: transform 0.3s ease;
+}
+.previewChevronOpen {
+  transform: rotate(-90deg);
+}
+.clipStyle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px;
+  color: var(--text-soft);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.segmented {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: var(--surface3);
+}
+.segment {
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.segment:hover:not(.segmentOn):not(:disabled) {
+  color: var(--text);
+}
+.segment:disabled {
+  cursor: progress;
+}
+.segment:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.segmentOn {
+  color: #1b0a02;
+  background: var(--accent);
+}
+.lineRange {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px;
+  color: var(--text-soft);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.lineRangeInput {
+  width: 96px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.lineRangeValue {
+  min-width: 52px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-soft);
+  text-align: right;
+}
+.zonesSwitchLabel {
+  white-space: nowrap;
+}
+.zonesSwitchTrack {
+  position: relative;
+  flex-shrink: 0;
+  width: 34px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--surface3);
+  border: 1px solid var(--glass-border);
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+.zonesSwitchTrackOn {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.zonesSwitchKnob {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translateY(-50%);
+  transition: transform 0.18s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.zonesSwitchTrackOn .zonesSwitchKnob {
+  transform: translate(16px, -50%);
+}
+
+.wall {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.row {
+  display: flex;
+  gap: 12px;
+  /* Height + flex are set inline by StreamGrid (fixed rows in a scrollable
+     wall, windowed so only on-screen tiles are mounted). */
+  min-height: 0;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  min-height: 0;
+  border: 1px dashed var(--glass-border);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg-soft);
+  padding: 40px;
+}
+.emptyIcon {
+  opacity: 0.8;
+  filter: drop-shadow(0 0 14px var(--accent-glow));
+}
+.emptyTitle {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
+}
+.emptyBody {
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--text-dim);
+}
+
+

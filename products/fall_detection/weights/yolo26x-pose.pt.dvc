@@ -1,0 +1,5 @@
+outs:
+- md5: b8b86fc4a6fb6f71bb2b01a3817dc3ba
+  size: 126242553
+  hash: md5
+  path: yolo26x-pose.pt

@@ -1,0 +1,3325 @@
+{
+ "commits": [
+  "6e3deb1e",
+  "af128f7d"
+ ],
+ "created": "2026-11-18T13:16:13+00:00",
+ "extra_runs": {
+  "build_and_unit": 1,
+  "capacity": 1,
+  "capacity_noise": "proxy: attendance's ceiling measured 3x, 0.2 % spread; 3 % floor",
+  "ppe_fall_shelf": 3,
+  "proximity": "2 warm runs of 3 (the first built the engine)"
+ },
+ "fingerprint": {
+  "arch": "x86_64",
+  "cpu": "AMD Ryzen 7 250 w/ Radeon 780M Graphics",
+  "cpu_count": 16,
+  "cuda": "13.2",
+  "driver": "595.99.02",
+  "git": {
+   "branch": "feat/soak-sampler",
+   "commit": "6e3deb1eb0c6caa8ba1021f6e8d7e7d5fd4ab563",
+   "dirty": false,
+   "short": "6e3deb1e"
+  },
+  "gpu": "NVIDIA GeForce RTX 5050 Laptop GPU",
+  "hostname": "mmtayee-LOQ-15AHP10",
+  "jetson": false,
+  "machine_id": "rtx-5050-laptop",
+  "os": "Linux-7.0.0-43-generic-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "ram_gb": 14.9,
+  "vram_mib": 8151
+ },
+ "golden": {
+  "attendance": {
+   "deterministic": true,
+   "entries": 796,
+   "output": "golden/attendance.jsonl",
+   "sha256": "50aa84934f490313bb72c75f2e9bbee85b8f69af848ff9977ebfc540f601aa2b",
+   "statuses": {
+    "IDENTICAL": 11
+   }
+  },
+  "barber": {
+   "deterministic": true,
+   "entries": 1146,
+   "output": "golden/barber.jsonl",
+   "sha256": "fa66adee4257c47cbd7db22b1a45ed8bd4cd24c92ec177e0777acd40baff2a6e",
+   "statuses": {
+    "1 difference(s)": 11
+   }
+  },
+  "barber-faces": {
+   "deterministic": false,
+   "entries": 2632,
+   "output": "golden/barber-faces.jsonl",
+   "sha256": "c036a4d23de553d351440f73492d7f00875dee20cb4a5b96fd48dba30701a1ed",
+   "statuses": {
+    "1 difference(s)": 8,
+    "SEMANTICALLY EQUAL": 3
+   }
+  },
+  "fall_detection": {
+   "deterministic": false,
+   "entries": 214,
+   "output": "golden/fall_detection.jsonl",
+   "sha256": "1c264b7c0bbc2be19d0de1f4a7813c6185e2f3013aa7807c18d093a8320580bd",
+   "statuses": {
+    "no baseline": 3
+   }
+  },
+  "fire": {
+   "deterministic": true,
+   "entries": 624,
+   "output": "golden/fire.jsonl",
+   "sha256": "6c3eea937deedb675b1cd982827bbf7e595eb8287cb2d9e010a04877e2374be5",
+   "statuses": {
+    "SEMANTICALLY EQUAL": 11
+   }
+  },
+  "multicam": {
+   "deterministic": true,
+   "entries": 168,
+   "output": "golden/multicam.jsonl",
+   "sha256": "147e885359982dbafe9db39b740fd10cf7873fb1fae160ec2802ad568336a367",
+   "statuses": {
+    "2 difference(s)": 11
+   }
+  },
+  "ppe": {
+   "deterministic": false,
+   "entries": 207,
+   "output": "golden/ppe.jsonl",
+   "sha256": "0107652dcd1d4bb26af43dcd63f9fdca446d6550f0fb96a5afbbb059ee09bf30",
+   "statuses": {
+    "no baseline": 3
+   }
+  },
+  "proximity": {
+   "deterministic": true,
+   "entries": 437,
+   "output": "golden/proximity.jsonl",
+   "sha256": "6b240b54da2fe2366f2177981a9c279a85b50d3af8120532fb47ca58158cb581",
+   "statuses": {
+    "SEMANTICALLY EQUAL": 2
+   }
+  },
+  "shelf": {
+   "deterministic": false,
+   "entries": 214,
+   "output": "golden/shelf.jsonl",
+   "sha256": "1e4e129a1d8703462feb0be34d409f29e0c65d60ad296d01ad7dbe5c5031801e",
+   "statuses": {
+    "no baseline": 3
+   }
+  },
+  "zones": {
+   "deterministic": true,
+   "entries": 806,
+   "output": "golden/zones.jsonl",
+   "sha256": "38f1b0c7e475caad6db958fc488ebfc604486cd19868d2cd1a769e64056e0beb",
+   "statuses": {
+    "IDENTICAL": 11
+   }
+  }
+ },
+ "machine_id": "rtx-5050-laptop",
+ "metrics": {
+  "build.frontend.css_bytes": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "bytes",
+   "value": 217088
+  },
+  "build.frontend.js_bytes": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "bytes",
+   "value": 1448700
+  },
+  "build.frontend.largest_chunk_bytes": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "bytes",
+   "value": 577031
+  },
+  "build.frontend.total_bytes": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "bytes",
+   "value": 2000438
+  },
+  "build.image.iris-deepstream-sidecar-mtmc:latest": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "bytes",
+   "value": 39898385112
+  },
+  "build.image.iris-deepstream-sidecar:latest": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "bytes",
+   "value": 31238597172
+  },
+  "build.image.iris-iris:latest": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "bytes",
+   "value": 4490899768
+  },
+  "build.lock.perception/uv.lock": {
+   "direction": "equal",
+   "kind": "efficiency",
+   "unit": "packages",
+   "value": 88
+  },
+  "build.lock.products/attendance/uv.lock": {
+   "direction": "equal",
+   "kind": "efficiency",
+   "unit": "packages",
+   "value": 22
+  },
+  "build.lock.products/barber/uv.lock": {
+   "direction": "equal",
+   "kind": "efficiency",
+   "unit": "packages",
+   "value": 39
+  },
+  "build.lock.products/fall_detection/uv.lock": {
+   "direction": "equal",
+   "kind": "efficiency",
+   "unit": "packages",
+   "value": 112
+  },
+  "build.lock.tools/mtmc-research/uv.lock": {
+   "direction": "equal",
+   "kind": "efficiency",
+   "unit": "packages",
+   "value": 94
+  },
+  "build.lock.tools/onnx-export/uv.lock": {
+   "direction": "equal",
+   "kind": "efficiency",
+   "unit": "packages",
+   "value": 64
+  },
+  "build.lock.uv.lock": {
+   "direction": "equal",
+   "kind": "efficiency",
+   "unit": "packages",
+   "value": 183
+  },
+  "capacity.attendance.ceiling_fps": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 28.5
+  },
+  "capacity.attendance@af5.realtime_cameras": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "cameras",
+   "value": 4
+  },
+  "capacity.barber.ceiling_fps": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 93.95
+  },
+  "capacity.barber@af5.realtime_cameras": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "cameras",
+   "value": 8
+  },
+  "capacity.fall_detection.ceiling_fps": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 17.9
+  },
+  "capacity.fall_detection@af5.realtime_cameras": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "cameras",
+   "value": 1
+  },
+  "capacity.fire.ceiling_fps": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 30.6
+  },
+  "capacity.fire@af5.realtime_cameras": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "cameras",
+   "value": 4
+  },
+  "capacity.ppe.ceiling_fps": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 25.0
+  },
+  "capacity.ppe@af5.realtime_cameras": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "cameras",
+   "value": 4
+  },
+  "capacity.proximity.ceiling_fps": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 76.95
+  },
+  "capacity.proximity@af5.realtime_cameras": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "cameras",
+   "value": 4
+  },
+  "capacity.shelf.ceiling_fps": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 29.2
+  },
+  "capacity.shelf@af5.realtime_cameras": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "cameras",
+   "value": 4
+  },
+  "capacity.zones.ceiling_fps": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 28.8
+  },
+  "capacity.zones@af5.realtime_cameras": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "cameras",
+   "value": 4
+  },
+  "counters.attendance.dram_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.08
+  },
+  "counters.attendance.dram_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.099
+  },
+  "counters.attendance.gpu_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 58.0
+  },
+  "counters.attendance.gr_engine_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.689
+  },
+  "counters.attendance.gr_engine_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.748
+  },
+  "counters.attendance.mem_ctrl_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 13.0
+  },
+  "counters.attendance.nvdec_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.attendance.nvjpg_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.attendance.power_w.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 54.74
+  },
+  "counters.attendance.sm_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.61
+  },
+  "counters.attendance.sm_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.664
+  },
+  "counters.attendance.sm_occupancy.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.129
+  },
+  "counters.attendance.sm_occupancy.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.144
+  },
+  "counters.attendance.tensor_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.003
+  },
+  "counters.attendance.tensor_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.026
+  },
+  "counters.barber-faces.dram_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.098
+  },
+  "counters.barber-faces.dram_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.109
+  },
+  "counters.barber-faces.gpu_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 34.0
+  },
+  "counters.barber-faces.gr_engine_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.509
+  },
+  "counters.barber-faces.gr_engine_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.535
+  },
+  "counters.barber-faces.mem_ctrl_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 12.0
+  },
+  "counters.barber-faces.nvdec_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.barber-faces.nvjpg_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.barber-faces.power_w.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 36.52
+  },
+  "counters.barber-faces.sm_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.444
+  },
+  "counters.barber-faces.sm_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.465
+  },
+  "counters.barber-faces.sm_occupancy.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.154
+  },
+  "counters.barber-faces.sm_occupancy.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.161
+  },
+  "counters.barber-faces.tensor_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.09
+  },
+  "counters.barber-faces.tensor_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.096
+  },
+  "counters.barber.dram_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.057
+  },
+  "counters.barber.dram_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.059
+  },
+  "counters.barber.gpu_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 27.0
+  },
+  "counters.barber.gr_engine_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.372
+  },
+  "counters.barber.gr_engine_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.401
+  },
+  "counters.barber.mem_ctrl_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 8.0
+  },
+  "counters.barber.nvdec_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.barber.nvjpg_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.barber.power_w.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 27.99
+  },
+  "counters.barber.sm_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.332
+  },
+  "counters.barber.sm_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.356
+  },
+  "counters.barber.sm_occupancy.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.121
+  },
+  "counters.barber.sm_occupancy.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.132
+  },
+  "counters.barber.tensor_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.059
+  },
+  "counters.barber.tensor_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.061
+  },
+  "counters.fall_detection.dram_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.163
+  },
+  "counters.fall_detection.dram_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.167
+  },
+  "counters.fall_detection.gpu_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 98.5
+  },
+  "counters.fall_detection.gr_engine_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.978
+  },
+  "counters.fall_detection.gr_engine_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.985
+  },
+  "counters.fall_detection.mem_ctrl_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 27.0
+  },
+  "counters.fall_detection.nvdec_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.fall_detection.nvjpg_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.fall_detection.power_w.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 59.755
+  },
+  "counters.fall_detection.sm_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.929
+  },
+  "counters.fall_detection.sm_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.939
+  },
+  "counters.fall_detection.sm_occupancy.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.179
+  },
+  "counters.fall_detection.sm_occupancy.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.183
+  },
+  "counters.fall_detection.tensor_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.17
+  },
+  "counters.fall_detection.tensor_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.178
+  },
+  "counters.fire.dram_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.122
+  },
+  "counters.fire.dram_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.133
+  },
+  "counters.fire.gpu_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 96.0
+  },
+  "counters.fire.gr_engine_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.955
+  },
+  "counters.fire.gr_engine_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.981
+  },
+  "counters.fire.mem_ctrl_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 19.0
+  },
+  "counters.fire.nvdec_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 1.0
+  },
+  "counters.fire.nvjpg_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.fire.power_w.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 59.77
+  },
+  "counters.fire.sm_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.875
+  },
+  "counters.fire.sm_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.909
+  },
+  "counters.fire.sm_occupancy.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.176
+  },
+  "counters.fire.sm_occupancy.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.187
+  },
+  "counters.fire.tensor_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.004
+  },
+  "counters.fire.tensor_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.016
+  },
+  "counters.multicam.dram_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.0
+  },
+  "counters.multicam.dram_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.014
+  },
+  "counters.multicam.gpu_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 6.0
+  },
+  "counters.multicam.gr_engine_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.143
+  },
+  "counters.multicam.gr_engine_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.156
+  },
+  "counters.multicam.mem_ctrl_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 3.0
+  },
+  "counters.multicam.nvdec_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 1.0
+  },
+  "counters.multicam.nvjpg_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.multicam.power_w.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 10.69
+  },
+  "counters.multicam.sm_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.0
+  },
+  "counters.multicam.sm_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.625
+  },
+  "counters.multicam.sm_occupancy.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.0
+  },
+  "counters.multicam.sm_occupancy.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.213
+  },
+  "counters.multicam.tensor_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.0
+  },
+  "counters.multicam.tensor_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.141
+  },
+  "counters.ppe.dram_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.177
+  },
+  "counters.ppe.dram_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.192
+  },
+  "counters.ppe.gpu_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 97.5
+  },
+  "counters.ppe.gr_engine_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.978
+  },
+  "counters.ppe.gr_engine_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.981
+  },
+  "counters.ppe.mem_ctrl_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 25.0
+  },
+  "counters.ppe.nvdec_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 1.0
+  },
+  "counters.ppe.nvjpg_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.ppe.power_w.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 59.76
+  },
+  "counters.ppe.sm_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.924
+  },
+  "counters.ppe.sm_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.932
+  },
+  "counters.ppe.sm_occupancy.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.198
+  },
+  "counters.ppe.sm_occupancy.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.203
+  },
+  "counters.ppe.tensor_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.091
+  },
+  "counters.ppe.tensor_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.111
+  },
+  "counters.proximity.dram_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.032
+  },
+  "counters.proximity.dram_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.0645
+  },
+  "counters.proximity.gpu_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 28.5
+  },
+  "counters.proximity.gr_engine_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.3215
+  },
+  "counters.proximity.gr_engine_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.3445
+  },
+  "counters.proximity.mem_ctrl_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 11.5
+  },
+  "counters.proximity.nvdec_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 1.5
+  },
+  "counters.proximity.nvjpg_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.proximity.power_w.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 25.47
+  },
+  "counters.proximity.sm_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.1705
+  },
+  "counters.proximity.sm_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.5055
+  },
+  "counters.proximity.sm_occupancy.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.066
+  },
+  "counters.proximity.sm_occupancy.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.1985
+  },
+  "counters.proximity.tensor_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.0295
+  },
+  "counters.proximity.tensor_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.0825
+  },
+  "counters.shelf.dram_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.143
+  },
+  "counters.shelf.dram_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.151
+  },
+  "counters.shelf.gpu_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 98.0
+  },
+  "counters.shelf.gr_engine_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.969
+  },
+  "counters.shelf.gr_engine_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.975
+  },
+  "counters.shelf.mem_ctrl_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 22.0
+  },
+  "counters.shelf.nvdec_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.shelf.nvjpg_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.shelf.power_w.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 59.76
+  },
+  "counters.shelf.sm_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.897
+  },
+  "counters.shelf.sm_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.909
+  },
+  "counters.shelf.sm_occupancy.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.187
+  },
+  "counters.shelf.sm_occupancy.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.193
+  },
+  "counters.shelf.tensor_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.019
+  },
+  "counters.shelf.tensor_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.02
+  },
+  "counters.zones.dram_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.08
+  },
+  "counters.zones.dram_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.099
+  },
+  "counters.zones.gpu_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 58.0
+  },
+  "counters.zones.gr_engine_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.683
+  },
+  "counters.zones.gr_engine_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.743
+  },
+  "counters.zones.mem_ctrl_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 12.0
+  },
+  "counters.zones.nvdec_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.zones.nvjpg_util.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 0.0
+  },
+  "counters.zones.power_w.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "",
+   "value": 54.225
+  },
+  "counters.zones.sm_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.61
+  },
+  "counters.zones.sm_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.664
+  },
+  "counters.zones.sm_occupancy.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.129
+  },
+  "counters.zones.sm_occupancy.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.143
+  },
+  "counters.zones.tensor_active.median": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.003
+  },
+  "counters.zones.tensor_active.p95": {
+   "direction": "both",
+   "kind": "efficiency",
+   "unit": "ratio",
+   "value": 0.026
+  },
+  "golden.attendance.entries": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "entries",
+   "value": 796
+  },
+  "golden.attendance.ran": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "",
+   "value": true
+  },
+  "golden.barber-faces.entries": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "entries",
+   "value": 2634
+  },
+  "golden.barber-faces.ran": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "",
+   "value": true
+  },
+  "golden.barber.entries": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "entries",
+   "value": 1143
+  },
+  "golden.barber.ran": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "",
+   "value": true
+  },
+  "golden.fall_detection.entries": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "entries",
+   "value": 214
+  },
+  "golden.fall_detection.ran": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "",
+   "value": true
+  },
+  "golden.fire.entries": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "entries",
+   "value": 624
+  },
+  "golden.fire.ran": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "",
+   "value": true
+  },
+  "golden.multicam.entries": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "entries",
+   "value": 168
+  },
+  "golden.multicam.ran": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "",
+   "value": true
+  },
+  "golden.ppe.entries": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "entries",
+   "value": 210
+  },
+  "golden.ppe.ran": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "",
+   "value": true
+  },
+  "golden.proximity.entries": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "entries",
+   "value": 437.0
+  },
+  "golden.proximity.ran": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "",
+   "value": true
+  },
+  "golden.shelf.entries": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "entries",
+   "value": 214
+  },
+  "golden.shelf.ran": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "",
+   "value": true
+  },
+  "golden.zones.entries": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "entries",
+   "value": 806
+  },
+  "golden.zones.ran": {
+   "direction": "equal",
+   "kind": "correctness",
+   "unit": "",
+   "value": true
+  },
+  "runtime.attendance.boot_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 8.0
+  },
+  "runtime.attendance.cpu_stage.probe.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.291
+  },
+  "runtime.attendance.cpu_stage.probe.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 4.46
+  },
+  "runtime.attendance.cpu_stage.probe.dets.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.003
+  },
+  "runtime.attendance.cpu_stage.probe.dets.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.01
+  },
+  "runtime.attendance.cpu_stage.probe.frame_objects.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.035
+  },
+  "runtime.attendance.cpu_stage.probe.frame_objects.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.07
+  },
+  "runtime.attendance.cpu_stage.probe.map_bgr.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.009
+  },
+  "runtime.attendance.cpu_stage.probe.map_bgr.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 3.9
+  },
+  "runtime.attendance.cpu_stage.publish.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 25.642
+  },
+  "runtime.attendance.cpu_stage.publish.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 52.22
+  },
+  "runtime.attendance.cpu_stage.publish.draw.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 24.816
+  },
+  "runtime.attendance.cpu_stage.publish.draw.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 50.43
+  },
+  "runtime.attendance.cpu_stage.publish.redis.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.846
+  },
+  "runtime.attendance.cpu_stage.publish.redis.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 1.52
+  },
+  "runtime.attendance.cpu_stage.rotation.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.06
+  },
+  "runtime.attendance.cpu_stage.rotation.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.0
+  },
+  "runtime.attendance.cpu_stage.upload.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.927
+  },
+  "runtime.attendance.cpu_stage.upload.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.03
+  },
+  "runtime.attendance.drops": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "count",
+   "value": 0.0
+  },
+  "runtime.attendance.flight_cpu_pct": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 63
+  },
+  "runtime.attendance.fps_median": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 20.0
+  },
+  "runtime.attendance.fps_p10": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 20.0
+  },
+  "runtime.attendance.gpu_added_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1936
+  },
+  "runtime.attendance.main_loop_lag_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 0.0
+  },
+  "runtime.attendance.res.cgroup_peak_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1481.6
+  },
+  "runtime.attendance.res.cpu_cores": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "cores",
+   "value": 0.6215
+  },
+  "runtime.attendance.res.rss_anon_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1269.75
+  },
+  "runtime.attendance.res.threads": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "threads",
+   "value": 109.0
+  },
+  "runtime.attendance.stage.gpu.decode.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 25.95
+  },
+  "runtime.attendance.stage.gpu.decode.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 40.27
+  },
+  "runtime.attendance.stage.gpu.infer.pgie.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 26.83
+  },
+  "runtime.attendance.stage.gpu.infer.pgie.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 53.2
+  },
+  "runtime.attendance.stage.gpu.infer.pgie_fire.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.74
+  },
+  "runtime.attendance.stage.gpu.infer.pgie_fire.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 3.45
+  },
+  "runtime.attendance.stage.gpu.infer.sgie_face.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 17.79
+  },
+  "runtime.attendance.stage.gpu.infer.sgie_face.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 35.18
+  },
+  "runtime.attendance.stage.gpu.jpeg.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 23.36
+  },
+  "runtime.attendance.stage.gpu.jpeg.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 46.58
+  },
+  "runtime.attendance.stages_sum": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 178.45
+  },
+  "runtime.barber-faces.boot_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 9.7
+  },
+  "runtime.barber-faces.cpu_stage.probe.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.428
+  },
+  "runtime.barber-faces.cpu_stage.probe.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 3.58
+  },
+  "runtime.barber-faces.cpu_stage.probe.dets.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.396
+  },
+  "runtime.barber-faces.cpu_stage.probe.dets.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.31
+  },
+  "runtime.barber-faces.cpu_stage.probe.frame_objects.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.351
+  },
+  "runtime.barber-faces.cpu_stage.probe.frame_objects.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.27
+  },
+  "runtime.barber-faces.cpu_stage.probe.map_bgr.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.878
+  },
+  "runtime.barber-faces.cpu_stage.probe.map_bgr.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 1.56
+  },
+  "runtime.barber-faces.cpu_stage.publish.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.808
+  },
+  "runtime.barber-faces.cpu_stage.publish.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.67
+  },
+  "runtime.barber-faces.cpu_stage.publish.redis.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.799
+  },
+  "runtime.barber-faces.cpu_stage.publish.redis.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.66
+  },
+  "runtime.barber-faces.cpu_stage.rotation.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.071
+  },
+  "runtime.barber-faces.cpu_stage.rotation.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.0
+  },
+  "runtime.barber-faces.cpu_stage.upload.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.964
+  },
+  "runtime.barber-faces.cpu_stage.upload.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.03
+  },
+  "runtime.barber-faces.drops": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "count",
+   "value": 0.0
+  },
+  "runtime.barber-faces.flight_cpu_pct": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 68
+  },
+  "runtime.barber-faces.fps_median": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 25.0
+  },
+  "runtime.barber-faces.fps_p10": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 25.0
+  },
+  "runtime.barber-faces.gpu_added_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 2978
+  },
+  "runtime.barber-faces.main_loop_lag_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 0.0
+  },
+  "runtime.barber-faces.res.cgroup_peak_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1586.3
+  },
+  "runtime.barber-faces.res.cpu_cores": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "cores",
+   "value": 0.6705
+  },
+  "runtime.barber-faces.res.rss_anon_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1401.75
+  },
+  "runtime.barber-faces.res.threads": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "threads",
+   "value": 128.5
+  },
+  "runtime.barber-faces.stage.gpu.decode.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 41.89
+  },
+  "runtime.barber-faces.stage.gpu.decode.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 76.22
+  },
+  "runtime.barber-faces.stage.gpu.infer.pgie.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 9.79
+  },
+  "runtime.barber-faces.stage.gpu.infer.pgie.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 19.61
+  },
+  "runtime.barber-faces.stage.gpu.infer.sgie_face.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 21.9
+  },
+  "runtime.barber-faces.stage.gpu.infer.sgie_face.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 43.93
+  },
+  "runtime.barber-faces.stages_sum": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 140.03
+  },
+  "runtime.barber.boot_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 9.8
+  },
+  "runtime.barber.cpu_stage.probe.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.02
+  },
+  "runtime.barber.cpu_stage.probe.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 2.55
+  },
+  "runtime.barber.cpu_stage.probe.dets.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.28
+  },
+  "runtime.barber.cpu_stage.probe.dets.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.22
+  },
+  "runtime.barber.cpu_stage.probe.frame_objects.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.234
+  },
+  "runtime.barber.cpu_stage.probe.frame_objects.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.19
+  },
+  "runtime.barber.cpu_stage.probe.map_bgr.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.885
+  },
+  "runtime.barber.cpu_stage.probe.map_bgr.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.79
+  },
+  "runtime.barber.cpu_stage.publish.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.723
+  },
+  "runtime.barber.cpu_stage.publish.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.59
+  },
+  "runtime.barber.cpu_stage.publish.redis.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.714
+  },
+  "runtime.barber.cpu_stage.publish.redis.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.58
+  },
+  "runtime.barber.cpu_stage.rotation.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.071
+  },
+  "runtime.barber.cpu_stage.rotation.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.0
+  },
+  "runtime.barber.cpu_stage.upload.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.01
+  },
+  "runtime.barber.cpu_stage.upload.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.03
+  },
+  "runtime.barber.drops": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "count",
+   "value": 0.0
+  },
+  "runtime.barber.flight_cpu_pct": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 41
+  },
+  "runtime.barber.fps_median": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 25.0
+  },
+  "runtime.barber.fps_p10": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 25.0
+  },
+  "runtime.barber.gpu_added_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 2824
+  },
+  "runtime.barber.main_loop_lag_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 0.0
+  },
+  "runtime.barber.res.cgroup_peak_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1705.3
+  },
+  "runtime.barber.res.cpu_cores": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "cores",
+   "value": 0.3855
+  },
+  "runtime.barber.res.rss_anon_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1386.25
+  },
+  "runtime.barber.res.threads": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "threads",
+   "value": 128.0
+  },
+  "runtime.barber.stage.gpu.decode.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 42.6
+  },
+  "runtime.barber.stage.gpu.decode.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 78.06
+  },
+  "runtime.barber.stage.gpu.infer.pgie.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 10.24
+  },
+  "runtime.barber.stage.gpu.infer.pgie.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 20.52
+  },
+  "runtime.barber.stage.gpu.infer.sgie_face.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 22.69
+  },
+  "runtime.barber.stage.gpu.infer.sgie_face.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 45.56
+  },
+  "runtime.barber.stages_sum": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 144.97
+  },
+  "runtime.fall_detection.boot_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 6.8
+  },
+  "runtime.fall_detection.cpu_stage.probe.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.023
+  },
+  "runtime.fall_detection.cpu_stage.probe.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 1.44
+  },
+  "runtime.fall_detection.cpu_stage.probe.dets.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.227
+  },
+  "runtime.fall_detection.cpu_stage.probe.dets.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.13
+  },
+  "runtime.fall_detection.cpu_stage.probe.frame_objects.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.202
+  },
+  "runtime.fall_detection.cpu_stage.probe.frame_objects.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.12
+  },
+  "runtime.fall_detection.cpu_stage.probe.map_bgr.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.127
+  },
+  "runtime.fall_detection.cpu_stage.probe.map_bgr.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 1.11
+  },
+  "runtime.fall_detection.cpu_stage.publish.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 53.877
+  },
+  "runtime.fall_detection.cpu_stage.publish.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 32.23
+  },
+  "runtime.fall_detection.cpu_stage.publish.draw.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 58.541
+  },
+  "runtime.fall_detection.cpu_stage.publish.draw.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 31.35
+  },
+  "runtime.fall_detection.cpu_stage.publish.redis.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.941
+  },
+  "runtime.fall_detection.cpu_stage.publish.redis.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.58
+  },
+  "runtime.fall_detection.cpu_stage.rotation.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.1
+  },
+  "runtime.fall_detection.cpu_stage.rotation.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.0
+  },
+  "runtime.fall_detection.cpu_stage.upload.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.4
+  },
+  "runtime.fall_detection.cpu_stage.upload.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.01
+  },
+  "runtime.fall_detection.drops": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "count",
+   "value": 0.0
+  },
+  "runtime.fall_detection.fps_median": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 17.55
+  },
+  "runtime.fall_detection.fps_p10": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 17.4
+  },
+  "runtime.fall_detection.gpu_added_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 2960
+  },
+  "runtime.fall_detection.stage.gpu.decode.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 33.68
+  },
+  "runtime.fall_detection.stage.gpu.decode.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 49.94
+  },
+  "runtime.fall_detection.stage.gpu.infer.pgie.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 31.85
+  },
+  "runtime.fall_detection.stage.gpu.infer.pgie.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 42.62
+  },
+  "runtime.fall_detection.stage.gpu.infer.sgie_pose.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 36.3
+  },
+  "runtime.fall_detection.stage.gpu.infer.sgie_pose.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 44.24
+  },
+  "runtime.fall_detection.stage.gpu.jpeg.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 53.7
+  },
+  "runtime.fall_detection.stage.gpu.jpeg.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 71.84
+  },
+  "runtime.fall_detection.stages_sum": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 207.48
+  },
+  "runtime.fire.boot_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 7.9
+  },
+  "runtime.fire.cpu_stage.probe.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.231
+  },
+  "runtime.fire.cpu_stage.probe.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 3.62
+  },
+  "runtime.fire.cpu_stage.probe.dets.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.003
+  },
+  "runtime.fire.cpu_stage.probe.dets.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.01
+  },
+  "runtime.fire.cpu_stage.probe.frame_objects.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.031
+  },
+  "runtime.fire.cpu_stage.probe.frame_objects.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.09
+  },
+  "runtime.fire.cpu_stage.probe.map_bgr.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.925
+  },
+  "runtime.fire.cpu_stage.probe.map_bgr.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 2.85
+  },
+  "runtime.fire.cpu_stage.publish.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 25.796
+  },
+  "runtime.fire.cpu_stage.publish.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 50.76
+  },
+  "runtime.fire.cpu_stage.publish.draw.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 33.157
+  },
+  "runtime.fire.cpu_stage.publish.draw.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 49.27
+  },
+  "runtime.fire.cpu_stage.publish.redis.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.753
+  },
+  "runtime.fire.cpu_stage.publish.redis.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 1.46
+  },
+  "runtime.fire.cpu_stage.rotation.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.078
+  },
+  "runtime.fire.cpu_stage.rotation.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.0
+  },
+  "runtime.fire.cpu_stage.upload.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.05
+  },
+  "runtime.fire.cpu_stage.upload.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.03
+  },
+  "runtime.fire.drops": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "count",
+   "value": 0.0
+  },
+  "runtime.fire.flight_cpu_pct": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 57
+  },
+  "runtime.fire.fps_median": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 30.0
+  },
+  "runtime.fire.fps_p10": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 30.0
+  },
+  "runtime.fire.gpu_added_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1932
+  },
+  "runtime.fire.main_loop_lag_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 0.0
+  },
+  "runtime.fire.res.cgroup_peak_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1415.95
+  },
+  "runtime.fire.res.cpu_cores": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "cores",
+   "value": 0.566
+  },
+  "runtime.fire.res.rss_anon_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1213.7
+  },
+  "runtime.fire.res.threads": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "threads",
+   "value": 110.0
+  },
+  "runtime.fire.stage.gpu.decode.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 24.01
+  },
+  "runtime.fire.stage.gpu.decode.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 43.22
+  },
+  "runtime.fire.stage.gpu.infer.pgie.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 27.8
+  },
+  "runtime.fire.stage.gpu.infer.pgie.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 72.82
+  },
+  "runtime.fire.stage.gpu.infer.pgie_fire.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 6.53
+  },
+  "runtime.fire.stage.gpu.infer.pgie_fire.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 17.97
+  },
+  "runtime.fire.stage.gpu.infer.sgie_face.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 16.5
+  },
+  "runtime.fire.stage.gpu.infer.sgie_face.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 38.26
+  },
+  "runtime.fire.stage.gpu.jpeg.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 31.45
+  },
+  "runtime.fire.stage.gpu.jpeg.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 47.76
+  },
+  "runtime.fire.stages_sum": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 221.23
+  },
+  "runtime.multicam.boot_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 19.7
+  },
+  "runtime.multicam.cpu_stage.probe.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.38
+  },
+  "runtime.multicam.cpu_stage.probe.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 2.77
+  },
+  "runtime.multicam.cpu_stage.probe.dets.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.083
+  },
+  "runtime.multicam.cpu_stage.probe.dets.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.07
+  },
+  "runtime.multicam.cpu_stage.probe.frame_objects.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.049
+  },
+  "runtime.multicam.cpu_stage.probe.frame_objects.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.04
+  },
+  "runtime.multicam.cpu_stage.probe.map_bgr.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.198
+  },
+  "runtime.multicam.cpu_stage.probe.map_bgr.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 1.84
+  },
+  "runtime.multicam.cpu_stage.publish.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.114
+  },
+  "runtime.multicam.cpu_stage.publish.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.09
+  },
+  "runtime.multicam.cpu_stage.publish.redis.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.086
+  },
+  "runtime.multicam.cpu_stage.publish.redis.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.07
+  },
+  "runtime.multicam.cpu_stage.rotation.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.107
+  },
+  "runtime.multicam.cpu_stage.rotation.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.0
+  },
+  "runtime.multicam.cpu_stage.upload.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.117
+  },
+  "runtime.multicam.cpu_stage.upload.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.03
+  },
+  "runtime.multicam.drops": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "count",
+   "value": 0.0
+  },
+  "runtime.multicam.flight_cpu_pct": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 29
+  },
+  "runtime.multicam.fps_median": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 20.0
+  },
+  "runtime.multicam.fps_p10": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 19.9
+  },
+  "runtime.multicam.gpu_added_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1402
+  },
+  "runtime.multicam.main_loop_lag_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 0.0
+  },
+  "runtime.multicam.res.cgroup_peak_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1771.25
+  },
+  "runtime.multicam.res.cpu_cores": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "cores",
+   "value": 0.2845
+  },
+  "runtime.multicam.res.rss_anon_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1329.05
+  },
+  "runtime.multicam.res.threads": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "threads",
+   "value": 82.0
+  },
+  "runtime.multicam.stage.gpu.decode.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 38.38
+  },
+  "runtime.multicam.stage.gpu.decode.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 52.91
+  },
+  "runtime.multicam.stage.gpu.infer.pgie.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.14
+  },
+  "runtime.multicam.stage.gpu.infer.pgie.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 4.26
+  },
+  "runtime.multicam.stage.gpu.infer.sgie_plate.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 45.43
+  },
+  "runtime.multicam.stage.gpu.infer.sgie_plate.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 89.06
+  },
+  "runtime.multicam.stages_sum": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 144.84
+  },
+  "runtime.ppe.boot_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 6.7
+  },
+  "runtime.ppe.drops": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "count",
+   "value": 0.0
+  },
+  "runtime.ppe.fps_median": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 25.05
+  },
+  "runtime.ppe.fps_p10": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 25.0
+  },
+  "runtime.ppe.gpu_added_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1294
+  },
+  "runtime.ppe.stage.gpu.decode.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 24.65
+  },
+  "runtime.ppe.stage.gpu.decode.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 46.83
+  },
+  "runtime.ppe.stage.gpu.infer.pgie.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 16.51
+  },
+  "runtime.ppe.stage.gpu.infer.pgie.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 27.2
+  },
+  "runtime.ppe.stage.gpu.infer.pgie_ppe.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 13.99
+  },
+  "runtime.ppe.stage.gpu.infer.pgie_ppe.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 19.07
+  },
+  "runtime.ppe.stage.gpu.jpeg.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 44.89
+  },
+  "runtime.ppe.stage.gpu.jpeg.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 65.87
+  },
+  "runtime.ppe.stages_sum": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 158.77
+  },
+  "runtime.proximity.boot_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 6.55
+  },
+  "runtime.proximity.cpu_stage.probe.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.461
+  },
+  "runtime.proximity.cpu_stage.probe.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 4.945
+  },
+  "runtime.proximity.cpu_stage.probe.dets.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.0925
+  },
+  "runtime.proximity.cpu_stage.probe.dets.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.07
+  },
+  "runtime.proximity.cpu_stage.probe.frame_objects.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.1585
+  },
+  "runtime.proximity.cpu_stage.probe.frame_objects.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.185
+  },
+  "runtime.proximity.cpu_stage.probe.map_bgr.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.1865
+  },
+  "runtime.proximity.cpu_stage.probe.map_bgr.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 1.005
+  },
+  "runtime.proximity.cpu_stage.publish.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.291
+  },
+  "runtime.proximity.cpu_stage.publish.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.225
+  },
+  "runtime.proximity.cpu_stage.publish.redis.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.255
+  },
+  "runtime.proximity.cpu_stage.publish.redis.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.195
+  },
+  "runtime.proximity.cpu_stage.rotation.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.1
+  },
+  "runtime.proximity.cpu_stage.rotation.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.0
+  },
+  "runtime.proximity.cpu_stage.upload.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.47
+  },
+  "runtime.proximity.cpu_stage.upload.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.035
+  },
+  "runtime.proximity.drops": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "count",
+   "value": 0.0
+  },
+  "runtime.proximity.flight_cpu_pct": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.0
+  },
+  "runtime.proximity.fps_median": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 20.0
+  },
+  "runtime.proximity.fps_p10": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 20.0
+  },
+  "runtime.proximity.gpu_added_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1526.0
+  },
+  "runtime.proximity.main_loop_lag_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 0.0
+  },
+  "runtime.proximity.res.cgroup_peak_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 915.6
+  },
+  "runtime.proximity.res.cpu_cores": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "cores",
+   "value": 0.493
+  },
+  "runtime.proximity.res.rss_anon_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 607.65
+  },
+  "runtime.proximity.res.threads": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "threads",
+   "value": 74.0
+  },
+  "runtime.proximity.stage.gpu.decode.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 35.16
+  },
+  "runtime.proximity.stage.gpu.decode.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 46.385
+  },
+  "runtime.proximity.stage.gpu.infer.pgie.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 12.97
+  },
+  "runtime.proximity.stage.gpu.infer.pgie.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 25.935
+  },
+  "runtime.proximity.stages_sum": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 72.32
+  },
+  "runtime.shelf.boot_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 6.6
+  },
+  "runtime.shelf.cpu_stage.probe.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.172
+  },
+  "runtime.shelf.cpu_stage.probe.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 2.35
+  },
+  "runtime.shelf.cpu_stage.probe.dets.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.032
+  },
+  "runtime.shelf.cpu_stage.probe.dets.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.02
+  },
+  "runtime.shelf.cpu_stage.probe.frame_objects.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.072
+  },
+  "runtime.shelf.cpu_stage.probe.frame_objects.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.05
+  },
+  "runtime.shelf.cpu_stage.probe.map_bgr.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.504
+  },
+  "runtime.shelf.cpu_stage.probe.map_bgr.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.67
+  },
+  "runtime.shelf.cpu_stage.publish.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 35.372
+  },
+  "runtime.shelf.cpu_stage.publish.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 21.37
+  },
+  "runtime.shelf.cpu_stage.publish.draw.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 47.415
+  },
+  "runtime.shelf.cpu_stage.publish.draw.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 20.97
+  },
+  "runtime.shelf.cpu_stage.publish.redis.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.666
+  },
+  "runtime.shelf.cpu_stage.publish.redis.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.41
+  },
+  "runtime.shelf.drops": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "count",
+   "value": 0.0
+  },
+  "runtime.shelf.fps_median": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 29.05
+  },
+  "runtime.shelf.fps_p10": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 29.0
+  },
+  "runtime.shelf.gpu_added_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1064
+  },
+  "runtime.shelf.stage.gpu.decode.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 29.12
+  },
+  "runtime.shelf.stage.gpu.decode.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 53.73
+  },
+  "runtime.shelf.stage.gpu.infer.pgie.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 16.33
+  },
+  "runtime.shelf.stage.gpu.infer.pgie.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 26.23
+  },
+  "runtime.shelf.stage.gpu.infer.pgie_shelf.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 12.66
+  },
+  "runtime.shelf.stage.gpu.infer.pgie_shelf.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 19.67
+  },
+  "runtime.shelf.stage.gpu.jpeg.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 44.2
+  },
+  "runtime.shelf.stage.gpu.jpeg.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 61.73
+  },
+  "runtime.shelf.stages_sum": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 161.13
+  },
+  "runtime.zones.boot_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 7.9
+  },
+  "runtime.zones.cpu_stage.probe.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 2.354
+  },
+  "runtime.zones.cpu_stage.probe.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 4.77
+  },
+  "runtime.zones.cpu_stage.probe.dets.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.003
+  },
+  "runtime.zones.cpu_stage.probe.dets.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.01
+  },
+  "runtime.zones.cpu_stage.probe.frame_objects.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.062
+  },
+  "runtime.zones.cpu_stage.probe.frame_objects.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.13
+  },
+  "runtime.zones.cpu_stage.probe.map_bgr.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.971
+  },
+  "runtime.zones.cpu_stage.probe.map_bgr.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 3.97
+  },
+  "runtime.zones.cpu_stage.publish.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 25.626
+  },
+  "runtime.zones.cpu_stage.publish.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 52.66
+  },
+  "runtime.zones.cpu_stage.publish.draw.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 24.906
+  },
+  "runtime.zones.cpu_stage.publish.draw.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 51.04
+  },
+  "runtime.zones.cpu_stage.publish.redis.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.832
+  },
+  "runtime.zones.cpu_stage.publish.redis.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 1.61
+  },
+  "runtime.zones.cpu_stage.rotation.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 0.067
+  },
+  "runtime.zones.cpu_stage.rotation.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.0
+  },
+  "runtime.zones.cpu_stage.upload.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.927
+  },
+  "runtime.zones.cpu_stage.upload.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 0.03
+  },
+  "runtime.zones.drops": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "count",
+   "value": 0.0
+  },
+  "runtime.zones.flight_cpu_pct": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 64
+  },
+  "runtime.zones.fps_median": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 20.0
+  },
+  "runtime.zones.fps_p10": {
+   "direction": "higher",
+   "kind": "efficiency",
+   "unit": "fps",
+   "value": 20.0
+  },
+  "runtime.zones.gpu_added_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1936
+  },
+  "runtime.zones.main_loop_lag_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 0.0
+  },
+  "runtime.zones.res.cgroup_peak_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1455.15
+  },
+  "runtime.zones.res.cpu_cores": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "cores",
+   "value": 0.6275
+  },
+  "runtime.zones.res.rss_anon_mib": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "MiB",
+   "value": 1266.95
+  },
+  "runtime.zones.res.threads": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "threads",
+   "value": 109.0
+  },
+  "runtime.zones.stage.gpu.decode.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 17.86
+  },
+  "runtime.zones.stage.gpu.decode.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 27.05
+  },
+  "runtime.zones.stage.gpu.infer.pgie.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 26.96
+  },
+  "runtime.zones.stage.gpu.infer.pgie.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 53.47
+  },
+  "runtime.zones.stage.gpu.infer.pgie_fire.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 1.75
+  },
+  "runtime.zones.stage.gpu.infer.pgie_fire.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 3.49
+  },
+  "runtime.zones.stage.gpu.infer.sgie_face.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 17.48
+  },
+  "runtime.zones.stage.gpu.infer.sgie_face.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 34.55
+  },
+  "runtime.zones.stage.gpu.jpeg.avg_ms": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "ms",
+   "value": 23.52
+  },
+  "runtime.zones.stage.gpu.jpeg.busy": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 46.93
+  },
+  "runtime.zones.stages_sum": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "%",
+   "value": 165.88
+  },
+  "unit.core.failing": {
+   "direction": "zero",
+   "kind": "correctness",
+   "unit": "tests",
+   "value": 0
+  },
+  "unit.core.tests": {
+   "direction": "higher",
+   "kind": "correctness",
+   "unit": "tests",
+   "value": 2810
+  },
+  "unit.core.time_s": {
+   "direction": "lower",
+   "kind": "efficiency",
+   "unit": "s",
+   "value": 91.8
+  }
+ },
+ "noisy": false,
+ "reference": {
+  "capacity": "capacity-reference.json",
+  "manifest": "reference-manifest.json",
+  "soak": "soak-reference.json (first 3 h soak) and soak-reference-2.json (second), variability in soak-variability.txt"
+ },
+ "runs": 11,
+ "schema": "regress.baseline.v1"
+}

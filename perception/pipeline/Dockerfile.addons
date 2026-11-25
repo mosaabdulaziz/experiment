@@ -1,0 +1,10 @@
+# Thin layer for a server whose existing sidecar image predates the Re-ID dependencies:
+# adds what perception/pipeline/Dockerfile installs after the DeepStream/pyds build (CUDA torch for the
+# MTMC Re-ID, the fast-reid helpers, the LLM clients) without rebuilding the 30 GB base.
+#   docker build -t scale-deepstream-sidecar:latest \
+#     --build-arg BASE=surveillance-camera-sys-deepstream-sidecar:latest - < perception/pipeline/Dockerfile.addons
+ARG BASE=surveillance-camera-sys-deepstream-sidecar:latest
+FROM ${BASE}
+RUN uv pip install --no-cache torch torchvision --index-url https://download.pytorch.org/whl/cu130
+RUN uv pip install --no-cache yacs tabulate termcolor fvcore iopath scikit-learn
+RUN uv pip install --no-cache ollama openai

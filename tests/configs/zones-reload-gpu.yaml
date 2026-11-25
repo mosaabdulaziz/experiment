@@ -1,0 +1,20 @@
+# TEST CONFIG (not a product): the zones live-reload validation (tools/zones/validate_reload.py). Two short local
+# clips, each run by its own shard replica (IRIS_SHARD_COUNT=2: cam-a -> deepstream-sidecar, cam-b ->
+# deepstream-sidecar-1), so a zone edit has exactly one owning worker and one bystander. Small detector, no recording,
+# no preview: only detection, tracking and nvdsanalytics run. The zones module's roi_probe writes the ROI labels
+# nvdsanalytics put on each analyzed frame to iris:zones:roi_probe:<camera>, which is what the script times.
+extends: ../../perception/pipeline/sidecar.yaml
+
+pgie_config: "/workspace/iris/perception/models/DeepStream-Yolo/config_infer_primary_yolo11.txt"   # yolo11s, FP16, b1
+file_loop: true            # the clips repeat for as long as the run takes
+record_enabled: false
+recorder: "none"
+pipeline_preview: false
+
+modules:
+  zones:
+    roi_probe: true
+
+sources:
+  - {id: cam-a, uri: "file:///workspace/iris/data/uploads/attendance/enter-3.mp4", label: "reload cam a"}
+  - {id: cam-b, uri: "file:///workspace/iris/data/uploads/attendance/enter-4.mp4", label: "reload cam b"}

@@ -1,0 +1,14 @@
+# TEST CONFIG (not a product): attendance on the 6 s bus-cabin clip, with the employees enrolled FROM that clip
+# (`just attendance-enroll-video`), so detection, tracking and recognition are all exercised on the same video.
+# Use:   just attendance-enroll-video      # once: builds "Person 1..N" from the faces in the clip (backs up the old roster)
+#        SIDECAR_CONFIG=tests/configs/attendance-bus.yaml IRIS_PRODUCT=attendance just up cam-22
+extends: ../../products/attendance/sidecar.yaml
+
+sources:
+  - {id: cam-22, uri: "rtsp://go2rtc:8554/raw-cam-22", roles: [attendance], label: "Bus cabin"}
+
+# The farthest person in this clip has a ~21 px face, under face_detect's default floor of 24 px, so it was enrolled
+# but never seen live. 16 px lets it through (recognition then runs on an upscaled crop: face_recognition.enhancement).
+modules:
+  face_detect:
+    min_pixels: 16

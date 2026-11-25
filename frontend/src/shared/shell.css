@@ -1,0 +1,21 @@
+/* Only the product switcher. Everything else a product sees is its own
+   stylesheet -- the shell must not decide how a product looks. */
+.productSwitch {
+  display: flex;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #0f172a;
+  font-family: system-ui, sans-serif;
+}
+.productSwitch button {
+  border: 0;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 13px;
+  color: #cbd5e1;
+  background: transparent;
+  cursor: pointer;
+}
+.productSwitch button:hover { background: #1e293b; color: #f1f5f9; }
+.productSwitch .productSwitchActive { background: #2563eb; color: #fff; }

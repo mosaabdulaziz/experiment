@@ -1,0 +1,5 @@
+outs:
+- md5: 4ee3af67bf9196ba1979eb5cc6cfc1a4
+  size: 86511772
+  hash: md5
+  path: staff_dinov2_s_palm_r3.onnx

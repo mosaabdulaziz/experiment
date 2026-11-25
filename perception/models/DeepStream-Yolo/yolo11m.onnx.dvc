@@ -1,0 +1,5 @@
+outs:
+- md5: 20157e50c11e4323d73cfaeffaa267d2
+  size: 80563312
+  hash: md5
+  path: yolo11m.onnx

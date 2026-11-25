@@ -1,0 +1,6 @@
+outs:
+- md5: 3955267f8de9c8bcc07af75c01ec8d67.dir
+  size: 86325046
+  nfiles: 288
+  hash: md5
+  path: rtx-5050-laptop

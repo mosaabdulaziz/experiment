@@ -1,0 +1,5 @@
+outs:
+- md5: 80248d427976241cbd1343889ed132b3
+  size: 174383860
+  hash: md5
+  path: w600k_r50.onnx

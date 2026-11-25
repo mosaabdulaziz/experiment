@@ -1,0 +1,298 @@
+# What runs before a change may be merged.
+#
+# The failure this exists to catch is the one this repo has already had: a
+# change to the shared perception layer merges cleanly and silently changes
+# ANOTHER product's behaviour (barber's face-ownership rule changed
+# attendance's face matching, 2026-09). Nobody runs every product by hand, so
+# the server does.
+#
+# Needs a runner: GitLab executes nothing by itself. If pipelines sit in
+# "pending", no runner is registered -- Settings -> CI/CD -> Runners. Either
+# enable shared runners, or install gitlab-runner on a machine with the docker
+# executor. These jobs only need Python and Node; no GPU, no cameras, no Redis
+# (the tests use fakeredis and recorded fixtures).
+
+stages: [test]
+
+# Run for merge requests, and for the branches we treat as trunk. Without this,
+# every push to every branch runs a pipeline and the queue fills with work
+# nobody is waiting on.
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH == "integration/monorepo"
+
+# Paths that belong to everyone. A change here can break any product, so every
+# product's job runs -- being clever about skipping them is how a shared-layer
+# regression reaches main.
+.shared_paths: &shared_paths
+  - perception/**/*
+  - app/**/*
+  - tests/**/*
+  - test_streamer/**/*
+  - docker-compose*.yml
+  - Dockerfile
+  - justfile
+  - pyproject.toml
+  - uv.lock
+  - tools/**/*
+  - .gitlab-ci.yml
+
+default:
+  interruptible: true   # a newer push cancels the older run; nobody waits on stale results
+
+# Every Python environment below is installed from a committed uv.lock (DEPENDENCIES.md), with the one pinned uv.
+# `uv sync --locked` installs exactly the locked versions (hash-checked) and FAILS when the lock no longer matches its
+# pyproject.toml, instead of quietly re-locking as a plain `uv sync` would.
+.install_uv: &install_uv pip install --quiet uv==0.13.6   # the pinned uv (DEPENDENCIES.md, "uv")
+
+# ── The locks are current (DEPENDENCIES.md) ───────────────────────────────────
+# A requirements file or pyproject.toml changed without `just deps-lock` fails here. `uv lock --check` resolves
+# nothing: it compares each lock with its pyproject.toml (a 3.12 project makes uv fetch a 3.12 interpreter first).
+# The two scripts check what uv cannot see: the sidecar's groups against the requirements.txt files and the
+# Dockerfile, and the root's requirements*.txt against its lock.
+deps-locks:
+  stage: test
+  image: python:3.11-slim
+  rules:
+    - changes: ["**/pyproject.toml", "**/uv.lock", "**/requirements*.txt", tools/deps/**/*, Dockerfile,
+                perception/pipeline/Dockerfile, justfile, .gitlab-ci.yml]
+  variables:
+    UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
+  before_script:
+    - *install_uv
+  script:
+    - python tools/deps/perception_groups.py --check
+    - python tools/deps/root_exports.py --check
+    - for d in . perception products/attendance products/barber products/fall_detection tools/onnx-export
+               tools/mtmc-research tools/mlflow-server; do
+        echo "== $d"; (cd "$d" && uv lock --check) || exit 1; done
+
+# ── Renovate's merge requests: no major version slipped into a lock ──────────
+# Renovate holds them back itself (renovate.json5, postUpgradeTasks); this is the check that it did, against the
+# target branch's locks. A major update is a deliberate merge request by a person (DEPENDENCIES.md, "Updates").
+deps-majors:
+  stage: test
+  image: python:3.11-slim
+  rules:
+    - if: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^renovate\//
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq --no-install-recommends git
+  script:
+    - git fetch --quiet origin "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+    - python tools/deps/hold_majors.py --check --base "origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+
+# The bot's configuration is valid (the same Renovate version the runner uses: deps/renovate-runner.gitlab-ci.yml).
+renovate-config:
+  stage: test
+  image:
+    name: ghcr.io/renovatebot/renovate:44.160.1@sha256:6db9b39ad1b8256adf85d2e02b6d63c0a0e865b4e6188d3de45241ccbdb4c44f
+    entrypoint: [""]
+  rules:
+    - changes: [renovate.json5, deps/renovate-runner.gitlab-ci.yml]
+  script:
+    - renovate-config-validator --strict renovate.json5
+
+# ── The repo's own suite: pipeline settings, app, products' declarations ──────
+core-tests:
+  stage: test
+  image: python:3.11-slim
+  rules:
+    - changes: *shared_paths
+    - changes: [products/**/*]
+  variables:
+    UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
+  cache:
+    # Keyed on the lock: the cache is reused until the lock changes, and
+    # rebuilt when it does. Keyed on the branch instead, every branch would pay
+    # for its own download.
+    key:
+      files: [uv.lock]
+    paths: [.cache/uv]
+  before_script:
+    # ffmpeg is a dependency too, and not a Python one: clip building and frame
+    # extraction shell out to it. Measured 2026-09-23 -- without it, 31 of the
+    # 800 tests (about 2,500 on 2026-11-10) fail in python:3.11-slim while passing on a developer machine
+    # that happens to have ffmpeg installed. That is the "works on my machine"
+    # gap, and the reason this pipeline was tried in a clean container before
+    # being committed.
+    # git too, which the slim image lacks: MLflow run lineage records the commit,
+    # branch and dirty state (mtmc/tracking/_lineage.py), and the MLflow tests
+    # build temporary git repos. Measured 2026-11-15 in python:3.11-slim on a
+    # depth-20 detached clone -- without it, 3 failed + 54 errors; with it, all pass.
+    # Faster later: build an image with ffmpeg + these packages once, push it to
+    # this project's container registry, and name it as `image:` here. Then a
+    # job starts instead of installing.
+    - apt-get update -qq && apt-get install -y -qq --no-install-recommends ffmpeg git
+    - *install_uv
+    # The root lock's `test` group (pyproject.toml): the app's versions, nothing heavier.
+    - uv sync --quiet --locked --only-group test
+  script:
+    # --junitxml: GitLab shows failing tests in the merge request itself,
+    # instead of making the reviewer read a log.
+    # test_streamer/ is the clip streamer the test runs depend on; it had tests nobody ran
+    - uv run --no-sync python -m pytest tests test_streamer -q --junitxml=report.xml
+  artifacts:
+    when: always          # a failed run is exactly when the report is wanted
+    paths: [report.xml]   # also as a plain file: regress-cpu reads it instead of running the suite again
+    reports:
+      junit: report.xml
+    expire_in: 1 week
+
+# ── Regression harness, CPU part (benchmarks/SCORECARD.md, issue #174) ───────────────────────────────────────
+# Reads what core-tests and frontend already produced (the junit file, the bundle) and the locks, and writes one results
+# file: test counts and times, bundle size, packages per lock. It runs no test again. It fails only when a test that is
+# not in benchmarks/known_failures.txt fails; whether a size or a time grew beyond its tolerance needs the stored
+# baseline and comes with the compare command (task "compare command, merge request workflow and gate validation").
+# The GPU part (golden replays, GPU cost) is `just regress` on a GPU machine (#86 automates it).
+regress-cpu:
+  stage: test
+  image: python:3.11-slim
+  needs:
+    - core-tests
+    - job: frontend
+      optional: true       # it only runs when frontend/ changed; without it the bundle is reported as not built
+  rules:
+    - changes: *shared_paths
+    - changes: [products/**/*, frontend/**/*, tools/regress/**/*, benchmarks/**/*]
+  script:
+    - PYTHONPATH=tools python -m regress run --only unit,build --unit-suites core --unit-junit core=report.xml --no-frontend-build --out regress-cpu.json
+  artifacts:
+    when: always
+    paths: [regress-cpu.json]
+    expire_in: 1 week
+
+# ── Barber's own suite, in its own environment ───────────────────────────────
+# Its dependencies are its own (products/barber/pyproject.toml), which is the
+# point of a product owning its folder.
+barber-tests:
+  stage: test
+  image: python:3.11-slim
+  rules:
+    - changes: *shared_paths
+    - changes: [products/barber/**/*]
+  variables:
+    UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
+  cache:
+    key:
+      files: [products/barber/uv.lock]
+    paths: [.cache/uv]
+  before_script:
+    - *install_uv
+  script:
+    - cd products/barber
+    - uv sync --quiet --locked
+    - uv run --no-sync python -m pytest -q --junitxml=../../report-barber.xml
+  artifacts:
+    when: always
+    reports:
+      junit: report-barber.xml
+    expire_in: 1 week
+
+# ── Attendance: its locked environment installs and its service imports ──────
+# Its behaviour is tested by the repo's suite (tests/test_attendance_*.py); this
+# checks the environment the host process runs from (products/attendance/uv.lock).
+attendance-service:
+  stage: test
+  image: python:3.11-slim
+  rules:
+    - changes: *shared_paths
+    - changes: [products/attendance/**/*]
+  variables:
+    UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
+  cache:
+    key:
+      files: [products/attendance/uv.lock]
+    paths: [.cache/uv]
+  before_script:
+    - *install_uv
+  script:
+    - cd products/attendance
+    - uv sync --quiet --locked
+    - uv run --no-sync python -c "import server"
+
+# ── Fall detection's own suite, in its own environment ───────────────────────
+# Only on its own changes: it never imports the platform's code (only its Redis
+# contracts, which its tests replay from fixtures), and its environment is
+# ~2.75 GB of CUDA torch wheels. Tests marked real_weights skip without the
+# checkpoints, which CI does not have.
+fall-detection-tests:
+  stage: test
+  image: python:3.11-slim
+  rules:
+    - changes: [products/fall_detection/**/*, .gitlab-ci.yml]
+  variables:
+    UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
+    UV_HTTP_TIMEOUT: "600"   # the CUDA wheels are hundreds of MB each
+  cache:
+    key:
+      files: [products/fall_detection/uv.lock]
+    paths: [.cache/uv]
+  before_script:
+    # opencv-contrib-python is the GUI build: it loads libGL and glib, which the slim image lacks
+    - apt-get update -qq && apt-get install -y -qq --no-install-recommends libgl1 libglib2.0-0
+    - *install_uv
+  script:
+    - cd products/fall_detection
+    - uv sync --quiet --locked
+    - uv run --no-sync python -m pytest -q --junitxml=../../report-fall.xml
+  artifacts:
+    when: always
+    reports:
+      junit: report-fall.xml
+    expire_in: 1 week
+
+# ── The dashboards: type-check and build all three products ──────────────────
+# There are no frontend tests yet; a build that type-checks is still the check
+# that catches a rename, a bad import or a product that no longer compiles.
+frontend:
+  stage: test
+  image: node:20-slim
+  rules:
+    - changes: [frontend/**/*, .gitlab-ci.yml]
+  cache:
+    key:
+      files: [frontend/package-lock.json]
+    paths: [frontend/.npm]
+  before_script:
+    - cd frontend
+    - npm ci --cache .npm --prefer-offline --no-audit --no-fund
+  script:
+    - npm run build     # tsc -b && vite build: type errors fail the job
+  artifacts:
+    paths: [frontend/dist]   # regress-cpu measures the bundle
+    expire_in: 1 day
+
+# ── Versioned data (DATA.md) ────────────────────────────────────────────
+# Offline: every .dvc pointer belongs to a group in data/catalog.yaml, so nothing is versioned
+# without a use case and a place in DATA.md.
+data-catalog:
+  stage: test
+  image: python:3.11-slim
+  rules:
+    - changes: ["**/*.dvc", dvc.yaml, dvc.lock, data/catalog.yaml, tools/data/**/*]
+  variables:
+    UV_CACHE_DIR: "$CI_PROJECT_DIR/.cache/uv"
+  before_script:
+    - *install_uv
+  script:
+    - uv run --locked --isolated --only-group data python tools/data/catalog.py check
+
+# A merge request that changes a pointer must have pushed the bytes (`just data-push`); otherwise
+# the next person's `dvc pull` fails. Needs the CI variable RCLONE_CONFIG_B64 (base64 of an rclone.conf
+# with the remote `iris-onedrive`), so it may fail on a missing secret without blocking the merge until
+# that exists. After the MinIO switch, replace the script with `dvc status -c`.
+dvc-pointers:
+  stage: test
+  image: python:3.11-slim
+  allow_failure: true
+  rules:
+    - changes: ["**/*.dvc", dvc.lock]
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq --no-install-recommends rclone
+    - *install_uv
+    - '[ -n "$RCLONE_CONFIG_B64" ] || { echo "RCLONE_CONFIG_B64 is not set: cannot reach the data store" >&2; exit 1; }'
+    - mkdir -p ~/.config/rclone && echo "$RCLONE_CONFIG_B64" | base64 -d > ~/.config/rclone/rclone.conf
+  script:
+    - uv run --locked --isolated --only-group data python tools/data/check_pushed.py --rclone iris-onedrive:IRIS/repo-data/dvc-store

@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "yolo26l-seg-736x1280.onnx",
+  "sha256": "872d9f83a05632337bcea8cdf2e25dc3a49ef824469f165dece489c211de35ba",
+  "size_bytes": 112231285,
+  "created_at": "2026-11-15T12:19:52+00:00",
+  "run_id": "4ae642860df5422fa3086344d3d2fbf4",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "a7a036afd2dbd1caab0897a14534305fba1bcfcc",
+  "registered_model": "person-segmenter",
+  "version": "2"
+}

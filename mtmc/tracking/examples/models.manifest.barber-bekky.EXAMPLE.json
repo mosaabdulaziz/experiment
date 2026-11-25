@@ -1,0 +1,161 @@
+{
+  "_EXAMPLE_ONLY": "NOT A REAL MANIFEST. The shape `python -m mtmc.tracking.manifest generate --product barber --site bekky` writes to products/barber/models.manifest.bekky.json, for docs and tests. No registry version exists yet (no central MLflow server): versions and run ids are placeholders, and sha256 values are real only where the repo pins them (staff .json, models.*.sha256, justfile, buffalo_l pins, git-tracked files); the rest are zeros. buffalo_l (face-recognizer) is under DVC at perception/models/insightface/models/buffalo_l since 2026-11-05.",
+  "schema": 1,
+  "product": "barber",
+  "site": "bekky",
+  "generated_at": "2026-11-04T00:00:00+00:00",
+  "generated_from_commit": "example",
+  "tracking_uri": "https://mlflow.example.invalid",
+  "models": [
+    {
+      "path": "models/reid/swin_tiny_market1501_aicity156_featuredim256.onnx",
+      "registered_model": "person-reid",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "37b008d887495d5fbad31c72aadbf381c5456cb619e0e2a9c246a6d48a2932ff",
+      "size_bytes": 113893579,
+      "loaded_by": "modules.appearance.reid_spec=tao_swin_t"
+    },
+    {
+      "path": "models/tracker/resnet50_market1501_aicity156.onnx",
+      "registered_model": "tracker-reid",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "0e21d09278508ec835955f422a9fdd3cd59b2a6ecdef98d705f388f33cebac2b",
+      "size_bytes": 96398132,
+      "loaded_by": "tracker_config -> ReID.onnxFile (only when reidType != 0)"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo-Face/labels.txt",
+      "registered_model": "face-detector",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "98d57c25a2bed283c090bc2508078faff041262880bec9b6b744e6372d4a5f09",
+      "size_bytes": 5,
+      "loaded_by": "modules.face_detect.config -> labelfile-path"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo-Face/yolov8n-face.onnx",
+      "registered_model": "face-detector",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "size_bytes": 12957356,
+      "loaded_by": "modules.face_detect.config -> onnx-file"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo-Seg/labels.txt",
+      "registered_model": "person-segmenter",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "bd17f1ee35d5f3c862a4894605855abbb9dda4b0621fdb0ac4c2c8c7bb7e730a",
+      "size_bytes": 621,
+      "loaded_by": "pgie_config -> labelfile-path"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-r384.onnx",
+      "registered_model": "person-segmenter",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "size_bytes": 112230196,
+      "loaded_by": "pgie_config -> onnx-file"
+    },
+    {
+      "path": "perception/models/kids_car/kids_car.onnx",
+      "registered_model": "kids-car-detector",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "size_bytes": 9650406,
+      "loaded_by": "barber service kids_car_model"
+    },
+    {
+      "path": "perception/models/staff/prompts.json",
+      "registered_model": "staff-clip",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "d3297a09c4acaa1708c1ebf591e523d630347284c29aa23ae5c2769b45832016",
+      "size_bytes": 136788,
+      "loaded_by": "modules.appearance.prompts (staff_model: clip)"
+    },
+    {
+      "path": "perception/models/staff/staff_dinov2_s.onnx",
+      "registered_model": "staff-classifier",
+      "version": "1",
+      "alias": "production-barber-bekky",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "9622ff42998909318269dcde2c78df977558c9c9cded135333584a9b52eb4b4f",
+      "size_bytes": 86511772,
+      "loaded_by": "modules.appearance.staff_classifier"
+    },
+    {
+      "path": "perception/models/staff/vision_model.onnx",
+      "registered_model": "staff-clip",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "fd6e1402a588279d1723c7534d4bcba5bc0b14b47dfab0e46f8c47b8270d7d40",
+      "size_bytes": 351685709,
+      "loaded_by": "modules.appearance.clip_model (staff_model: clip)"
+    },
+    {
+      "path": "perception/models/insightface/models/buffalo_l/1k3d68.onnx",
+      "registered_model": "face-recognizer",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "size_bytes": 143607619,
+      "loaded_by": "modules.face_recognition.model"
+    },
+    {
+      "path": "perception/models/insightface/models/buffalo_l/2d106det.onnx",
+      "registered_model": "face-recognizer",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "size_bytes": 5030888,
+      "loaded_by": "modules.face_recognition.model"
+    },
+    {
+      "path": "perception/models/insightface/models/buffalo_l/det_10g.onnx",
+      "registered_model": "face-recognizer",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91",
+      "size_bytes": 16923827,
+      "loaded_by": "modules.face_recognition.model"
+    },
+    {
+      "path": "perception/models/insightface/models/buffalo_l/genderage.onnx",
+      "registered_model": "face-recognizer",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "size_bytes": 1322532,
+      "loaded_by": "modules.face_recognition.model"
+    },
+    {
+      "path": "perception/models/insightface/models/buffalo_l/w600k_r50.onnx",
+      "registered_model": "face-recognizer",
+      "version": "1",
+      "alias": "production-barber",
+      "run_id": "00000000000000000000000000000000",
+      "sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+      "size_bytes": 174383860,
+      "loaded_by": "modules.face_recognition.model"
+    }
+  ]
+}

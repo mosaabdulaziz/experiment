@@ -1,0 +1,5 @@
+outs:
+- md5: 348aebc3499f51a2e944d3a84dd40bd2
+  size: 12479895
+  hash: md5
+  path: mmaction2_jm.pth

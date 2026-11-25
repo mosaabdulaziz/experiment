@@ -1,0 +1,386 @@
+{
+ "samples": 960,
+ "seconds": 9590.3,
+ "psi": {
+  "cpu_some_stall_pct": {
+   "min": 4.121,
+   "mean": 24.008,
+   "p95": 40.391,
+   "max": 53.48,
+   "n": 959
+  },
+  "cpu_full_stall_pct": {
+   "min": 0.0,
+   "mean": 0.0,
+   "p95": 0.0,
+   "max": 0.0,
+   "n": 959
+  },
+  "memory_some_stall_pct": {
+   "min": 0.0,
+   "mean": 0.013,
+   "p95": 0.092,
+   "max": 0.731,
+   "n": 959
+  },
+  "memory_full_stall_pct": {
+   "min": 0.0,
+   "mean": 0.007,
+   "p95": 0.055,
+   "max": 0.421,
+   "n": 959
+  },
+  "io_some_stall_pct": {
+   "min": 0.024,
+   "mean": 0.107,
+   "p95": 0.155,
+   "max": 0.709,
+   "n": 959
+  },
+  "io_full_stall_pct": {
+   "min": 0.006,
+   "mean": 0.047,
+   "p95": 0.084,
+   "max": 0.621,
+   "n": 959
+  }
+ },
+ "vm_per_s": {
+  "pswpin": {
+   "min": 0.0,
+   "mean": 0.03,
+   "p95": 0.1,
+   "max": 3.3,
+   "n": 959
+  },
+  "pswpout": {
+   "min": 0.0,
+   "mean": 0.883,
+   "p95": 0.0,
+   "max": 259.897,
+   "n": 959
+  },
+  "pgmajfault": {
+   "min": 0.0,
+   "mean": 0.55,
+   "p95": 0.3,
+   "max": 198.189,
+   "n": 959
+  }
+ },
+ "oom_kill_total": 0,
+ "cpu_pct": {
+  "user": {
+   "min": 19.987,
+   "mean": 45.056,
+   "p95": 63.79,
+   "max": 71.749,
+   "n": 959
+  },
+  "nice": {
+   "min": 0.0,
+   "mean": 0.051,
+   "p95": 0.161,
+   "max": 0.212,
+   "n": 959
+  },
+  "system": {
+   "min": 6.796,
+   "mean": 10.41,
+   "p95": 12.153,
+   "max": 13.668,
+   "n": 959
+  },
+  "idle": {
+   "min": 14.73,
+   "mean": 44.285,
+   "p95": 69.723,
+   "max": 72.069,
+   "n": 959
+  },
+  "iowait": {
+   "min": 0.006,
+   "mean": 0.044,
+   "p95": 0.077,
+   "max": 0.267,
+   "n": 959
+  },
+  "irq": {
+   "min": 0.0,
+   "mean": 0.0,
+   "p95": 0.0,
+   "max": 0.0,
+   "n": 959
+  },
+  "softirq": {
+   "min": 0.11,
+   "mean": 0.155,
+   "p95": 0.18,
+   "max": 0.2,
+   "n": 959
+  },
+  "steal": {
+   "min": 0.0,
+   "mean": 0.0,
+   "p95": 0.0,
+   "max": 0.0,
+   "n": 959
+  }
+ },
+ "busiest_core_pct": {
+  "min": 35.707,
+  "mean": 63.427,
+  "p95": 82.317,
+  "max": 90.568,
+  "n": 959
+ },
+ "freq_mean_khz": {
+  "min": 1440171,
+  "mean": 3313861.779,
+  "p95": 3946547,
+  "max": 4814093,
+  "n": 960
+ },
+ "freq_min_khz": {
+  "min": 1100334,
+  "mean": 2791284.63,
+  "p95": 3592257,
+  "max": 4465346,
+  "n": 960
+ },
+ "hwmon": {
+  "BAT1:in:0": {
+   "min": 13.316,
+   "mean": 13.337,
+   "p95": 13.341,
+   "max": 13.342,
+   "n": 960
+  },
+  "BAT1:power:1": {
+   "min": 0.03,
+   "mean": 0.053,
+   "p95": 0.07,
+   "max": 0.07,
+   "n": 960
+  },
+  "acpi_fan:fan:1": {
+   "min": 2700,
+   "mean": 2700.0,
+   "p95": 2700,
+   "max": 2700,
+   "n": 960
+  },
+  "acpitz:temp:1": {
+   "min": 66.0,
+   "mean": 74.014,
+   "p95": 75.0,
+   "max": 77.0,
+   "n": 960
+  },
+  "amdgpu:in:vddgfx": {
+   "min": 0.71,
+   "mean": 0.932,
+   "p95": 1.289,
+   "max": 1.432,
+   "n": 960
+  },
+  "amdgpu:in:vddnb": {
+   "min": 0.93,
+   "mean": 0.937,
+   "p95": 0.94,
+   "max": 0.945,
+   "n": 960
+  },
+  "amdgpu:power:PPT": {
+   "min": 8.39,
+   "mean": 24.175,
+   "p95": 34.99,
+   "max": 62.7,
+   "n": 960
+  },
+  "amdgpu:temp:edge": {
+   "min": 60.0,
+   "mean": 64.855,
+   "p95": 65.0,
+   "max": 66.0,
+   "n": 960
+  },
+  "k10temp:temp:Tctl": {
+   "min": 65.1,
+   "mean": 74.435,
+   "p95": 76.0,
+   "max": 77.4,
+   "n": 960
+  },
+  "nvme:temp:Composite": {
+   "min": 47.9,
+   "mean": 49.283,
+   "p95": 51.9,
+   "max": 53.9,
+   "n": 960
+  },
+  "nvme:temp:Sensor 1": {
+   "min": 47.9,
+   "mean": 49.288,
+   "p95": 51.9,
+   "max": 53.9,
+   "n": 960
+  },
+  "ucsi_source_psy_USBC000:001:in:0": {
+   "min": 0.0,
+   "mean": 0.0,
+   "p95": 0.0,
+   "max": 0.0,
+   "n": 960
+  }
+ },
+ "on_ac_fraction": 1.0,
+ "battery_status": [
+  "Not charging"
+ ],
+ "disk_per_s": {
+  "rd_sectors": {
+   "min": 0.0,
+   "mean": 23.479,
+   "p95": 31.999,
+   "max": 6764.416,
+   "n": 959
+  },
+  "wr_sectors": {
+   "min": 41.6,
+   "mean": 2690.752,
+   "p95": 6369.519,
+   "max": 27410.102,
+   "n": 959
+  },
+  "io_busy_ms": {
+   "min": 1.5,
+   "mean": 7.736,
+   "p95": 12.8,
+   "max": 43.898,
+   "n": 959
+  }
+ },
+ "containers": {
+  "safety-go2rtc-1": {
+   "restarts_start_end": [
+    0,
+    0
+   ],
+   "oom_killed_ever": false,
+   "last_status": "running",
+   "last_exit_code": 0,
+   "unhealthy_samples": 0,
+   "memory_events_delta": {
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0
+   },
+   "cpu_throttled_periods_delta": 0
+  },
+  "safety-iris-1": {
+   "restarts_start_end": [
+    0,
+    0
+   ],
+   "oom_killed_ever": false,
+   "last_status": "running",
+   "last_exit_code": 0,
+   "unhealthy_samples": 0,
+   "memory_events_delta": {
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0
+   },
+   "cpu_throttled_periods_delta": 0
+  },
+  "safety-minio-1": {
+   "restarts_start_end": [
+    0,
+    0
+   ],
+   "oom_killed_ever": false,
+   "last_status": "running",
+   "last_exit_code": 0,
+   "unhealthy_samples": 0,
+   "memory_events_delta": {
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0
+   },
+   "cpu_throttled_periods_delta": 0
+  },
+  "safety-redis-1": {
+   "restarts_start_end": [
+    0,
+    0
+   ],
+   "oom_killed_ever": false,
+   "last_status": "running",
+   "last_exit_code": 0,
+   "unhealthy_samples": 0,
+   "memory_events_delta": {
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0
+   },
+   "cpu_throttled_periods_delta": 0
+  },
+  "safety-safety-fire-1": {
+   "restarts_start_end": [
+    0,
+    0
+   ],
+   "oom_killed_ever": false,
+   "last_status": "running",
+   "last_exit_code": 0,
+   "unhealthy_samples": 0,
+   "memory_events_delta": {
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0
+   },
+   "cpu_throttled_periods_delta": 0
+  },
+  "safety-safety-ppe-1": {
+   "restarts_start_end": [
+    0,
+    0
+   ],
+   "oom_killed_ever": false,
+   "last_status": "running",
+   "last_exit_code": 0,
+   "unhealthy_samples": 0,
+   "memory_events_delta": {
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0
+   },
+   "cpu_throttled_periods_delta": 0
+  },
+  "safety-safety-zones-1": {
+   "restarts_start_end": [
+    0,
+    0
+   ],
+   "oom_killed_ever": false,
+   "last_status": "running",
+   "last_exit_code": 0,
+   "unhealthy_samples": 0,
+   "memory_events_delta": {
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0
+   },
+   "cpu_throttled_periods_delta": 0
+  }
+ },
+ "probe_errors": {}
+}

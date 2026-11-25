@@ -1,0 +1,21 @@
+[project]
+name = "attendance-service"
+version = "0.1.0"
+description = "Employee attendance ACL — consumes surveillance-camera-sys's recognition stream, never imports its code."
+requires-python = ">=3.11"
+dependencies = [
+    "redis>=5.0",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "python-multipart>=0.0.32",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.uv]
+required-version = ">=0.13.6,<0.14"  # uv 0.13.x: one lock format, so the lock never churns (DEPENDENCIES.md, "uv")

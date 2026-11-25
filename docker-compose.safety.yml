@@ -1,0 +1,95 @@
+# Overlay for the safety stack (`just safety-*`): proximity, zone intrusion/overcrowding, PPE, fall and fire/smoke in
+# one tool, as compose project SAFETY_COMPOSE_PROJECT (safety) with its own ports and its own data dir (SAFETY_DIR),
+# so it runs beside every other stack on this machine and leaves this checkout's data/ alone. Use only through the
+# safety-* recipes: they set these variables (scripts/safety_env.sh; the SAFETY_* settings in .env.example).
+#
+# Each feature is a ROLE sidecar, safety-<role>, running the config tools/safety_controller.py generates from
+# products/safety/ (data/safety/generated/<role>.yaml). Several can share a camera: they run with role-scoped Redis
+# keys (<camera>@<role>). The plain `deepstream-sidecar` of docker-compose.yml is not part of this stack.
+
+x-safety-sidecar: &safety-sidecar
+  image: ${SAFETY_SIDECAR_IMAGE:-safety-deepstream-sidecar:latest}
+  build:
+    context: .
+    dockerfile: perception/pipeline/Dockerfile
+  user: "${SAFETY_UID:-1000}:${SAFETY_GID:-1000}"   # files written into the checkout stay the user's
+  ulimits:
+    nofile: {soft: 65536, hard: 65536}
+    core: {soft: 0, hard: 0}
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+  volumes:
+    - ./:/workspace/iris
+    - ${SAFETY_DIR:-./scratch/safety}/data:/workspace/iris/data
+    - ${SAFETY_MODELS_DIR:-./perception/models}:/workspace/iris/perception/models
+  tmpfs:
+    - /tmp/iris-segments:size=64m
+  restart: unless-stopped
+
+x-safety-env: &safety-env
+  NVIDIA_DRIVER_CAPABILITIES: all
+  HOME: /tmp
+  MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+  MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
+  RTSP_USER: ${RTSP_USER:-}
+  RTSP_PASS: ${RTSP_PASS:-}
+
+services:
+  go2rtc:
+    volumes: !override
+      - ${SAFETY_DIR:-./scratch/safety}/data/safety/generated/go2rtc.yaml:/config/go2rtc.yaml:ro
+    ports: !override
+      - "${GO2RTC_RTSP_PORT}:8554"
+      - "${GO2RTC_API_PORT}:1984"
+      - "${GO2RTC_WEBRTC_PORT}:8555"
+      - "${GO2RTC_WEBRTC_PORT}:8555/udp"
+
+  iris:
+    user: "${SAFETY_UID:-1000}:${SAFETY_GID:-1000}"
+    environment:
+      - HOME=/tmp
+      - IRIS_PRODUCT=safety
+      # Every role's generated config, merged by the app (app/sidecar_config.py): every module, and every source as
+      # the stream its role publishes (<camera>@<role>). Same order as products/safety/safety.yaml's features.
+      - SIDECAR_CONFIG=data/safety/generated/proximity.yaml,data/safety/generated/zones.yaml,data/safety/generated/ppe.yaml,data/safety/generated/fall.yaml,data/safety/generated/fire.yaml
+      # The fall service runs on the host (its review queue is proxied at /api/safety/fall/*); the cameras file the
+      # controller reads (a path inside the repo: the app sees the repo's products/ only). TELEGRAM_BOT_TOKEN comes
+      # from .env (env_file).
+      - SAFETY_FALL_URL=http://host.docker.internal:${SAFETY_FALL_PORT}
+      - SAFETY_CAMERAS=${SAFETY_CAMERAS}
+    volumes:
+      - ${SAFETY_DIR:-./scratch/safety}/data:/app/data
+    restart: unless-stopped
+
+  safety-proximity:
+    <<: *safety-sidecar
+    command: ["python3", "-m", "perception.engine.main", "data/safety/generated/proximity.yaml"]
+    environment:
+      <<: *safety-env
+      # nvinfer's TensorRT engine build for the seg model crashes when GStreamer has loaded libunwind first.
+      LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+
+  safety-zones:
+    <<: *safety-sidecar
+    command: ["python3", "-m", "perception.engine.main", "data/safety/generated/zones.yaml"]
+    environment: *safety-env
+
+  safety-ppe:
+    <<: *safety-sidecar
+    command: ["python3", "-m", "perception.engine.main", "data/safety/generated/ppe.yaml"]
+    environment: *safety-env
+
+  safety-fall:
+    <<: *safety-sidecar
+    command: ["python3", "-m", "perception.engine.main", "data/safety/generated/fall.yaml"]
+    environment: *safety-env
+
+  safety-fire:
+    <<: *safety-sidecar
+    command: ["python3", "-m", "perception.engine.main", "data/safety/generated/fire.yaml"]
+    environment: *safety-env

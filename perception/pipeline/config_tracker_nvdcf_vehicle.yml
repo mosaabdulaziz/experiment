@@ -1,0 +1,71 @@
+################################################################################
+# IRIS tracker config — DUMMY visual tracker (pure Kalman + IoU).
+#
+# Originally NvDCF (visual correlation filter), but NvDCF loses small
+# license plates when the car moves — the visual template is too small
+# and uniform to track reliably.  Switching to DUMMY mode (visualTrackerType=0)
+# makes the tracker rely only on Kalman motion prediction + IoU matching,
+# which handles small fast-moving plates much better.
+#
+# Shadow tracking (maxShadowTrackingAge=120) keeps lost tracks alive through
+# ~4.8s of detector dropouts via Kalman prediction, preventing ID reassignment
+# when the plate is briefly invisible.
+################################################################################
+
+BaseConfig:
+  minDetectorConfidence: 0.08      # Consider all detector bboxes down to 0.08 confidence for tracking
+
+TargetManagement:
+  enableBboxUnClipping: 1          # In case the bbox is likely to be clipped by image border, unclip bbox
+  maxTargetsPerStream: 120         # Max number of targets to track per stream. Recommended to set >10. Note: this value should account for the targets being tracked in shadow mode as well. Max value depends on the GPU memory capacity
+
+  # [Creation & Termination Policy]
+  minIouDiff4NewTarget: 0.3686     # If the IOU between the newly detected object and any of the existing targets is higher than this threshold, this newly detected object will be discarded.
+  minTrackerConfidence: 0.1000     # If the confidence of an object tracker is lower than this on the fly, then it will be tracked in shadow mode. Valid Range: [0.0, 1.0]
+  probationAge: 1                  # Active tracking starts on frame 1.
+  maxShadowTrackingAge: 500        # Persist lost tracks through up to 500 frames (~20s at 25 fps).
+                                  # Very patient: covers long occlusions, slow traffic,
+                                  # and temporary detector dropouts.
+  earlyTerminationAge: 30          # Allow 30 frames (~1.2s) of shadow tracking before premature termination.  With intermittent plate detection, the detector misses several frames between successful detections; a value of 1 terminates tracks too aggressively, causing ID flickering.
+
+TrajectoryManagement:
+  useUniqueID: 0                   # Use 64-bit long Unique ID when assignining tracker ID.
+
+DataAssociator:
+  dataAssociatorType: 0            # the type of data associator among { DEFAULT= 0 }
+  associationMatcherType: 1        # the type of matching algorithm among { GREEDY=0, CASCADED=1 }
+  checkClassMatch: 1               # If checked, only the same-class objects are associated with each other. Default: true
+
+  # [Association Metric: Thresholds for valid candidates]
+  minMatchingScore4Overall: 0.08           # Extremely permissive: almost any plausible match accepted
+  minMatchingScore4SizeSimilarity: 0.05    # Barely gate on size — let IoU do the work
+  minMatchingScore4Iou: 0.005              # Near-zero: accept even tiny overlap during re-entry
+  minMatchingScore4VisualSimilarity: 0.0   # Ignored when visualTrackerType=DUMMY
+
+StateEstimator:
+  stateEstimatorType: 1            # the type of state estimator among { DUMMY=0, SIMPLE=1, REGULAR=2 }
+
+  # [Dynamics Modeling]
+  # Lowered for small plates: tighter Kalman predictions stay closer to the
+  # plate's last known position during occlusion, improving re-association.
+  processNoiseVar4Loc: 800.0      # Very tight: prediction stays close to last known position
+  processNoiseVar4Size: 200.0     # Plates are rigid, size barely changes
+  processNoiseVar4Vel: 150.0      # Smooth motion, low velocity uncertainty
+  measurementNoiseVar4Detector: 30.0      # Trust detector strongly
+  measurementNoiseVar4Tracker: 100.0      # Trust Kalman prediction during occlusion
+
+VisualTracker:
+  visualTrackerType: 0             # DUMMY: pure Kalman + IoU (no visual features).
+                                  # NvDCF loses small plates when the car moves; DUMMY
+                                  # relies only on motion prediction + bbox overlap.
+
+  # [NvDCF: Feature Extraction]
+  useColorNames: 1                 # Use ColorNames feature
+  useHog: 0                        # Use Histogram-of-Oriented-Gradient (HOG) feature
+  featureImgSizeLevel: 2           # Size of a feature image. Valid range: {1, 2, 3, 4, 5}, from the smallest to the largest
+  featureFocusOffsetFactor_y: -0.1054 # The offset for the center of hanning window relative to the feature height. The center of hanning window would move by (featureFocusOffsetFactor_y*featureMatSize.height) in vertical direction
+
+  # [NvDCF: Correlation Filter]
+  filterLr: 0.0767                 # learning rate for DCF filter in exponential moving average. Valid Range: [0.0, 1.0]
+  filterChannelWeightsLr: 0.0339   # learning rate for the channel weights among feature channels. Valid Range: [0.0, 1.0]
+  gaussianSigma: 0.5687            # Standard deviation for Gaussian for desired response when creating DCF filter

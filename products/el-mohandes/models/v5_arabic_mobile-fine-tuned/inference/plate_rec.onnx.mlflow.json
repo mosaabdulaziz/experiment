@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "plate_rec.onnx",
+  "sha256": "92ae41f35945278f32332f70df6924ae61cbec416e3cba4ed435d349dd542c34",
+  "size_bytes": 7652257,
+  "created_at": "2026-11-05T09:10:49+00:00",
+  "run_id": "7f0d048e8b914eb399c78ec8a2c35adb",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "plate-ocr",
+  "version": "1"
+}

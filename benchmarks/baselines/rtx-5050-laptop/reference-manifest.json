@@ -1,0 +1,380 @@
+{
+ "files": {
+  "baselines": {
+   "tests/baselines/golden-attendance.before.jsonl": {
+    "bytes": 125205,
+    "sha256": "498db17831352e4dda8017c52f9bf2f92361b6910aa77da222c171c2d25c8855"
+   },
+   "tests/baselines/golden-barber-faces.before.jsonl": {
+    "bytes": 1013735,
+    "sha256": "1615cb7b7bfb2842e20b962d84f8d6b083990dcbc87bd39496916c0c09ce8c66"
+   },
+   "tests/baselines/golden-barber.before.jsonl": {
+    "bytes": 582243,
+    "sha256": "5cf5f9ab89f188ddd2c622d1e7988a4f352d46c49f391a6f833597ca55098b0c"
+   },
+   "tests/baselines/golden-fire.before.jsonl": {
+    "bytes": 65946,
+    "sha256": "afdb7bdee09d8900bcbf0ee02320fc9a18f1e1a2983ee6167a420546f1411ec9"
+   },
+   "tests/baselines/golden-multicam.before.jsonl": {
+    "bytes": 14146,
+    "sha256": "fddd1db5b10a5acf9d4d0fb42261ca86aea56b9b9c3507103e4e8d4b82709805"
+   },
+   "tests/baselines/golden-proximity.before.jsonl": {
+    "bytes": 1746741,
+    "sha256": "bb76939cc9a4f7f6c2450845df3e9ce4cf41d77142dac6bec2b576802c45a5f1"
+   },
+   "tests/baselines/golden-zones.before.jsonl": {
+    "bytes": 126336,
+    "sha256": "ca254e7f2faa5996b594b87d6071dee1d950b623ca21ee0b52f7d2cb16b6813a"
+   }
+  },
+  "clips": {
+   "data/uploads/attendance/enter-3.mp4": {
+    "bytes": 2700474,
+    "sha256": "180c40c70b5c51dc38639a46ca7129899334c76a38fae55fbbcfd20d9a78f1ad"
+   },
+   "data/uploads/golden/barber.mp4": {
+    "bytes": 10685589,
+    "sha256": "c42956c52a736cf8069835c1b105618e0c1ece230f8ea1c23a1701cdeb78efc6"
+   },
+   "data/uploads/golden/fall.mp4": {
+    "bytes": 250006,
+    "sha256": "eed7a424f38bb1ea424f1c3864ca5cd634cee3fa8e36b8146644f72c5321962b"
+   },
+   "data/uploads/golden/fire.mp4": {
+    "bytes": 14258930,
+    "sha256": "cabf9182f463acfd02fff106e833c1c6d7d0d3dcfed6f9504b91329ad70dc9db"
+   },
+   "data/uploads/golden/ppe.mp4": {
+    "bytes": 14393472,
+    "sha256": "c175f1b28163b347a71df9bee04a1a0a3b062edba5d1e1eb56078a23e9197f45"
+   },
+   "data/uploads/golden/proximity.mp4": {
+    "bytes": 61002769,
+    "sha256": "45a594ac7fa9061c2a2e7f35093276d0f9ba23e58c64ce7f2e06c0eae2a99634"
+   },
+   "data/uploads/golden/shelf.mp4": {
+    "bytes": 6213546,
+    "sha256": "74ee766de00c137909aee1a0210ccaf067189cb52c7853954b39bac44c1696fe"
+   },
+   "data/uploads/golden/vehicles.mp4": {
+    "bytes": 55596222,
+    "sha256": "5bd25d36cded5ca24a7aeb507086bbf7f4a1c4c2cda2cdd8f4e5f096abec24a6"
+   }
+  },
+  "configs": {
+   "tests/configs/golden-attendance-max.yaml": {
+    "bytes": 201,
+    "sha256": "084f10848c55b8f726bd7bc74495849b545b64fe5f69af1c63fb8f09dba8f8b0"
+   },
+   "tests/configs/golden-attendance.yaml": {
+    "bytes": 793,
+    "sha256": "f1ff9b39b8af2c7c27ab2f1190d71ebdf9c6b6b8c5226679466b3f8c91b21c4f"
+   },
+   "tests/configs/golden-barber-faces.redis": {
+    "bytes": 85,
+    "sha256": "079301e28793778e36e302c09dd7bd3db9d848d21a911602c71f3af37fabe8c4"
+   },
+   "tests/configs/golden-barber-faces.yaml": {
+    "bytes": 573,
+    "sha256": "ed27922aea1af804fb13bf852fa14cc223f9acc32499b23b374a08d0168c1bca"
+   },
+   "tests/configs/golden-barber.yaml": {
+    "bytes": 400,
+    "sha256": "85915297dfa8d31420281661bd50ee467e52e7126453114dd3472b02e9f82498"
+   },
+   "tests/configs/golden-fall_detection.yaml": {
+    "bytes": 413,
+    "sha256": "afa399c4b8e617fbb36702f1fa42f4cfb72b3a4511af4ee0229b930837946c9a"
+   },
+   "tests/configs/golden-fire.yaml": {
+    "bytes": 414,
+    "sha256": "e8028d697f89e25eb909fe4298e02474d79f08238e61df7857f67cee2ce1701a"
+   },
+   "tests/configs/golden-multicam.yaml": {
+    "bytes": 352,
+    "sha256": "120ff50ecc5c2cdf80d6fe68a9acc0239c8f490e0e88d71a5373100f4d8d37c9"
+   },
+   "tests/configs/golden-ppe.yaml": {
+    "bytes": 426,
+    "sha256": "43eb2d8613a48f918d84dc729c9920e7b2938a425882bebc49a6881751f01220"
+   },
+   "tests/configs/golden-proximity.yaml": {
+    "bytes": 525,
+    "sha256": "715e0340fe8c32f48fc84f4778bbde0b55b81c4d3c61c363f83600e60c1d8b63"
+   },
+   "tests/configs/golden-shelf.yaml": {
+    "bytes": 427,
+    "sha256": "1c49e9b29c84cd98592e57e4a56da8dce5897ec11fdf033080adf741c1065318"
+   },
+   "tests/configs/golden-zones-roi.txt": {
+    "bytes": 206,
+    "sha256": "2e511e11837434748f783c7529fcfcace4523dcb5ca00ee92c701d349a438232"
+   },
+   "tests/configs/golden-zones-roi_remapped_single.txt": {
+    "bytes": 206,
+    "sha256": "2e511e11837434748f783c7529fcfcace4523dcb5ca00ee92c701d349a438232"
+   },
+   "tests/configs/golden-zones.yaml": {
+    "bytes": 874,
+    "sha256": "fdc71d388417570b9d7b273c1676fae79dd18f60d78fca068c86ca682622af50"
+   }
+  },
+  "engines": {
+   "model_b1_gpu0_fp16.engine": {
+    "bytes": 20436388,
+    "sha256": "678457614c2e9905b51813eb278aae8af21bf9a61758f10ddad8cad29770e904"
+   },
+   "model_b1_gpu0_fp32.engine": {
+    "bytes": 281562188,
+    "sha256": "4a94c9a0ae06de27b01650db689b0b9d4d02c32b376e3b08dc5ec3a458d82b48"
+   },
+   "model_b2_gpu0_fp32.engine": {
+    "bytes": 230776100,
+    "sha256": "08d0e4da63d70a110dbce1e9d116fd59cafa23ba3832bd3908cb062bd18f7ef2"
+   },
+   "model_b4_gpu0_fp32.engine": {
+    "bytes": 230911172,
+    "sha256": "0d7fe9d47a8856fc21453fc88f7a99109ebe483139057721f1b611f1682b84c2"
+   },
+   "model_b8_gpu0_fp32.engine": {
+    "bytes": 230877396,
+    "sha256": "86feb1417b5feaaad8ba56cfcc4c93b83dfa0cbc3cf97ad89219043639688ce5"
+   },
+   "perception/models/DeepStream-Yolo-Face/yolov8n-face.onnx_b16_gpu0_fp32.engine": {
+    "bytes": 14312556,
+    "sha256": "2300863d15f08c2956dc620ab65c18364e2f2867e253449981e6140b2212b9a6"
+   },
+   "perception/models/DeepStream-Yolo-Fire/fire_smoke_box.onnx_b1_gpu0_fp16.engine": {
+    "bytes": 6898868,
+    "sha256": "505add1e4eda606c504884683027432da83b68b1f42ca4e7ee6b28f69e299f03"
+   },
+   "perception/models/DeepStream-Yolo-Fire/fire_smoke_box.onnx_b2_gpu0_fp16.engine": {
+    "bytes": 6656580,
+    "sha256": "2f963311fb965268c81de4994c76a2449b1a4d04adb79bf8f42d756297bb2795"
+   },
+   "perception/models/DeepStream-Yolo-Fire/fire_smoke_box.onnx_b3_gpu0_fp16.engine": {
+    "bytes": 6818972,
+    "sha256": "7fe645ffd5902ebdad0e704d4e4a425a75454afc8814ea9fdd8f80684a9d7685"
+   },
+   "perception/models/DeepStream-Yolo-Fire/fire_smoke_box.onnx_b4_gpu0_fp16.engine": {
+    "bytes": 6704452,
+    "sha256": "d8faf1816e4af864b96f0a4bbf98d5af494c879374048585e61ff7bd41fe79ba"
+   },
+   "perception/models/DeepStream-Yolo-Fire/fire_smoke_box.onnx_b8_gpu0_fp16.engine": {
+    "bytes": 6732004,
+    "sha256": "dc13d66240ebfd1189d5e582cb4cbf718615273fb84077c7de605c2875ab3a6f"
+   },
+   "perception/models/DeepStream-Yolo-PPE/voxdroid_yolov8s_css.onnx_b16_gpu0_fp16.engine": {
+    "bytes": 23869076,
+    "sha256": "29c0b8a6df32c6726b35ff52213c354355874c660b0f636599a5efac0c09ab40"
+   },
+   "perception/models/DeepStream-Yolo-Pose/yolo26x-pose.onnx_b16_gpu0_fp32.engine": {
+    "bytes": 233242292,
+    "sha256": "1d48185f16e105b8b0a96dd83efe7fb953ce8ba80eb352684eca23dcdccb0497"
+   },
+   "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-736x1280.onnx_b1_gpu0_fp16.engine": {
+    "bytes": 58212732,
+    "sha256": "a7c89c9bf76f43bff8907b59b8002097b39a5a3c41dcb35dba6b4ce1d2570ad1"
+   },
+   "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-736x1280.onnx_b2_gpu0_fp16.engine": {
+    "bytes": 59177004,
+    "sha256": "ccdf023d03930b71bb76610da03ab6b6af4ad260d4f71ef140f763f430da5c90"
+   },
+   "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-736x1280.onnx_b4_gpu0_fp16.engine": {
+    "bytes": 59247196,
+    "sha256": "8449078a254f2a93309f6ef0ecbfc83ca3726484f22e2ee76f8a37d7035931d8"
+   },
+   "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-736x1280.onnx_b8_gpu0_fp16.engine": {
+    "bytes": 59176188,
+    "sha256": "8e8344de98bc6774dd9feb30da14a15f1f8f58f3bc40c4f7957e6140e1f4778f"
+   },
+   "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-r384.onnx_b1_gpu0_fp16.engine": {
+    "bytes": 58432828,
+    "sha256": "fdc27cbc366aace9e8f4fd5f19d6be3a7f02e6167171fc6abffad880e156bd72"
+   },
+   "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-r384.onnx_b2_gpu0_fp16.engine": {
+    "bytes": 58925012,
+    "sha256": "76bad4b5d1eb7b30f68f3f4b187c7d3464b6d0d2026bbbd6adaa54412aeafe05"
+   },
+   "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-r384.onnx_b3_gpu0_fp16.engine": {
+    "bytes": 58922220,
+    "sha256": "5df1d12ad0de1323dc208c63511cb1a5d0a338c694649c924991933a31289f10"
+   },
+   "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-r384.onnx_b4_gpu0_fp16.engine": {
+    "bytes": 58968500,
+    "sha256": "62529d93d89499d35790d5c6e2545c064f9b51d1705f760522ff0539f03f4b98"
+   },
+   "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-r384.onnx_b8_gpu0_fp16.engine": {
+    "bytes": 58964860,
+    "sha256": "ea019d2f9979b1cc49370ec13663ffd6c6fbbd0a8997804ed7cc8715af8462a7"
+   },
+   "perception/models/DeepStream-Yolo-Shelf/detect_product_empty_space.onnx_b1_gpu0_fp16.engine": {
+    "bytes": 9661084,
+    "sha256": "ed87a6673690f5899bb038183dadf700ee1bff2d385d4be1a0e51c6381d391e8"
+   },
+   "perception/models/DeepStream-Yolo-Shelf/detect_product_empty_space.onnx_b2_gpu0_fp16.engine": {
+    "bytes": 6962188,
+    "sha256": "259d210f9a4992c3679885d57f59ea2a0edfb75cda609202aae6d05d00964a24"
+   },
+   "perception/models/DeepStream-Yolo-Shelf/detect_product_empty_space.onnx_b4_gpu0_fp16.engine": {
+    "bytes": 7121356,
+    "sha256": "b119dee8ac26b0f8af22cd34d541ab083396d69809ac46cab1ebfaa6a60a1d9f"
+   },
+   "perception/models/DeepStream-Yolo-Shelf/detect_product_empty_space.onnx_b8_gpu0_fp16.engine": {
+    "bytes": 7141228,
+    "sha256": "db7f020765c12803d1e206b92e970e3fdc1a357d15a102ad392c3b735c341006"
+   },
+   "perception/models/DeepStream-Yolo-Shelf/detect_product_empty_space_640.onnx_b2_gpu0_fp16.engine": {
+    "bytes": 6894876,
+    "sha256": "d8d946ccfa6b8462c9c03d1f01aa5271bcf6e4517e1781ce5acd65ff87880708"
+   },
+   "perception/models/DeepStream-Yolo-Shelf/detect_product_empty_space_640.onnx_b4_gpu0_fp16.engine": {
+    "bytes": 6927556,
+    "sha256": "a0b3f2371bbb0df92c8259fd8aaa2153fb403a676987f993d935ccfcc000cb59"
+   },
+   "perception/models/DeepStream-Yolo-Shelf/detect_product_empty_space_640.onnx_b8_gpu0_fp16.engine": {
+    "bytes": 6931548,
+    "sha256": "e858f85294d8a71160935ba7937caea079a2c522941d70c7edcd18d54324ff4d"
+   },
+   "products/el-mohandes/models/finetuned/best.onnx_b13_gpu0_fp16.engine": {
+    "bytes": 20788732,
+    "sha256": "c787d90849bc51001040baae378c3e47ddb1ba1168c3b946259ba84b31111513"
+   },
+   "products/el-mohandes/models/finetuned/best.onnx_b5_gpu0_fp16.engine": {
+    "bytes": 20893788,
+    "sha256": "25c73bdaa11c3fdf2fef531c31fe77c9ef14213444bfcdc516143b1ec99a5bd3"
+   },
+   "products/el-mohandes/models/plate_640/best.onnx_b16_gpu0_fp16.engine": {
+    "bytes": 20892772,
+    "sha256": "d4fbec7aaa5af9b68daca5e85c66c756355884080d7d7e347caa4a2477c050c9"
+   }
+  },
+  "models": {
+   "perception/models/DeepStream-Yolo-Face/yolov8n-face.onnx": {
+    "bytes": 12957356,
+    "sha256": "d4f973fb02cbedbf3fb072469ee49a6e071cfbfa6f52e13d74642fe588a2391f"
+   },
+   "perception/models/DeepStream-Yolo-Fire/fire_s.onnx": {
+    "bytes": 44661425,
+    "sha256": "872d202ae931b2f529ace11259fbab9bf213ec743684cd9cffc8e1d066f6e9f5"
+   },
+   "perception/models/DeepStream-Yolo-Fire/fire_smoke_box.onnx": {
+    "bytes": 9627478,
+    "sha256": "d5e4b6fd2f53832a16098eabbf6a966b774b1bdc721d34d06293f90ddc83d13d"
+   },
+   "perception/models/DeepStream-Yolo-PPE/voxdroid_yolov8s_css.onnx": {
+    "bytes": 44598110,
+    "sha256": "cdd4f0afe9081144dc972eb396594f995386017807aef2ce9dce4a0b41c44656"
+   },
+   "perception/models/DeepStream-Yolo-Pose/yolo11n-pose.onnx": {
+    "bytes": 12348133,
+    "sha256": "f15ef4e2393f49df14167af53f47fdbf84396698cae4d89b6203509e2b59a94c"
+   },
+   "perception/models/DeepStream-Yolo-Pose/yolo26x-pose.onnx": {
+    "bytes": 231857148,
+    "sha256": "5ec4e798975864a89996387ddaa6550394d8706620816e85e5a684f0981a932f"
+   },
+   "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-736x1280.onnx": {
+    "bytes": 112231285,
+    "sha256": "54aa2b0457ab4b52d990c870fceeacfcb37a1b2b10359ca51d363368e8003f34"
+   },
+   "perception/models/DeepStream-Yolo-Seg/yolo26l-seg-r384.onnx": {
+    "bytes": 112230196,
+    "sha256": "a1b34547145b7ef192c209f4c7a8d4007ac67a30190f1e32a7cc7af6674f4147"
+   },
+   "perception/models/DeepStream-Yolo-Shelf/detect_product_empty_space.onnx": {
+    "bytes": 10439971,
+    "sha256": "d9b26c2695350ccb081965cee902f5c79e2af6beb0140f622ce879a1b95461be"
+   },
+   "perception/models/DeepStream-Yolo-Shelf/detect_product_empty_space_640.onnx": {
+    "bytes": 10439692,
+    "sha256": "2b4c550c78139842dc9369a85e68002470ea475a84ee558a572e2c375d3b6572"
+   },
+   "perception/models/DeepStream-Yolo/damoyolo_m.onnx": {
+    "bytes": 112982939,
+    "sha256": "ed9ef583185fe987eba27d1aecac2d2c9f5a370d3c1b79c67ba169154b1851af"
+   },
+   "perception/models/DeepStream-Yolo/damoyolo_s.onnx": {
+    "bytes": 65239033,
+    "sha256": "269d23e87787d969c46f3e8e0d76b3e8d303103625b4179dc699b68325744188"
+   },
+   "perception/models/DeepStream-Yolo/yolo11l.onnx": {
+    "bytes": 101610591,
+    "sha256": "b5891c6a071169c1fd54cd9c460a11dade643752f77a3d49e754b3f5a8f4ce00"
+   },
+   "perception/models/DeepStream-Yolo/yolo11m.onnx": {
+    "bytes": 80563312,
+    "sha256": "f1ee2957e16c6b126d86939958bfd71529a1399b5f1de30c0069ff32b3e77299"
+   },
+   "perception/models/DeepStream-Yolo/yolo11s.onnx": {
+    "bytes": 37952242,
+    "sha256": "2d50c0487e244abfa6de9bed5256647c2d290606cda57aaef75708189a7daf13"
+   },
+   "perception/models/DeepStream-Yolo/yolo11x.onnx": {
+    "bytes": 227924411,
+    "sha256": "ee680c13ede47444f4bb2c64213661ad53194af1620bc99853d8c83433c7433c"
+   },
+   "perception/models/depth/yolo26m-depth-736x1280.onnx": {
+    "bytes": 88431641,
+    "sha256": "592d490a21b11166a0e2e3fca635875973dac15eecfdc8dd9a5c54aea764a350"
+   },
+   "perception/models/kids_car/kids_car.onnx": {
+    "bytes": 9650406,
+    "sha256": "8a6d59e1479059e8120a893397d75c66811597b9a5da440463d9a4a3f2f5174d"
+   },
+   "perception/models/staff/staff_dinov2_s.onnx": {
+    "bytes": 86511772,
+    "sha256": "9622ff42998909318269dcde2c78df977558c9c9cded135333584a9b52eb4b4f"
+   },
+   "perception/models/staff/staff_dinov2_s_palm.onnx": {
+    "bytes": 86511772,
+    "sha256": "acfa84119f5d54abdc259ed07ccb3828e3ae01637eb7771946b13e840ea5da84"
+   },
+   "perception/models/staff/staff_dinov2_s_palm_r3.onnx": {
+    "bytes": 86511772,
+    "sha256": "434e3cfac26e64ff558d7346843b5d5d10da610a2887fd32123c6200e5f32381"
+   },
+   "perception/models/staff/text_model.onnx": {
+    "bytes": 254058553,
+    "sha256": "3f6571f5bad13a97c469c1622e1cfc4d9aef78b79fdbfcff804ca357bfada8cc"
+   },
+   "perception/models/staff/vision_model.onnx": {
+    "bytes": 351685709,
+    "sha256": "fd6e1402a588279d1723c7534d4bcba5bc0b14b47dfab0e46f8c47b8270d7d40"
+   },
+   "products/el-mohandes/models/finetuned/best.onnx": {
+    "bytes": 37786702,
+    "sha256": "5546ea558d53817dac4406876c7d477a3b9122f4719b15ce6744723871c82d9c"
+   },
+   "products/el-mohandes/models/plate_640/best.onnx": {
+    "bytes": 37901879,
+    "sha256": "3474ad4689b4d5488a1e770c710f4da20d718e44a4379f023a692e7b7d16083f"
+   },
+   "products/el-mohandes/models/v5_arabic_mobile-fine-tuned/inference/plate_rec.onnx": {
+    "bytes": 7652257,
+    "sha256": "92ae41f35945278f32332f70df6924ae61cbec416e3cba4ed435d349dd542c34"
+   },
+   "products/el-mohandes/models/vehicle_1280_1cls/best.onnx": {
+    "bytes": 38182342,
+    "sha256": "55a3c35eb8d6a3ba5bd03fca48009e9715494e7d35528a3e90099fffeb46bacc"
+   }
+  }
+ },
+ "images": {
+  "iris-deepstream-sidecar-mtmc:latest": "sha256:402fbe36ba3dc8eca15e538e9be1d7016524ec04bcb1b3d7bf2b2fb46a5aad59 created 2026-11-02T17:27:13.326087319+02:00 size 39898385112",
+  "iris-deepstream-sidecar:latest": "sha256:c33d0edfca10cb5b4f748299558c03afe55050f3219c78d69b025c44684fd2f5 created 2026-11-02T14:18:28.202632333+02:00 size 31238597172",
+  "iris-iris:latest": "sha256:c6f2eb692bb43b51ea445d9de106f034c9873e0682fc339cec72cb015cd40894 created 2026-11-02T14:09:08.886955707+02:00 size 4490899768",
+  "nvidia/dcgm-exporter:4.6.0-4.8.3-distroless": "sha256:613ab03c11d442fd960ff515f547e9921537454a712d08160bc8f677f89f1c35 created 2026-07-08T20:41:22.167103474Z size 217163878"
+ },
+ "versions": {
+  "cuda_in_sidecar": "see docker image inspect / provenance-start.txt",
+  "docker": "Docker version 29.10.0, build fdd4b8e",
+  "git_worktree_commit": "af128f7df52e5ec2a2ff0b80b71c5e827545e794",
+  "gpu": "NVIDIA GeForce RTX 5050 Laptop GPU, [N/A], 3090 MHz, 8151 MiB",
+  "kernel": "7.0.0-43-generic",
+  "nvidia_driver": "595.99.02"
+ }
+}

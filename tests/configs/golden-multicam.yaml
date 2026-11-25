@@ -1,0 +1,8 @@
+# TEST CONFIG (not a product): the multicam pipeline profile (vehicle detector, plate SGIE, MTMC) on a 90 s vehicle
+# clip, from disk, no loop, one source. Clip: tools/make_golden_clips.sh.
+extends: ../../configs/presets/multicam/sidecar.yaml
+
+file_loop: false
+
+sources:
+  - {id: cam-01, uri: "file:///workspace/iris/data/uploads/golden/vehicles.mp4"}

@@ -1,0 +1,6 @@
+outs:
+- md5: ccf41e2b6176ef3ffc0b21276136426e.dir
+  size: 25044850
+  nfiles: 636
+  hash: md5
+  path: t2

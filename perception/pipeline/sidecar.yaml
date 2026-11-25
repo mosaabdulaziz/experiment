@@ -1,0 +1,383 @@
+# IRIS DeepStream sidecar config (Stage 1 — batched multi-source)
+redis_url: "redis://redis:6379/0"
+
+# through ffmpeg (-c copy, original codecs) and publishes it to go2rtc's RTSP
+# ingest as raw-<cam-id>; go2rtc derives <cam-id> (original + on-demand H.264
+# transcode for browsers) which the sidecar consumes over real RTSP, so
+# recording uses Smart Video Record (recorder: auto -> rtsp:// => svr). See
+# test_streamer/README.md. To switch back to direct file playback, restore the
+# file:// URIs (the upload names are in test_streamer/stream_recordings.py's
+# CAM_FILES).
+# CAMERAS ARE DECLARED PER PRODUCT (2026-09-23), in products/<name>/sidecar.yaml.
+# They used to live here, which meant a product that forgot a `sources:` line
+# silently inherited another product's cameras -- and this file, shared by
+# everyone, carried one product's inventory. A process with no cameras of its
+# own now refuses to start instead of guessing (see sidecar.py's exit when
+# `sources` resolves empty).
+
+pgie_config: "/workspace/iris/perception/models/DeepStream-Yolo/config_infer_primary_yolo11_x.txt"  # X-tier, FP32 -- started as a one-off tier comparison but has been the actual running model ever since, including through all of the face-ID recognition-threshold tuning (face_recognition_threshold/min_votes/lock_seconds) validated live against it. Switching tiers now would decouple those calibrated thresholds from the model they were tuned against.
+# TRT engines are serialized by nvinfer NEXT TO their ONNX file (derived name
+# <onnx>_b<batch>_gpu<id>_<mode>.engine), so the pgie and face-sgie engines live
+# in perception/models/DeepStream-Yolo/ and perception/models/DeepStream-Yolo-Face/ respectively (both on the
+# workspace volume). engine_dir below is kept only for legacy/back-compat.
+engine_dir: "/workspace/iris/data/deepstream-engines"
+
+# Use-case modules this process runs, in the order they run: name -> settings. Empty here on purpose -- a product
+# declares what it needs (products/*/sidecar.yaml), and nothing is switched on by inheritance. See
+# perception/modules/README.md for the list and perception/modules/<name>/README.md for each one's settings.
+modules: {}
+# Roles (IRIS_SIDECAR_ROLE selects sources by their `roles:` tag) and who owns an untagged source's recording are a
+# PRODUCT's to declare: `role_overrides:` and `untagged_recording_owner:` in its own yaml (products/attendance). The
+# shared file names no product.
+
+# INT8 calibration inputs for the pgie (yolo11s). Only consulted when
+# config_infer_primary_yolo11.txt sets network-mode=1 (INT8); the custom YOLO
+# parser's calibrator (compiled with OPENCV=1) reads these env vars at
+# engine-build time and writes the calibration cache to the config's
+# int8-calib-file. Generate the image list first with:
+#   python3 perception/models/DeepStream-Yolo/tools/gen_int8_calib_table.py --video <source>
+int8_calib_img_path: "/workspace/iris/perception/models/DeepStream-Yolo/calib/calib_images.txt"
+int8_calib_batch_size: 1
+
+autostart: true  # set true to start processing immediately on container launch
+tracker_lib: "/opt/nvidia/deepstream/deepstream/lib/libnvds_nvmultiobjecttracker.so"
+# Repo-owned NvDCF config (perf preset + long shadow tracking so brief detector
+# dropouts keep the same object_id). Relative to the sidecar's cwd; takes effect
+# on the next sidecar restart.
+# (Was "sidecar/..." -- that folder moved to perception/pipeline/ on 2026-09-23. A
+# missing file does not stop DeepStream: it logs "File doesn't exist. Will go ahead
+# with default values" and runs the tracker untuned. tests/test_sidecar_config_paths.py
+# now fails if this path stops resolving.)
+tracker_config: "perception/pipeline/config_tracker_nvdcf.yml"
+
+# 1080x720 (was 1280x720) since 2026-09-01: every CHIRLA camera is natively
+# 1080x720, so muxing at 1280 stretched each frame 1.19x horizontally --
+# softer AND geometrically distorted (faces widened), for both the preview
+# and the recognizer's crops. Native passthrough is sharper and cheaper.
+# 2026-09-10: reverted from 3840x2160 -- that was a brand-new, never-before-
+# tested combination in this repo, and cam-20 produced ZERO detections of ANY
+# class across 64/64 published meta entries at that resolution (engine built
+# and loaded cleanly, no errors -- confirmed via redis, not just "nobody
+# walked by": two pulled preview frames 60s+ apart both show a person seated
+# at the desk, clearly detectable). Reverting to isolate whether the 4K mux
+# itself is the cause before touching model tier at all.
+mux_width: 1080
+mux_height: 720
+capture_width: 1080
+capture_height: 720
+
+# Camera clock from RTCP (issue 1 Phase 2, 2026-09-12). true = when a camera
+# sends its own clock alongside the video (RTCP Sender Reports: small
+# side-channel messages saying "this frame was captured at <camera's time>"),
+# the attendance table and that camera tile's clock use the CAMERA's time. A
+# camera that doesn't send it falls back to the server's current time on its
+# own, per camera. false = always server time. Process-start-only (restart
+# the sidecar after changing). Only a source whose uri points straight at a
+# camera can carry it -- go2rtc's relay (rtsp://go2rtc:8554/...) drops it.
+rtcp_camera_clock: true
+
+sample_fps: 12   # meta + face-recognition cadence. Raised 2 -> 4 -> 6 on
+                # 2026-08-31: with face_recognition_min_votes: 3, votes accrue
+                # at this rate, so 6/s locks a name after ~0.5s of face
+                # visibility -- catches people who cross the frame quickly, and
+                # gives each track more match attempts per pass. Cost: 3x the
+                # original embedding work, but ArcFace only runs on frames with
+                # detected faces, so this stays cheap next to the pipeline
+                # itself. Watch the recognition queue if many cams run at once.
+# Preview-publish rate (JPEGs written to iris:jpeg:<id> for the website).
+# With analysis_fps active the preview is capped at the analysis rate (the
+# probe publishes from the analysis branch); with process_fps only, it runs at
+# stream_fps on every frame.
+stream_fps: 25
+# Preview mode for the website. true (default) = DeepStream draws boxes and
+# JPEG-encodes every preview frame into iris:jpeg:<id> (annotated tiles).
+# false = inference-only: the sidecar publishes NO preview JPEGs; the website
+# plays each source's raw stream over WebRTC (iris:status:<id> preview_uri)
+# and overlays detections from iris:meta:<id>. Raw mode frees the GPU entirely
+# of NVJPEG encode + surface copy + box drawing (the measured preview overhead).
+# Set true for fire/smoke demo -- the sidecar burns hazard-coloured boxes into the preview.
+pipeline_preview: true
+# ── Rate limiting: analysis_fps (videorate) vs process_fps (pgie interval) ─
+# Two independent knobs — alternatives, never combined (when analysis_fps > 0
+# the code forces infer_interval = 1).
+#
+# analysis_fps — a GStreamer videorate + capsfilter between each source's tee
+# and the mux caps the WHOLE analysis branch (nvinfer, nvtracker,
+# nvvideoconvert, probe → preview) at ~analysis_fps frames/s per source. This
+# is the biggest per-stream GPU saving (inference + tracker + convert + probe
+# all scale down). Trade-offs: the website preview runs at ~analysis_fps too
+# (coherent but low-fps for small values), and the actual rate is PTS-
+# quantized for non-integer source/analysis ratios (24 fps source → af=10
+# measures ~10; 25 fps source → af=10 measures ~8.4). Decode still runs at the
+# source's full rate (videorate is post-decode). Production default: 10.
+# 0 = disabled (direct tee->mux link).
+#
+# process_fps — nvinfer `interval`: inference on every Nth batch
+# (N = stream_fps / process_fps); skipped batches propagate the last
+# detections, so the pipeline stays full-rate and the preview stays smooth at
+# stream_fps while only inference is reduced. Use this instead when preview
+# smoothness at native rate matters more than the extra tracker/convert
+# savings. 0 = infer every frame.
+# 2026-09-10: 10 -> 0. The "skipped batches propagate the last detections"
+# claim above does NOT hold in practice -- measured live on cam-15: object
+# metadata (checked at the raw pyds level, before any filtering) is genuinely
+# EMPTY on skipped frames, not carried forward, even though the SAME tracked
+# object (stable object_id) reappears on the next inferred frame. That
+# produces a hard on/off box flicker in the UI at the interval's own cadence.
+# Inferring every frame removes the gap entirely. Cost: full inference load
+# per stream instead of ~1-in-2.5 -- affordable for a couple of test cams,
+# revisit if running many streams at once.
+process_fps: 0
+analysis_fps: 0
+# Switched modes 2026-08-31 (user asked for a smoother live view): analysis_fps
+# off, process_fps on. The pipeline now runs at the source's full rate, so the
+# preview publishes at stream_fps (25) with boxes propagated between inferred
+# frames, while inference itself still runs at ~10/s -- same detection cost,
+# smoother video, and the tracker sees 30 fps instead of 10 (better ID
+# continuity). Watch GPU load when streaming many cams at once; if it
+# saturates, drop back to analysis_fps: 10 / process_fps: 0.
+# nvstreammux sync-inputs (main, independent of the fps mode above -- a real
+# fix for cross-stream tile flicker, kept regardless of which knob is active).
+# With 0 (the RTSP default), independently-paced sources produce
+# intermittently malformed batches — frame PIXELS get cross-attributed
+# between sources, so a tile flickers between cameras' video (boxes/dets stay
+# correct: they key off pad_index, only the surface content scrambles). =1
+# time-aligns one frame per source per batch and fixes it. Caveat to re-test
+# for other topologies: mixed file+RTSP pipelines can stall with
+# sync-inputs=1 (see sidecar.py).
+mux_sync_inputs: 1
+# TEMP (2026-09-10): giving the mux more slack to align multiple sources
+# before closing a batch, testing whether the default 40000us is too tight
+# for sync-inputs=1 to reliably avoid cross-stream corruption with 2+ sources
+# (confirmed: 1 source alone is always clean, 2+ sources intermittently
+# corrupt even with sync-inputs=1 already on). Remove if this doesn't help.
+mux_push_timeout_us: 500000
+
+# ── Decoder-level frame drop ───────────────────────────────────────────────
+# Alternative/stronger cap: decode every Nth frame only, cutting decoder GPU
+# work itself (the single biggest per-stream pipeline cost). Unlike analysis_fps
+# it ALSO caps the record branch (same tee), so recordings drop to
+# ~stream_fps/N fps. Prefer analysis_fps unless decode is the limiting factor.
+# 0 (default) = disabled.
+decoder_drop_interval: 0
+
+jpeg_quality: 50   # 75 -> 50 (2026-09-13, user: preview quality doesn't matter, smoothness does).
+                    # 92 -> 75 earlier the same day: preview pictures ~35% smaller so faster tile refresh
+                    # (60 ms) stays light on bandwidth; preview only -- detection/recognition use
+                    # the pipeline's own full-quality frame. Restart the sidecar after changing.
+                    # cv2-style quality; the GPU path maps it onto nvJPEG's scale
+                    # (nvjpegenc quality = jpeg_quality - 15, byte-equivalent).
+                    # Raised from 80 on 2026-09-01: at 80 (effective ~65) the
+                    # dashboard tiles showed visible block artifacts -- "videos
+                    # are a little bit pixelated". ~2x the preview bytes; fine
+                    # at this deployment's 3-6 concurrent streams.
+# GPU JPEG encode (nvjpegenc) for the published preview frames instead of CPU
+# cv2.imencode — moves the ~5-15ms/frame encode off the CPU onto the GPU. Falls
+# back to cv2.imencode automatically if the element is missing or wedges.
+# The encoder is shared across the per-stream publisher workers and serialized
+# with an internal lock, so concurrent 14-source batches can't poison it.
+gpu_jpeg: true
+stream_maxlen: 64
+conf_threshold: -1.0  # was 0.0. Lowered 2026-09-01 so SHADOW TRACKS (tracker
+                      # still localizing a person the detector missed this
+                      # frame -- DeepStream reports their conf as -0.1) are
+                      # included in the published dets. Attendance's presence
+                      # bridge reads dets to keep a back-turned person's
+                      # sighting alive; at 0.0 a seated/occluded person whose
+                      # detection dropped vanished from dets instantly even
+                      # though the tracker still had them, breaking their
+                      # presence span. Pairs with the raised
+                      # maxShadowTrackingAge in config_tracker_nvdcf.yml.
+draw_shadow_tracks: true   # draw boxes for shadow-tracked objects (detector missed them this
+                           # frame, tracker still localizing) so boxes don't flicker; false =>
+                           # only detector-confident objects get boxes
+sync_to_clock: true
+file_loop: true
+# 2026-09-13: tuned for the real cameras over the slow Tailscale relay (delay
+# 0.2-1.5s, ~10% loss). With latency 100 + drop-on-latency nearly every packet
+# counted as "late" and was thrown away, so sources looked silent and the
+# sidecar looped on reconnects while go2rtc still had the video. Cost: the live
+# view and attendance times run ~2s behind. Restart the sidecar after changing.
+# Second pass (same day): 2000 + false made it worse -- keeping late/out-of-order
+# data produced corrupted H.265 ("NAL unit type 50 not supported": 0 errors all
+# day before, 7 in 15 min after) and silent 5-12s freezes. Now 500 + drop again.
+rtsp_latency_ms: 500          # how long to wait for late video data (was fixed 100; 2000 tried)
+rtsp_drop_on_latency: true    # drop late data -- keeping it corrupted frames (false tried)
+rtsp_reconnect_interval: 15  # 5 -> 15 (2026-09-13, slow camera link). History: was 10. Halved 2026-09-01: `just replay` restarts
+                             # the RTSP publishers, and the sidecar's per-source
+                             # watchdog only notices dead streams after this
+                             # interval (then retries on the same cycle) -- at 10
+                             # the dashboard tiles took 20-40s to resume after a
+                             # replay. Local mediamtx, so aggressive reconnects
+                             # are free; real flaky WAN cameras might want 10+.
+relevant_classes:
+  - person
+  - fire
+  - smoke
+  # 2026-09-12: commented out, not removed -- this system is being used for
+  # identification/attendance, not the productivity-monitoring or traffic
+  # use cases these were added for. person/fire/smoke share this SAME filter
+  # (it's the only place in sidecar.py that gates what reaches dets/boxes at
+  # all, checked directly before touching this), so fire/smoke alerting stays
+  # intact. Uncomment individually if a use case for one of these comes back.
+  # - car
+  # - truck
+  # - bus
+  # - motorcycle
+  # - bicycle
+  # - traffic light
+  # - stop sign
+  # - dog
+  # - cell phone
+  # - laptop
+  # - tvmonitor
+
+
+# Full-fps preview recording (independent of the detection pipeline)
+record_seconds: 8              # segment length; should match chat.search.round_seconds in config.yaml.
+                               # Also keep config.yaml's alerts.clip.max_wait_seconds greater than
+                               # alerts.clip.pad_seconds + this, or alert clips time out before the
+                               # closing segment is indexed (IRIS warns at startup if it doesn't).
+record_bitrate_kbps: 2000     # target bitrate for the recorded segments, lower for lower bandwidth, higher for better quality.
+record_fps: 5                  # record-branch encode rate (frames/s per stream). 0 = full source rate.
+                               # MEASURED: at 0 (full rate), the 12 recording branches throttled the
+                               # shared tee so the analysis/preview branch fell to 1.7-3.5 fps while
+                               # non-recording cams ran at 4.2-5.0. Capping at 5 freed the analysis
+                               # branch (all cams back at ~4.2-5.0 fps; previews stay smooth) and
+                               # recording stayed full-rate-free of issues. Alert/chat clips only
+                               # need a few fps, so keep this modest (5-10); it saves GPU + disk too.
+                               # The GPU's concurrent-NVENC-session ceiling is MEASURED at startup (a
+                               # throwaway subprocess probe opens encoder sessions until the driver
+                               # stops accepting them; a wedge during probing can't touch the real
+                               # pipeline) — no GPU-specific knob, so this runs unchanged on any GPU.
+                               # Streams past the measured ceiling keep analyzing and previewing but
+                               # don't record. Recording starts after the probe + the per-branch
+                               # stagger below (~40s at 14 streams).
+# ── Smart Video Record (RTSP sources only) ──────────────────────────────────
+# SVR muxes the camera's OWN encoded stream -- NvDsSRInitParams' width/height are
+# documented "0 means no transcode" -- so it costs no NVENC session. The encode
+# branch below spends one session per stream against a driver ceiling the probe
+# measures at ~8-14 (see record_stagger_ms), and streams past it keep analyzing but
+# never record. SVR removes the ceiling for RTSP rather than scheduling around it.
+# Per-source override with `recorder: svr|encode|none` in the sources list;
+# `auto` picks from the URI scheme: rtsp:// -> svr, everything else -> encode
+# (SVR is RTSP-only in DeepStream -- nvurisrcbin: "Sources must be of type
+# source-type-rtsp").
+recorder: "auto"
+svr_cache_seconds: 15         # pre-roll held in RAM, per stream. MUST be greater than
+                              # alerts.clip.pad_seconds in config.yaml or a clip opens after
+                              # its own alert (IRIS warns at startup). DeepStream defaults this
+                              # to 0 -- no pre-roll at all -- so it is always set explicitly.
+                              # Also the deadline for PROACTIVE VLM alerts: those are only known
+                              # once the model answers, and IRIS asks for the recording via
+                              # iris:svr_request:<id> at that point, so a moment older than this
+                              # is out of cache and gets no clip. Raise it if VLM alerts on RTSP
+                              # streams report "the moment is Ns old but the cache holds only".
+svr_duration_seconds: 10      # total clip length; keep at 2 x alerts.clip.pad_seconds
+svr_coalesce_seconds: 2.5     # alerts within this of a running session share its clip; keep
+                              # below svr_duration_seconds/2 so a shared clip retains context
+                              # on both sides, same rule as alerts.clip.coalesce_seconds
+# Mitigation for a traced NVIDIA DeepStream bug, not a correctness setting -- see
+# SvrTrigger's docstring (svr_trigger.py) for the full story: SmartRecord
+# (libnvdsgst_smartrecord.so) calls into the source's nvurisrcbin from a
+# background thread, and when that call lands on an already-freed instance it
+# segfaults inside g_type_check_instance() -- confirmed live via gdb,
+# symbol-resolved, across many captures. A fire/smoke incident that stays open
+# re-arms SVR the instant the previous session closes, which keeps
+# SmartRecord's background threads maximally busy and gives this race the most
+# opportunities to fire. This gap can't fix NVIDIA's bug, only reduce how often
+# the crash-prone window opens. 0.0 (svr_trigger.py's own default) would
+# restore instant re-arm.
+svr_rearm_cooldown_seconds: 1.0
+svr_dir: "/workspace/iris/data/alert_svr"   # sidecar's view of the shared dir
+svr_dir_app: "data/alert_svr"               # the app's view of the same dir
+
+# Source self-healing. A recorder failure returns NOT_NEGOTIATED into
+# nvurisrcbin's internal pre-decode tee, which stops rtspsrc -- and since the
+# RTSP connection is dead by then, nvurisrcbin's own "Resetting source" loop
+# never recovers it, so the camera is lost for the life of the process. The
+# sidecar restarts such a source itself; this is how long it then ignores
+# further reports of the SAME incident (one failure is reported repeatedly
+# over ~10s, and the restart itself takes a few seconds). Per source, so one
+# camera failing never masks another's.
+source_restart_cooldown_seconds: 30
+# Silent stalls: a source whose frames stop coming out of the mux while its
+# RTSP session stays up posts no error at all (decoder starved of surfaces, or
+# the mux swallowing its buffers -- seen 2026-09-24 on the barber cameras).
+# After this many seconds without one of its frames the sidecar restarts the
+# source; a source that stays silent is retried with doubling waits up to
+# source_stall_max_backoff_seconds, reset by its next frame. Never before a
+# source's first frame, never while paused, and not when every source goes
+# silent at once (that is downstream). Log line: "no frame came out of the mux".
+# 0 disables.
+source_stall_seconds: 15
+source_stall_max_backoff_seconds: 300
+# When restarting the source does not help (2026-09-26: after the barber test
+# streams restarted, two cameras stayed dead through an hour of restarts until
+# the whole sidecar restarted), end the process instead, like the main-loop
+# watchdog below, so the container's restart policy restarts it. N > 0: once N
+# stall restarts of one source within the window brought no frame back, its
+# next stall report exits (code 71); so do N+1 consecutive "every source
+# silent" reports. Costs every camera a ~15 s gap. A camera that never
+# delivers after the restart is not watched, so a camera that is really gone
+# does not cause a restart loop. Log line: "still no frame out of the mux after".
+# 0 (default) keeps restarting the source forever; barber enables it.
+source_stall_max_failed_restarts: 0
+source_stall_failed_restart_window_seconds: 600
+# The GLib main loop runs every recovery path above, and nvurisrcbin's own
+# reconnect can deadlock it (2026-09-24: resetting a source whose decoder was
+# starved). A separate thread exits the process when the loop has not run for
+# this long, so the container's restart policy brings the sidecar back (~30 s
+# outage for every camera, instead of one camera lost silently for good).
+# Log line: "GLib main loop has not run for". 0 disables.
+main_loop_stall_seconds: 60
+
+analysis_queue_buffers: 2      # depth, in BUFFERS, of the per-source queue between each tee and
+                               # nvstreammux. A tee pushes to its src pads serially on the upstream
+                               # thread, and only a queue starts a new one -- videorate is a filter,
+                               # not a queue. Without this the analysis branch runs inside the
+                               # decoder's thread, so anything stalling the RECORD branch off the same
+                               # tee (NVENC wedge mid-run, splitmuxsink disk stall) also stops
+                               # analysis for that source. It also lets rec_queue stay non-leaky:
+                               # backpressure no longer reaches the decoder, so segments are never
+                               # dropped to protect inference.
+                               # COST: these are NVMM surfaces, ~1.4MB/frame at 720p, PER STREAM --
+                               # depth 2 is ~530MB across 192 streams. Measure GPU headroom before
+                               # raising it. 0 = no queue (direct link, pre-2026-08 behavior).
+record_stagger_ms: 2500        # ms between lazy record-branch creations after the pipeline is PLAYING.
+                               # nvv4l2h264enc opens its NVENC session during the PLAYING state change;
+                               # 6+ simultaneous opens in one process deadlock the NVENC driver on some
+                               # GPUs (RTX 5050 laptop: sessions open in BLOCKING mode, never encode,
+                               # freezing the whole pipeline). Creating each branch one at a time
+                               # serializes the opens — verified to 14 sources at 2.5s. Cost: recording
+                               # starts after the NVENC probe + ~N*stagger after boot (~40s at 14
+                               # streams). 0 = create branches back-to-back (still serialized by the
+                               # blocking opens, and capped by the measured NVENC capacity).
+record_tmp_dir: "/tmp/iris-segments"
+storage_backend: "local"       # "minio" | "local" -- must match config.yaml's segments.storage_backend
+local_segments_dir: "/workspace/iris/data/segments"  # sidecar's view of the shared data/segments dir; only used when storage_backend: "local"
+segment_debug_logging: true    # log one INFO line per successfully recorded+uploaded+indexed segment; set false once the pipeline is confirmed stable
+pts_parity_logging: false   # log `pts - wall_clock` from both the probe and the segment
+                            # recorder so their time bases can be compared; diagnostic only
+# Per-stage timing telemetry (benchmarking mode). When enabled, hot-path stages
+# (probe + sub-stages, publish, recognizer, upload, rotation) accumulate
+# wall-clock time per thread and log [telemetry] lines every telemetry_interval
+# seconds — the harness (benchmarks/stream_capacity.py --telemetry) collects them
+# into the cell JSON and prints a per-stage busy% breakdown to find bottlenecks.
+# Also enabled by env IRIS_TELEMETRY=1. Cost when on: one monotonic() per stage
+# call; off: one bool check. On here so the monitoring stack (monitoring/README.md)
+# shows live pipeline metrics out of the box; set false to disable both the log
+# lines and the Prometheus exporter.
+telemetry_enabled: true
+telemetry_interval: 5.0    # s between [telemetry] flush lines; also the gauge sample rate
+# Port for the Prometheus /metrics exporter (monitoring stack scrapes
+# deepstream-sidecar:9100). Only active while telemetry is enabled; one server
+# per process, so shard replicas each export their own slice on this port.
+telemetry_prometheus_port: 9100
+minio_endpoint: "minio:9000"
+minio_bucket: "iris-segments"
+minio_secure: false
+# minio_access_key / minio_secret_key: set via MINIO_ACCESS_KEY / MINIO_SECRET_KEY env vars
+
+# Zones (intrusion, overcrowding, filter zones) are the `zones` module: see perception/modules/zones/README.md.
+record_enabled: true

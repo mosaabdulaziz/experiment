@@ -1,0 +1,53 @@
+{
+ "input_hw": [
+  252,
+  126
+ ],
+ "resize": "stretch",
+ "interpolation": "area",
+ "color": "rgb",
+ "mean": [
+  0.485,
+  0.456,
+  0.406
+ ],
+ "std": [
+  0.229,
+  0.224,
+  0.225
+ ],
+ "output": "staff_p = sigmoid(logit / temperature), shape [n, 1]",
+ "temperature": 0.8359,
+ "val_points": [
+  {
+   "threshold": 0.5,
+   "staff_recall": 0.9111,
+   "customers_as_staff": 0.0334
+  },
+  {
+   "threshold": 0.55,
+   "staff_recall": 0.9062,
+   "customers_as_staff": 0.0334
+  },
+  {
+   "threshold": 0.7,
+   "staff_recall": 0.8882,
+   "customers_as_staff": 0.0253
+  },
+  {
+   "threshold": 0.596,
+   "staff_recall": 0.899,
+   "customers_as_staff": 0.031
+  },
+  {
+   "threshold": 0.9,
+   "staff_recall": 0.8089,
+   "customers_as_staff": 0.0106
+  }
+ ],
+ "source_run": "runs_v3/dinov2_s_s0",
+ "timm_id": "vit_small_patch14_dinov2.lvd142m",
+ "best_epoch": 5,
+ "dataset": "barber_staff_dataset (review v2) + barber_staff_dataset_r2 2026-10-07 (369 reviewed frames, mostly hard)",
+ "sha256": "9622ff42998909318269dcde2c78df977558c9c9cded135333584a9b52eb4b4f"
+}

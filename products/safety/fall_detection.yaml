@@ -1,0 +1,14 @@
+# The fall product's service inside the safety stack. tools/safety_controller.py renders
+# <data>/safety/generated/fall_detection.yaml on top of this file with the fall role's cameras and the stack's zones
+# file; `just safety-up` starts the service with that config (FALL_DETECTION_CONFIG).
+extends: ../fall_detection/fall_detection.yaml
+# The fall role sidecar writes iris:meta:<camera>@fall beside the other role sidecars on the camera.
+key_role: fall
+port: 8014                      # beside a plain `just fall-up` (8004) on the same machine
+# The alert says what happened ("Person fell (confidence 82%)") and carries the person's track and the evaluation,
+# confidence and review flag as fields, which the safety console words in English or Arabic.
+alert_details: true
+scoring:
+  # A candidate is an incident only when its confidence (as the alert states it, two decimals) is above this: one the
+  # product is 0% sure of is not. It still goes to the review queue. (The fall product's own default: no floor.)
+  alert_above: 0.0

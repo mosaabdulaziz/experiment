@@ -1,0 +1,12 @@
+# Barber sidecar for Palm Hills on the real cameras (2026-10-15): sidecar.palm-hills.yaml without ph-4
+# (= barber.palm-hills-live.yaml's cameras). Six sources = a b6 TensorRT engine, built once on first start.
+extends: sidecar.palm-hills.yaml
+
+sources:
+  - {id: ph-1, uri: "rtsp://go2rtc:8554/raw-ph-1", roles: [barber]}
+  - {id: ph-2, uri: "rtsp://go2rtc:8554/raw-ph-2", roles: [barber]}
+  - {id: ph-3, uri: "rtsp://go2rtc:8554/raw-ph-3", roles: [barber]}
+  # - {id: ph-4, uri: "rtsp://go2rtc:8554/raw-ph-4", roles: [barber]}
+  - {id: ph-5, uri: "rtsp://go2rtc:8554/raw-ph-5", roles: [barber]}
+  - {id: ph-6, uri: "rtsp://go2rtc:8554/raw-ph-6", roles: [barber]}
+  - {id: ph-7, uri: "rtsp://go2rtc:8554/raw-ph-7", roles: [barber]}

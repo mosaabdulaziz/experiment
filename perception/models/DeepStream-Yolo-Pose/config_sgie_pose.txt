@@ -1,0 +1,45 @@
+[property]
+gpu-id=0
+net-scale-factor=0.0039215697906911373
+model-color-format=0
+onnx-file=yolo26x-pose.onnx
+# There is NO model-engine-file here on purpose. nvinfer serializes the engine beside the ONNX
+# under a derived name -- <onnx-path>_b<batch>_gpu<id>_<mode>.engine -- and that name follows
+# from THIS file's own onnx-file, batch-size, gpu-id and network-mode. The pose module derives
+# it (perception/engine/engine_path.py) and passes it to the element, so there is one source of
+# truth for the name and no way for a stale one to survive a model switch. The engine lands
+# beside the ONNX, on the workspace volume, so the cache survives container restarts.
+# cluster-mode=4 => NVDSINFER_CLUSTER_NONE (no built-in clustering). The parser runs its
+# own NMS, so enabling nvinfer clustering here would double-suppress detections.
+cluster-mode=4
+labelfile-path=labels.txt
+batch-size=16
+network-mode=0
+num-detected-classes=1
+# The SGIE's re-inference interval, in frames: 2 = re-infer every 2nd frame = 12.5 Hz on a 25 Hz
+# pipeline. nvinfer reads this from the CONFIG FILE -- it is not an element property, and the
+# element property `interval` does not gate a secondary GIE. The module's `interval` setting is the
+# declaration of the same number, and the module refuses to start when the two disagree.
+secondary-reinfer-interval=2
+# `interval` is the PRIMARY GIE's element property; it does nothing for a secondary one, and it is
+# listed here only because every model config in the repo carries it.
+interval=0
+# The unique id of this GIE in the pipeline: 1 is the pgie, 2 the face SGIE, 3 the fire detector,
+# so the pose SGIE takes 4. Two GIEs sharing an id would report each other's objects.
+gie-unique-id=4
+process-mode=2
+network-type=3
+maintain-aspect-ratio=1
+symmetric-padding=1
+scaling-filter=1
+scaling-compute-hw=0
+force-implicit-batch-dim=0
+# The pose network runs on the primary detector's people (class 0).
+operate-on-gie-id=1
+operate-on-class-ids=0
+parse-bbox-instance-mask-func-name=NvDsInferParseYoloPose
+custom-lib-path=/opt/nvidia/deepstream/deepstream/custom_parsers/libnvdsinfer_custom_impl_Yolo_pose.so
+output-instance-mask=1
+
+[class-attrs-all]
+pre-cluster-threshold=0.25

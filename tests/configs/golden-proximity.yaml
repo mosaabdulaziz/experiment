@@ -1,0 +1,13 @@
+# TEST CONFIG (not a product): the proximity profile on 40 s of the Camera189 clip (tools/make_golden_proximity_clip.sh), with
+# one whole-view zone with proximity on and no depth check (the depth worker's timing would make runs differ).
+extends: ../../products/proximity/sidecar.yaml
+
+file_loop: false
+
+modules:
+  proximity:
+    config_path: "tests/configs/golden_proximity_zones.json"
+    depth_model: ""
+
+sources:
+  - {id: cam-1, uri: "file:///workspace/iris/data/uploads/golden/proximity.mp4", label: "golden proximity"}

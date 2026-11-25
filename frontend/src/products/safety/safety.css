@@ -1,0 +1,361 @@
+/* The safety console in IRIS's look. IRIS's tokens, base styles and buttons come from products/iris/styles (index.tsx),
+   its header from its Header.module.css (App.tsx); these rules style the console's own pages with the same tokens:
+   glass panels, IRIS's orange accent, its alert red and yellow, small uppercase labels, mono for ids and times. */
+
+/* A solid dark page, not IRIS's warm mesh and grain: on an operations screen colour is for what needs attention, so
+   the reds and ambers of incidents stand out against a quiet background. */
+body:has(.sf-root)::before { background: var(--bg); }
+body:has(.sf-root)::after { display: none; }
+
+.sf-root {
+  /* IRIS's type; Cairo only for the Arabic letters it has none of */
+  --font: 'Inter', 'Cairo', system-ui, -apple-system, sans-serif;
+  /* the mono labels too (tile status, Zones): without it Arabic fell to a system monospace, one letter per cell */
+  --font-mono: 'JetBrains Mono', 'Cairo', 'Menlo', 'Consolas', monospace;
+  font-family: var(--font);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  animation: fadeInUp 0.4s ease;
+}
+.sf-root > main { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+:where(.sf-root) h1 { font-size: 22px; font-weight: 700; color: var(--text); }
+:where(.sf-root) h2 {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim);
+}
+.sf-root :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* IRIS spaces its uppercase labels out; spacing breaks the joins between Arabic letters */
+.sf-root:lang(ar) * { letter-spacing: 0; }
+
+/* ── header (IRIS's, plus what the console needs of it) ─────────────────── */
+/* three columns: the brand at the start, the pages in the middle of the bar, the connection and language at the end
+   (mirrored in Arabic); the pages are IRIS's nav, larger */
+.sf-root .sf-top { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+.sf-root .sf-top > :first-child { justify-self: start; }
+.sf-root .sf-nav { margin: 0; justify-self: center; gap: 6px; padding: 5px; border-radius: 14px; }
+.sf-root .sf-nav a { white-space: nowrap; font-size: 13px; gap: 8px; padding: 9px 18px; border-radius: 10px; }
+.sf-root .sf-top-end { justify-self: end; display: flex; align-items: center; gap: 12px; }
+.sf-root .sf-conn { text-transform: uppercase; }
+
+/* ── the banner: incidents waiting for an acknowledgement, side by side (IRIS's alert cards) ── */
+.sf-banner {
+  display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;
+  margin: 12px 22px 0; padding: 10px 12px 12px;
+  /* a quiet panel with a red edge: its count and its cards carry the colour */
+  background: var(--glass-highlight), var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-inline-start: 3px solid var(--alert-color);
+  border-radius: var(--radius);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  box-shadow: var(--elev-1);
+  animation: fadeIn 0.3s ease;
+}
+.sf-banner-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sf-banner-count {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--alert-color);
+}
+.sf-banner-count::before {
+  content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--alert-color);
+  box-shadow: 0 0 8px var(--alert-glow); animation: pulse-dot 1.5s ease infinite;
+}
+.sf-banner-strip {
+  list-style: none; display: flex; gap: 10px; overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity; padding-bottom: 4px;
+}
+.sf-bcard {
+  flex: 0 0 330px; scroll-snap-align: start; display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 10px;
+  padding: 8px; border-radius: 12px; background: var(--glass-highlight), rgba(16, 16, 20, 0.6);
+  border: 1px solid var(--alert-border);
+}
+.sf-bcard[data-tone='warning'] { border-color: rgba(255, 209, 102, 0.35); }
+.sf-root .sf-bcard-media { border-radius: 8px; overflow: hidden; align-self: start; }
+.sf-bcard-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.sf-bcard-top { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-dim); }
+.sf-bcard-msg {
+  font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sf-bcard-cam { font-size: 12px; color: var(--text-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sf-bcard .iris-btn { align-self: flex-start; margin-top: auto; }
+.sf-bcard-more { flex-basis: auto; display: flex; align-items: center; padding: 8px 18px; }
+@media (prefers-reduced-motion: reduce) {
+  .sf-banner, .sf-root { animation: none; }
+  .sf-banner-count::before { animation: none; }
+}
+
+/* ── shared pieces ───────────────────────────────────────────────────────── */
+.sf-page { padding: 22px; display: flex; flex-direction: column; gap: 16px; }
+.sf-page-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.sf-panel {
+  background: var(--glass-highlight), var(--glass-bg);
+  backdrop-filter: var(--blur-sm);
+  -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--elev-1);
+}
+.sf-muted { color: var(--text-dim); }
+.sf-empty { color: var(--text-dim); padding: 40px 0; text-align: center; font-size: 13px; }
+.sf-error { color: var(--alert-color); }
+.sf-warn { color: var(--yellow); }
+.sf-ok { color: var(--green); }
+.sf-input {
+  background: var(--glass-bg); color: var(--text); border: 1px solid var(--glass-border); border-radius: 10px;
+  padding: 7px 10px; font: inherit; font-size: 13px; min-width: 0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.sf-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+
+/* each feature's colour: its tag (a name on a tint) and its sign */
+.sf-root {
+  --f-proximity: #ffd166;
+  --f-zones: #b9a2ff;
+  --f-ppe: #f9996c;
+  --f-fall: #7dd3fc;
+  --f-fire: #ff6b6e;
+  --f-health: #a3a3ad;
+}
+.sf-tag-proximity, .sf-sign-proximity { --f: var(--f-proximity); }
+.sf-tag-zones, .sf-sign-zones { --f: var(--f-zones); }
+.sf-tag-ppe, .sf-sign-ppe { --f: var(--f-ppe); }
+.sf-tag-fall, .sf-sign-fall { --f: var(--f-fall); }
+.sf-tag-fire, .sf-sign-fire { --f: var(--f-fire); }
+.sf-tag-health, .sf-sign-health { --f: var(--f-health); }
+.sf-sign { flex: none; color: var(--f, var(--text-soft)); }
+.sf-tag {
+  display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 999px; white-space: nowrap;
+  font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; line-height: 1.45;
+  color: var(--f, var(--text-soft));
+  background: color-mix(in srgb, var(--f, #888) 16%, rgba(10, 10, 12, 0.55));
+  border: 1px solid color-mix(in srgb, var(--f, #888) 45%, transparent);
+}
+button.sf-tag { cursor: pointer; transition: background 0.15s, color 0.15s, opacity 0.15s; }
+button.sf-tag:hover { border-color: var(--f); }
+button.sf-tag[aria-pressed='true'] { color: #141414; background: var(--f); border-color: var(--f); }
+button.sf-tag[data-stopped] { opacity: 0.45; }
+.sf-mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* IRIS's switch (its stream wall's "Show zones") on a checkbox */
+.sf-switch {
+  appearance: none; position: relative; flex-shrink: 0; width: 34px; height: 18px; border-radius: 999px;
+  background: var(--surface3); border: 1px solid var(--glass-border); cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+.sf-switch::after {
+  content: ''; position: absolute; top: 50%; inset-inline-start: 2px; width: 12px; height: 12px; border-radius: 50%;
+  background: #fff; transform: translateY(-50%); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: inset-inline-start 0.18s ease;
+}
+.sf-switch:checked { background: var(--accent); border-color: var(--accent); }
+.sf-switch:checked::after { inset-inline-start: 18px; }
+.sf-switch:disabled { opacity: 0.5; cursor: progress; }
+
+/* ── live ────────────────────────────────────────────────────────────────── */
+/* the page fills the space under the banner; the wall's rows fill the wall (LivePage: IRIS's layoutRows) */
+.sf-page.sf-live {
+  flex: 1; min-height: 0; display: grid; gap: 18px;
+  grid-template-columns: minmax(0, 1fr) min(var(--rail-w, 360px), 60%); grid-template-rows: minmax(0, 1fr);
+}
+.sf-wall { display: flex; flex-direction: column; gap: 12px; min-width: 0; min-height: 0; }
+.sf-wall-row { display: flex; gap: 12px; flex: 1 1 0; min-height: 0; }
+/* IRIS's tile (StreamTile.module.css), plus the console's: no click to expand, outlined while an incident goes on */
+.sf-root .sf-tile { cursor: default; }
+.sf-root .sf-tile[data-alert] { border-color: var(--alert-color); box-shadow: 0 0 0 1px var(--alert-border), 0 0 24px var(--alert-glow); }
+.sf-tile-off {
+  position: absolute; inset: 0; display: grid; place-items: center; z-index: 1;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim);
+}
+.sf-tile-alert {
+  margin-inline: auto 8px; padding: 2px 9px; border-radius: 999px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: #fff; background: rgba(255, 94, 98, 0.85); box-shadow: 0 0 14px var(--alert-glow);
+}
+/* the bottom bar: just the tags, slim */
+.sf-root .sf-tile-tags { justify-content: flex-start; flex-wrap: wrap; gap: 5px; padding: 6px 8px; }
+/* a camera no feature runs on: its still, a little dimmer than a live tile, and what it waits for */
+.sf-root .sf-tile-still img { filter: saturate(0.6) brightness(0.85); }
+.sf-tile-note { font-size: 11px; font-weight: 600; color: var(--text-dim); padding: 2px 2px; }
+
+/* what still needs setting up, above the incidents: amber, IRIS's warning colour */
+.sf-setup {
+  display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 12px; flex: none;
+  border: 1px solid rgba(255, 209, 102, 0.32); border-radius: var(--radius); background: rgba(255, 209, 102, 0.06);
+}
+.sf-setup-head {
+  display: flex; align-items: center; gap: 7px; margin: 0;
+  font-size: 13px; font-weight: 700; color: var(--yellow);
+}
+.sf-setup ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.sf-setup-item {
+  display: grid; gap: 6px; padding: 9px 10px; border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border);
+}
+.sf-setup-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.sf-setup-cam { font-size: 12px; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sf-setup-item p { margin: 0; font-size: 12px; line-height: 1.45; color: var(--text-dim); }
+.sf-setup .iris-btn { justify-self: start; align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; }
+.sf-rail-wrap { position: relative; display: flex; min-width: 0; min-height: 0; }
+.sf-rail {
+  flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 14px; min-width: 0; min-height: 0; overflow-y: auto;
+  container: rail / inline-size;                     /* its cards follow its width (resizable: ResizeHandle) */
+  background: var(--glass-highlight), var(--glass-bg); backdrop-filter: var(--blur-sm); -webkit-backdrop-filter: var(--blur-sm);
+  border: 1px solid var(--glass-border); border-radius: var(--radius-lg); box-shadow: var(--elev-2);
+}
+
+.sf-rail-list { display: flex; flex-direction: column; gap: 10px; }
+/* a wide list: its cards in columns; a slim one: the meta wraps under the message */
+@container rail (min-width: 620px) {
+  .sf-rail-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); align-items: start; }
+}
+@container rail (max-width: 320px) {
+  .sf-rail .sf-ecard { padding: 11px 12px; }
+}
+
+/* ── incidents ───────────────────────────────────────────────────────────── */
+/* the tabs: IRIS's nav pills */
+.sf-tabs {
+  display: inline-flex; gap: 4px; align-self: flex-start; padding: 4px; border-radius: 12px;
+  background: var(--glass-bg-soft); border: 1px solid var(--glass-border);
+}
+.sf-tab {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim);
+  background: transparent; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+.sf-tab:hover { color: var(--text); background: rgba(255, 255, 255, 0.04); }
+.sf-tab[aria-selected='true'] {
+  color: #1b0a02; background: linear-gradient(180deg, var(--accent-soft), var(--accent)); box-shadow: 0 4px 14px var(--accent-glow);
+}
+.sf-filters { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.sf-chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px 4px 6px; border-radius: 999px;
+  font-size: 12px; color: var(--text-soft); background: var(--glass-bg-soft); border: 1px solid var(--glass-border);
+  cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.sf-chip:hover { color: var(--text); border-color: var(--glass-border-hi); }
+.sf-chip[aria-pressed='true'] { color: var(--accent-soft); border-color: var(--accent-glow); background: var(--accent-dim); }
+.sf-chip-text { padding: 4px 11px; }
+/* a day's run: IRIS's "TODAY ────" label */
+.sf-day-group { display: flex; flex-direction: column; gap: 10px; }
+.sf-day { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
+.sf-day::after { content: ''; flex: 1; height: 1px; background: var(--glass-border); }
+.sf-day-count { order: 1; font-family: var(--font-mono); font-weight: 400; letter-spacing: 0; }
+/* IRIS's incident card (IncidentCard.module.css), plus the console's: the facts line and the acknowledgement */
+.sf-root .sf-icard[data-waiting] { border-color: var(--alert-border); box-shadow: 0 0 0 1px var(--alert-border), var(--elev-1); }
+.sf-root .sf-icard[data-waiting][data-tone='warning'] {
+  border-color: rgba(255, 209, 102, 0.4); box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.22), var(--elev-1);
+}
+.sf-root .sf-icard[data-waiting][data-tone='info'] { border-color: var(--glass-border-hi); box-shadow: var(--elev-1); }
+/* IRIS's alert card is red whatever the alert: here red is for critical, amber for warnings, grey for the rest, and
+   only an incident still going on keeps its edge pulsing */
+.sf-root .sf-ecard[data-tone='warning'] {
+  background: var(--glass-highlight), linear-gradient(135deg, rgba(255, 209, 102, 0.07), var(--glass-bg));
+  border-color: rgba(255, 209, 102, 0.28);
+}
+.sf-root .sf-ecard[data-tone='warning']::before { background: var(--yellow); box-shadow: 0 0 12px rgba(255, 209, 102, 0.35); }
+.sf-root .sf-ecard[data-tone='info'] { background: var(--glass-highlight), var(--glass-bg); border-color: var(--glass-border); }
+.sf-root .sf-ecard[data-tone='info']::before { background: var(--text-muted); box-shadow: none; }
+.sf-root .sf-ecard:not([data-tone='critical']) { animation: fadeInUp 0.3s ease; }
+.sf-root .sf-ecard:not([data-open])::before { animation: none; }
+.sf-icard-facts { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; font-size: 12px; color: var(--text-dim); }
+.sf-icard-facts:empty { display: none; }
+.sf-icard-ack { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; font-size: 12px; }
+/* the Live list: IRIS's alert cards (EventCard.module.css), plus the acknowledgement beside the preview */
+.sf-ecard .sf-icard-facts { margin: 4px 0 0; }
+.sf-root .sf-ecard-ack { margin-inline-start: auto; }
+.sf-incident {
+  display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 14px 16px;
+  border-inline-start: 3px solid var(--glass-border-hi);
+}
+.sf-incident[data-tone='critical'] { border-inline-start-color: var(--alert-color); }
+.sf-incident[data-tone='warning'] { border-inline-start-color: var(--yellow); }
+.sf-incident[data-waiting] {
+  background: linear-gradient(135deg, rgba(255, 94, 98, 0.1), var(--glass-bg)); border-color: var(--alert-border);
+}
+.sf-incident-msg { font-size: 14px; font-weight: 600; color: var(--text); overflow-wrap: anywhere; }
+.sf-incident-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 4px; font-size: 12px; color: var(--text-dim); }
+.sf-incident-actions { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
+.sf-status-open { color: var(--alert-color); font-weight: 600; }
+
+/* ── cameras ─────────────────────────────────────────────────────────────── */
+.sf-camera-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.sf-camera-id { font-family: var(--font-mono); font-size: 11px; }
+.sf-camera-features { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.sf-feature-toggle {
+  display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 10px 12px;
+  border: 1px solid var(--glass-border); border-radius: 12px; background: var(--glass-bg-soft); cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.sf-feature-toggle:hover { border-color: var(--glass-border-hi); }
+.sf-feature-toggle[data-on] { border-color: var(--accent-glow); background: var(--accent-dim); }
+.sf-feature-text { display: grid; gap: 2px; min-width: 0; font-size: 13px; font-weight: 600; color: var(--text); }
+.sf-feature-sub { font-size: 11px; font-weight: 400; color: var(--text-dim); }
+.sf-feature-text .sf-tag { justify-self: start; }               /* the tag hugs its name, not the switch's width */
+.sf-feature-sub.sf-warn { color: var(--yellow); }
+.sf-applybar {
+  position: sticky; bottom: 0; margin-top: auto; display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; padding: 12px 22px; font-size: 13px; color: var(--text-soft);
+  background: rgba(10, 10, 12, 0.7); backdrop-filter: var(--blur-lg); -webkit-backdrop-filter: var(--blur-lg);
+  border-top: 1px solid var(--glass-border);
+}
+/* the camera's settings inside IRIS's zone editor (CameraEditor), above the selected zone's */
+.sf-camera-settings { display: grid; gap: 10px; }
+.sf-editor-camera {
+  display: grid; gap: 10px; padding: 12px 18px; border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.015);
+}
+.sf-editor-camera .sf-camera-features { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.sf-editor-camera .sf-feature-toggle { padding: 7px 10px; }
+.sf-apply-inline { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--text-soft); }
+/* the coverage summary under IRIS's zone editor toolbar */
+.sf-coverage { display: grid; gap: 6px; padding: 10px 16px; border-top: 1px solid var(--glass-border); font-size: 12px; color: var(--text-soft); }
+.sf-coverage strong { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+.sf-coverage ul { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.sf-coverage li { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ── health & settings ───────────────────────────────────────────────────── */
+.sf-table-wrap { overflow-x: auto; }
+.sf-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.sf-table th {
+  text-align: start; padding: 12px 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-dim); border-bottom: 1px solid var(--glass-border);
+}
+.sf-table td { text-align: start; padding: 12px 16px; border-bottom: 1px solid var(--glass-border); vertical-align: middle; }
+.sf-table tr:last-child td { border-bottom: none; }
+.sf-feature-cell { display: flex; align-items: center; gap: 10px; }
+.sf-health-feature { line-height: 0; display: inline-flex; align-items: center; }
+.sf-health-fps { font-family: var(--font-mono); font-size: 11px; line-height: 1; color: var(--text-dim); margin-inline-start: 4px; }
+.sf-health-feature[data-stopped] { opacity: 0.35; }
+.sf-form { display: grid; gap: 12px; padding: 16px; max-width: 600px; font-size: 13px; }
+.sf-field { display: grid; gap: 6px; color: var(--text-soft); }
+
+/* ── a clip (IRIS's overlay) ─────────────────────────────────────────────── */
+.sf-modal {
+  position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 24px;
+  background: rgba(5, 5, 7, 0.62); backdrop-filter: var(--blur-lg); -webkit-backdrop-filter: var(--blur-lg);
+  animation: fadeIn 0.2s ease;
+}
+.sf-modal-box { width: min(960px, 100%); padding: 14px; display: flex; flex-direction: column; gap: 10px; background: var(--glass-bg-strong); }
+.sf-modal-box video { width: 100%; background: #000; border-radius: 10px; }
+
+@media (max-width: 900px) {
+  /* stacked: the wall's tiles one under another at video shape, the list under them */
+  .sf-page.sf-live { flex: none; grid-template-columns: 1fr; grid-template-rows: auto; }
+  .sf-wall-row { flex-direction: column; flex: none; }
+  .sf-root .sf-wall .sf-tile { flex: none; height: auto; aspect-ratio: 16 / 9; }
+  .sf-rail { overflow: visible; }
+  .sf-page { padding: 16px; }
+  .sf-banner { margin: 12px 16px 0; }
+  .sf-bcard { flex-basis: 290px; grid-template-columns: 110px minmax(0, 1fr); }
+  .sf-incident { grid-template-columns: 28px minmax(0, 1fr); }
+  .sf-incident-actions { grid-column: 2; flex-direction: row; flex-wrap: wrap; }
+}
+/* IRIS hides its nav on phones (it has no small-screen layout); the console keeps it, on its own row */
+@media (max-width: 768px) {
+  .sf-root .sf-top { grid-template-columns: minmax(0, 1fr) auto; height: auto; padding: 10px 14px; row-gap: 8px; }
+  .sf-root .sf-nav { display: flex; grid-row: 2; grid-column: 1 / -1; justify-self: stretch; overflow-x: auto; }
+  .sf-root .sf-nav a { font-size: 12px; padding: 8px 12px; }
+}

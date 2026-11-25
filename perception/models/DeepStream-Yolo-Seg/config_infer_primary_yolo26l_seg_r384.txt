@@ -1,0 +1,32 @@
+# YOLO26l-seg, rectangular 640x384 input (H=384, W=640), FP16, batch 3 (barber sidecar, project 3).
+# The ONNX is made by `just barber-seg-model` (yolo26l-seg.pt -> export_yolo26_seg.py -s 384 640 --dynamic
+# --simplify; verified 2026-10-04 byte-identical to the file this config was measured with). The parser .so is
+# built into the sidecar image (perception/pipeline/Dockerfile). nvinfer builds the engine on first start.
+[property]
+gpu-id=0
+net-scale-factor=0.0039215697906911373
+model-color-format=0
+onnx-file=yolo26l-seg-r384.onnx
+model-engine-file=yolo26l-seg-r384.onnx_b3_gpu0_fp16.engine
+labelfile-path=labels.txt
+batch-size=3
+network-mode=2
+num-detected-classes=80
+interval=0
+gie-unique-id=1
+process-mode=1
+network-type=3
+cluster-mode=4
+maintain-aspect-ratio=1
+symmetric-padding=1
+scaling-filter=1
+scaling-compute-hw=0
+force-implicit-batch-dim=0
+output-instance-mask=1
+segmentation-threshold=0.5
+parse-bbox-instance-mask-func-name=NvDsInferParseYoloSeg
+custom-lib-path=/opt/nvidia/deepstream/deepstream/custom_parsers/libnvdsinfer_custom_impl_Yolo_seg.so
+
+[class-attrs-all]
+pre-cluster-threshold=0.25
+topk=300

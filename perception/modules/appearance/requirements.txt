@@ -1,0 +1,3 @@
+# The body embedder runs through ONNX Runtime on the GPU. Install after insightface (see face_recognition), which
+# would otherwise leave the CPU runtime shadowing it.
+onnxruntime-gpu>=1.19

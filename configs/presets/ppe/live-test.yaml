@@ -1,0 +1,5 @@
+# PPE live: test.mp4 as camera cam-ppe-live (`just ppe-live-sim`; see live.yaml).
+extends: live.yaml
+
+sources:
+  - {id: cam-ppe-live, uri: "rtsp://go2rtc:8554/raw-cam-ppe-live", label: "PPE live (test.mp4)"}

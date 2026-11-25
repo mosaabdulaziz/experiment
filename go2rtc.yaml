@@ -1,0 +1,339 @@
+# go2rtc — media server for IRIS raw previews (pipeline_preview: false).
+#
+# test_streamer/stream_recordings.py PUBLISHES the simulated cameras to this
+# server's RTSP ingest port as raw-cam-N (rtsp://go2rtc:8554/raw-cam-N,
+# `-c copy`, original codecs preserved). go2rtc only accepts RTSP publishes
+# for streams that exist in its config, so each raw-cam-N is declared below as
+# an empty placeholder — the pusher attaches to it as a producer.
+#
+# The derived `cam-N` streams are what BROWSERS consume (WebRTC at
+# /api/webrtc?src=cam-N). The DeepStream sidecar does NOT use them — it pulls
+# the raw-cam-N ingest directly (rtsp://go2rtc:8554/raw-cam-N) so detection
+# and SVR smart-record always see the ORIGINAL codec, untouched.
+#
+# Each cam-N lists two sources, in order:
+#   1. the ORIGINAL stream — served directly to browsers that can play it
+#      (Main-profile H.264 without B-frames: cam-4/5, and High-profile H.264
+#      for browsers that accept it, e.g. Chrome);
+#   2. an FFmpeg transcode to browser-safe H.264 (High profile, no B-frames —
+#      `-tune zerolatency`), the fallback for codecs browsers cannot play
+#      (HEVC: cam-6/7/8; H.264 High with B-frames for Firefox/OpenH264).
+# Transcodes are LAZY: go2rtc starts them only while a viewer actually needs
+# one, and stops them when the viewer leaves — nothing runs when idle. The
+# price is a ~1-2s ffmpeg spin-up the first time such a stream is watched.
+# That is the accepted tradeoff: the CPU stays free when nobody is viewing
+# (idle = zero transcode processes), and the GPU is never used for transcodes
+# at all — it is reserved for DeepStream inference.
+#
+# PRODUCTION (real cameras): keep the same shape but point raw-cam-N at the
+# camera's RTSP URI — go2rtc PULLS the camera, the sidecar pulls the original
+# from go2rtc (raw-cam-N), browsers get the derived cam-N. E.g.:
+#   streams:
+#     raw-cam-6: rtsp://user:pass@10.0.0.6:554/Streaming/Channels/101
+#     cam-6:
+#       - rtsp://user:pass@10.0.0.6:554/Streaming/Channels/101
+#       - ffmpeg:rtsp://user:pass@10.0.0.6:554/Streaming/Channels/101#video=h264
+# Best practice for scale: set cameras that support it to output H.264
+# Main/baseline (no B-frames) — then no transcode is needed at all and every
+# browser plays the original directly, with zero ongoing CPU cost.
+#
+# Transcode cost when active: ~0.3-0.7 of a core per stream (libx264 superfast
+# at these resolutions), CPU-only. If a fleet has many cameras that need
+# transcoding AND many simultaneous viewers, revisit: configure cameras to
+# H.264 Main (no transcode), or move transcodes to NVENC only after measuring
+# that the GPU has headroom above inference.
+#
+# Ports: 8554 RTSP (ingest + sidecar), 1984 API/UI (WHEP at
+# /api/webrtc?src=cam-N), 8555 WebRTC media (TCP+UDP).
+log:
+  level: info
+
+api:
+  # The browser plays raw previews from the frontend origin (localhost:8000 or
+  # the LAN host) via the WHEP endpoint, so cross-origin access is required.
+  origin: "*"
+
+webrtc:
+  # Pin the ICE candidates browsers can actually reach. Auto-discovery inside
+  # Docker only finds container-bridge IPs, and the default STUN servers make
+  # go2rtc advertise an srflx candidate with the machine's PUBLIC IP (behind
+  # NAT — unreachable, so WebRTC hangs). 127.0.0.1 covers a browser on the
+  # same machine (ports are published on the host); the LAN IP covers other
+  # devices on the network. Adjust the LAN IP for your deployment.
+  candidates:
+    - 127.0.0.1:8555
+    - 10.2.0.60:8555
+  # No STUN: we only ever reach the server directly (same host or same LAN).
+  ice_servers: []
+
+rtsp:
+  # Explicit RTP packet size (bytes). When set, go2rtc re-segments outbound
+  # RTP packets to this MTU — avoids oversized packets from some cameras and
+  # keeps packet sizes consistent across the relay. 1472 = standard Ethernet
+  # MTU (1500 - 20 IP - 8 UDP headers). Set to 0 to pass packets through
+  # unchanged (default). For relay-only setups like ours, explicit sizing
+  # prevents edge-case fragmentation on Docker bridge networks.
+  pkt_size: 1472
+
+# Preload streams on go2rtc start. Without this, the first sidecar connection
+# triggers stream negotiation — adding ~1-2s cold-start latency per camera.
+# Preloaded streams are ready immediately when the sidecar connects.
+preload:
+  raw-cam-1: "video"
+  raw-cam-2: "video"
+  raw-cam-3: "video"
+  raw-cam-4: "video"
+  raw-cam-5: "video"
+
+# FFmpeg templates used by the derived cam-N browser transcodes.
+# The h264 template uses superfast + zerolatency for minimal spin-up delay.
+# Add hardware: '#hardware' to use NVENC when available on the host.
+ffmpeg:
+  bin: ffmpeg
+  h264: "-codec:v libx264 -g:v 30 -preset:v superfast -tune:v zerolatency -profile:v main -level:v 4.1"
+
+streams:
+  # cam-1/2/3: real cameras (not CHIRLA-simulated) -- go2rtc PULLS the camera
+  # directly per the "PRODUCTION (real cameras)" recipe above, instead of
+  # waiting for a test_streamer push. DeepStream still only ever talks to
+  # go2rtc (raw-cam-N), never the camera directly -- see sidecar.yaml for why
+  # (2026-09-10: cam-1/2/3 pulled straight from the camera in sidecar.yaml
+  # died ~70s in with a fatal, unrecoverable RTSP read failure and never
+  # reconnected; routing through go2rtc here fixes it).
+  # ${RTSP_USER}/${RTSP_PASS} come from .env -- go2rtc substitutes these
+  # itself at load time (native support, no wrapper/template needed:
+  # https://github.com/AlexxIT/go2rtc/wiki/Configuration). docker-compose.yml's
+  # go2rtc service passes both into the container's environment.
+  # #transport=tcp (2026-09-10): go2rtc's RTSP client defaults to UDP for the
+  # media transport, which drops packets on this LAN and shows up as a solid
+  # green vertical tear on real motion (undefined chroma where a decoded frame
+  # loses NAL sync mid-row) -- a classic RTP-over-UDP packet-loss signature,
+  # not the earlier nvstreammux cross-source corruption (confirmed separately:
+  # persists even with the camera fully isolated, single-source, no batching
+  # involved at all). The team's own manual ffplay checks already used
+  # `-rtsp_transport tcp` for these same cameras (see prompt.md) -- matching
+  # that here instead of leaving go2rtc's ingest on the default.
+  #
+  # 2026-09-22: the full camera address comes from RAW_CAM_N_SRC, which
+  # docker-compose.yml builds -- by default the real camera above, with the
+  # credentials filled in. A second checkout on this host sets RAW_CAM_N_SRC
+  # in its .env to the first checkout's go2rtc instead, so the tunnel still
+  # carries each camera once. (Built in compose, not here: go2rtc's own
+  # ${VAR:default} can't hold other ${VARS} inside the default.)
+  raw-cam-1: ${RAW_CAM_1_SRC}
+  raw-cam-2: ${RAW_CAM_2_SRC}
+  raw-cam-3: ${RAW_CAM_3_SRC}
+  # RTSP ingest placeholders — publishers attach here, nothing else consumes them.
+  # raw-barber-1: the barber shop camera (products/barber/sidecar.yaml). Test
+  # clips are published here by test_streamer; for a real camera, replace the
+  # placeholder with its rtsp:// URL like raw-cam-1 above.
+  raw-barber-1:
+  raw-barber-c:
+  raw-barber-l:
+  raw-barber-r:
+  # raw-ph-*: Palm Hills (products/barber/sidecar.palm-hills.yaml)
+  raw-ph-1:
+  raw-ph-2:
+  raw-ph-3:
+  raw-ph-4:
+  raw-ph-5:
+  raw-ph-6:
+  raw-ph-7:
+  raw-cam-4:
+  raw-cam-5:
+  # cam-6: same physical camera as cam-3 (192.168.45.54), used here for the
+  # fire role. Restreamed FROM raw-cam-3 (go2rtc-internal, not the camera
+  # directly) so there is only ever ONE upstream RTSP session against that
+  # camera -- two independent pulls (attendance + fire) were suspected to be
+  # part of why the direct-RTSP setup above was unstable.
+  raw-cam-6: rtsp://127.0.0.1:8554/raw-cam-3
+  raw-cam-7:
+  raw-cam-8:
+  raw-cam-9:
+  raw-cam-10:
+  raw-cam-11:
+  raw-cam-12:
+  raw-cam-13:
+  raw-cam-14:
+  raw-cam-15:
+  raw-cam-16:
+  raw-cam-17:
+  raw-cam-18:
+  raw-cam-19:
+  raw-cam-20:
+  raw-cam-21:
+  raw-cam-22:
+  raw-cam-23:
+  raw-cam-24:
+  raw-cam-25:
+  raw-cam-26:
+  raw-cam-27:
+  raw-cam-28:
+  raw-cam-29:
+  raw-cam-30:
+  raw-cam-31:
+  raw-cam-32:
+  raw-cam-33:
+  raw-cam-34:
+  raw-cam-35:
+  raw-cam-36:
+  raw-cam-37:
+  raw-cam-38:
+  raw-cam-39:
+  raw-cam-40:
+  raw-cam-41:
+  raw-cam-42:
+  raw-cam-43:
+  raw-cam-44:
+  raw-cam-45:
+  raw-cam-46:
+  raw-cam-47:
+  raw-cam-48:
+  raw-cam-49:
+  raw-cam-50:
+  raw-cam-51:
+  raw-cam-52:
+  raw-cam-53:
+  raw-cam-54:
+  raw-cam-55:
+  raw-cam-56:
+  raw-cam-57:
+  raw-cam-58:
+  raw-cam-59:
+  raw-cam-60:
+  raw-cam-61:
+  raw-cam-62:
+  raw-cam-63:
+  raw-cam-64:
+  raw-cam-65:
+  raw-cam-66:
+  raw-cam-67:
+  raw-cam-68:
+  raw-cam-69:
+  raw-cam-70:
+  raw-cam-71:
+  raw-cam-72:
+
+  # Original first (see the header comment): browsers that can play it get it
+  # directly with zero transcode; the ffmpeg variant starts lazily only for
+  # viewers whose browser cannot play the original codec.
+  cam-1:
+    - rtsp://127.0.0.1:8554/raw-cam-1
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-1#video=h264
+  cam-2:
+    - rtsp://127.0.0.1:8554/raw-cam-2
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-2#video=h264
+  cam-3:
+    - rtsp://127.0.0.1:8554/raw-cam-3
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-3#video=h264
+  cam-4:
+    - rtsp://127.0.0.1:8554/raw-cam-4
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-4#video=h264
+  cam-5:
+    - rtsp://127.0.0.1:8554/raw-cam-5
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-5#video=h264
+  cam-6:
+    - rtsp://127.0.0.1:8554/raw-cam-6
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-6#video=h264
+  cam-7:
+    - rtsp://127.0.0.1:8554/raw-cam-7
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-7#video=h264
+  cam-8:
+    - rtsp://127.0.0.1:8554/raw-cam-8
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-8#video=h264
+
+  # products/attendance's CHIRLA cams (cam-9..18) -- added 2026-09-04 migrating
+  # this branch off MediaMTX onto go2rtc during the rebase onto main. Same
+  # original-first-then-ffmpeg-fallback pattern as cam-1..8 above; the
+  # raw-cam-9..18 placeholders already existed (headroom to raw-cam-72).
+  cam-9:
+    - rtsp://127.0.0.1:8554/raw-cam-9
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-9#video=h264
+  cam-10:
+    - rtsp://127.0.0.1:8554/raw-cam-10
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-10#video=h264
+  cam-11:
+    - rtsp://127.0.0.1:8554/raw-cam-11
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-11#video=h264
+  cam-12:
+    - rtsp://127.0.0.1:8554/raw-cam-12
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-12#video=h264
+  cam-13:
+    - rtsp://127.0.0.1:8554/raw-cam-13
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-13#video=h264
+  cam-14:
+    - rtsp://127.0.0.1:8554/raw-cam-14
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-14#video=h264
+  cam-15:
+    - rtsp://127.0.0.1:8554/raw-cam-15
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-15#video=h264
+  cam-16:
+    - rtsp://127.0.0.1:8554/raw-cam-16
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-16#video=h264
+  cam-17:
+    - rtsp://127.0.0.1:8554/raw-cam-17
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-17#video=h264
+  cam-18:
+    - rtsp://127.0.0.1:8554/raw-cam-18
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-18#video=h264
+  cam-19:
+    - rtsp://127.0.0.1:8554/raw-cam-19
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-19#video=h264
+  cam-20:
+    - rtsp://127.0.0.1:8554/raw-cam-20
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-20#video=h264
+  cam-21:
+    - rtsp://127.0.0.1:8554/raw-cam-21
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-21#video=h264
+  cam-22:
+    - rtsp://127.0.0.1:8554/raw-cam-22
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-cam-22#video=h264
+  barber-1:
+    - rtsp://127.0.0.1:8554/raw-barber-1
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-barber-1#video=h264
+    # The Barber Ops dashboard plays /api/stream.mjpeg, which needs a JPEG
+    # producer (go2rtc won't match H264 to it). Lazy like the rest.
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-barber-1#video=mjpeg
+  barber-c:
+    - rtsp://127.0.0.1:8554/raw-barber-c
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-barber-c#video=h264
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-barber-c#video=mjpeg
+  barber-l:
+    - rtsp://127.0.0.1:8554/raw-barber-l
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-barber-l#video=h264
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-barber-l#video=mjpeg
+  barber-r:
+    - rtsp://127.0.0.1:8554/raw-barber-r
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-barber-r#video=h264
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-barber-r#video=mjpeg
+  # Palm Hills (2026-10-14): the JPEG producer first -- go2rtc 1.9's frame.jpeg can't make a still from these
+  # HEVC keyframes (open GOP: ffmpeg exit 183), so stills (Setup's zone editor, alert snapshots) take the
+  # MJPEG transcode; the sidecar reads raw-ph-* directly and is unaffected.
+  ph-1:
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-1#video=mjpeg
+    - rtsp://127.0.0.1:8554/raw-ph-1
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-1#video=h264
+  ph-2:
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-2#video=mjpeg
+    - rtsp://127.0.0.1:8554/raw-ph-2
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-2#video=h264
+  ph-3:
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-3#video=mjpeg
+    - rtsp://127.0.0.1:8554/raw-ph-3
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-3#video=h264
+  ph-4:
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-4#video=mjpeg
+    - rtsp://127.0.0.1:8554/raw-ph-4
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-4#video=h264
+  ph-5:
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-5#video=mjpeg
+    - rtsp://127.0.0.1:8554/raw-ph-5
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-5#video=h264
+  ph-6:
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-6#video=mjpeg
+    - rtsp://127.0.0.1:8554/raw-ph-6
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-6#video=h264
+  ph-7:
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-7#video=mjpeg
+    - rtsp://127.0.0.1:8554/raw-ph-7
+    - ffmpeg:rtsp://127.0.0.1:8554/raw-ph-7#video=h264

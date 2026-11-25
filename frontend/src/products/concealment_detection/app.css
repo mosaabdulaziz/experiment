@@ -1,0 +1,482 @@
+/* Concealment detection -- the IRIS house style.
+   The blocks below are the house's own, copied verbatim from ../barber/app.css, so this
+   tab is the same house the attendance and barber products wear -- not a new skin over
+   the same colours. The fall product's own rules are at the end of this file. */
+
+:root {
+  --green-900: #0c3527;
+  --green-800: #114633;
+  --green-700: #16593f;
+  --green-600: #1b7a52;
+  --green-500: #14a05e;
+  --green-50: #e8f5ee;
+  --teal-600: #2e8fa3;
+  /* chart series (validated: lightness band, chroma floor, CVD ΔE 20.8) --
+     green = visits / wait, blue = haircuts, wherever they appear */
+  --chart-1: #1b9e5f;
+  --chart-2: #3b7fd6;
+  --ground: #eef1ef;
+  --card: #ffffff;
+  --tint: #f7f9f8;
+  --ink: #17251f;
+  --ink-soft: #5c6b63;
+  --ink-mute: #8a968f;
+  --line: #e4e9e5;
+  --line-strong: #cdd6d0;
+  --red-500: #d64550;
+  --red-50: #fdecee;
+  --amber-600: #b97c10;
+  --amber-500: #d98b1f;
+  --amber-50: #fdf3e0;
+  /* customer states */
+  --st-waiting: #2e8fa3;
+  --st-haircut: #1b7a52;
+  --st-washing: #3b7fd6;
+  --st-finished: #8a968f;
+  --zone-row: #b388ff;
+  --zone-door-area: #ffd54f;
+  --zone-face-area: #4dd0e1;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(12, 53, 39, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--green-900);
+  font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+  color: var(--ink);
+  font-size: 14px;
+}
+
+#root { min-height: 100vh; }
+button, input, select { font-family: inherit; }
+.num { font-variant-numeric: tabular-nums; }
+
+:focus-visible { outline: 2px solid var(--green-500); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+.shell { display: flex; min-height: 100vh; padding: 10px; gap: 10px; }
+
+.rail {
+  width: 56px;
+  flex: 0 0 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 0;
+  position: sticky;
+  top: 10px;
+  align-self: flex-start;
+  height: calc(100vh - 20px);
+}
+.railLogo { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-bottom: 10px; }
+.railLogo svg { display: block; border-radius: 9px; }
+/* 2026-10-18 (user): IRIS and the shop on every page, in the rail -- no page space. IRIS in its logo's own peach; the
+   shop's logo runs up the rail, white (any logo: its shape in white), its name in type when the site has none. */
+.railBrandName { font-size: 10.5px; font-weight: 800; letter-spacing: 0.16em; color: #f9996c; line-height: 1; }
+.railShop { margin-top: auto; display: flex; align-items: center; padding: 6px 0 2px; }
+.railShop + .railLang { margin-top: 8px; }
+.railShopName { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; font-size: 13px;
+  font-weight: 800; letter-spacing: 0.05em; color: #fff; }
+.railShopLogo { position: relative; width: 46px; height: 112px; padding: 0; }
+.railShopLogo img { position: absolute; left: 50%; top: 50%; width: 112px; height: auto; display: block;
+  transform: translate(-50%, -50%) rotate(-90deg); filter: brightness(0) invert(1); }
+@media (max-height: 640px) { .railShop { display: none; } }
+.railBtn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cfe6da;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s;
+}
+.railBtn:hover { background: rgba(255, 255, 255, 0.16); }
+.railActive, .railActive:hover { background: #fff; color: var(--green-800); }
+.railLang {
+  margin-top: auto;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 6px 4px;
+  width: 50px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cfe6da;
+  font-size: 12px;
+  font-weight: 700;
+  transition: background 0.15s;
+}
+.railLang:hover { background: rgba(255, 255, 255, 0.16); }
+.railCount {
+  position: absolute;
+  top: -5px;
+  inset-inline-end: -7px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--red-500);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 18px;
+  text-align: center;
+  border: 2px solid var(--green-900);
+}
+
+.page {
+  flex: 1;
+  background: var(--ground);
+  border-radius: 20px;
+  padding: 16px 20px 28px;
+  min-width: 0;
+}
+
+/* ── page head / top bar ────────────────────────────────────────── */
+
+.pageHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 10px 16px;
+  margin-bottom: 14px;
+}
+.staffPage > .pageHead, .setupPage > .pageHead { margin-bottom: 0; } /* their flex gap spaces it */
+.pageHead h1 { margin: 0; font-size: 20px; color: var(--green-800); font-weight: 800; white-space: nowrap; }
+.pageHeadMain { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; min-width: 0; }
+.pageHeadTools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.subLine { font-size: 12.5px; color: var(--ink-soft); margin: -6px 2px 14px; }
+
+@keyframes pulse { 50% { opacity: 0.35; } }
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  min-width: 0;
+}
+.sectionLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.sectionLabel .muted { text-transform: none; letter-spacing: 0; font-weight: 700; }
+
+.errorBar {
+  background: var(--red-50);
+  color: var(--red-500);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  font-weight: 700;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--ink-soft);
+  background: var(--ground);
+}
+.chipRed { color: var(--red-500); background: var(--red-50); }
+.chipAmber { color: var(--amber-600); background: var(--amber-50); }
+.chipGreen { color: var(--green-600); background: var(--green-50); }
+.countPill {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  background: var(--ground);
+  color: var(--ink-soft);
+}
+.countPillRed { background: var(--red-500); color: #fff; }
+
+.btnPrimary, .btnGhost, .btnDanger, .btnPlain {
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btnPrimary { border: none; background: var(--green-600); color: #fff; }
+.btnPrimary:hover:not(:disabled) { background: var(--green-700); }
+.btnGhost { border: 1px solid var(--green-500); background: none; color: var(--green-600); }
+.btnGhost:hover:not(:disabled) { background: var(--green-50); }
+.btnDanger { border: 1px solid var(--red-500); background: none; color: var(--red-500); }
+.btnDanger:hover:not(:disabled) { background: var(--red-50); }
+.btnPlain { border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+.btnPlain:hover:not(:disabled) { border-color: var(--line-strong); }
+.btnSmall { padding: 4px 10px; font-size: 12px; border-radius: 8px; }
+
+.feed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 60vh;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #101512;
+  /* a picture is spatial: its overlay never mirrors */
+  direction: ltr;
+}
+.feed img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.kpiGrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
+@media (max-width: 1250px) { .kpiGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.kpi {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1.5px solid transparent;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.kpiDanger { border-color: var(--red-500); }
+.kpiLabel { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+.kpiValue { font-size: 28px; font-weight: 800; line-height: 1.25; }
+.kpiSub { font-size: 12px; color: var(--ink-soft); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.kpiLive { display: inline-flex; align-items: center; gap: 5px; color: var(--green-600); font-weight: 700; }
+.kpiLive::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: pulse 1.6s infinite; }
+
+.tableScroll { overflow-x: auto; }
+.dataTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dataTable thead tr { background: var(--green-800); color: #fff; }
+.dataTable th { padding: 9px 12px; text-align: start; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.dataTable th:first-child { border-start-start-radius: 10px; border-end-start-radius: 10px; }
+.dataTable th:last-child { border-start-end-radius: 10px; border-end-end-radius: 10px; }
+.dataTable td { padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.dataTable td.num, .dataTable .num { font-variant-numeric: tabular-nums; }
+.rowClick { cursor: pointer; }
+.rowClick:hover { background: var(--tint); }
+.rowExcessive { background: #fef6f7; }
+.rowExcessive:hover { background: var(--red-50); }
+.rowOpen td { border-bottom: none; background: var(--tint); }
+.rowLost td { color: var(--ink-mute); }
+.rowOngoing { background: #fef6f7; }
+.rowOngoing .alertKindCell { color: var(--red-500); font-weight: 700; }
+.flags { display: flex; gap: 4px; flex-wrap: wrap; }
+.tableFoot { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 2px 2px; font-size: 12.5px; color: var(--ink-soft); flex-wrap: wrap; }
+.pager { display: flex; gap: 6px; }
+
+/* Insights / Alerts (rebuild): labelled filters, 4-up KPIs, the visit timeline chips */
+.filterField { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+.filterField .input, .filterField .select { width: auto; padding: 6px 9px; font-size: 12.5px; }
+.kpiGrid4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .kpiGrid4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.kpiValue.num { display: block; text-align: start; }
+.tableEmpty { text-align: center; padding: 24px !important; }
+
+.panelActions { display: flex; gap: 8px; }
+
+.confirmBackdrop { position: fixed; inset: 0; background: rgba(8, 22, 16, 0.55); display: grid; place-items: center; z-index: 50; padding: 20px; }
+.confirmBox { background: var(--card); border-radius: 16px; padding: 18px 20px; width: min(440px, 94vw); box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35); display: flex; flex-direction: column; gap: 12px; }
+.confirmBox h3 { margin: 0; font-size: 16px; }
+.confirmBox p { margin: 0; font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+
+.liveGrid { display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 10px; align-items: start; }
+.liveTabBody { min-width: 0; }
+/* Narrow screens: the chair strip, then the cameras, then the side panel, in one column (RTL needs nothing: a
+   single column has no side). */
+@media (max-width: 900px) { .liveGrid { grid-template-columns: minmax(0, 1fr); } }
+
+.feedTile { margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.feedCaption { display: flex; align-items: baseline; gap: 10px; font-size: 13px; }
+.feedName { font-weight: 800; color: var(--ink); }
+.feedClip { color: var(--ink-soft); font-size: 12.5px; }
+.feedTile .feed { max-height: none; }
+/* 2026-10-18 (user): on the picture's top-right corner (the camera's own clock is top-left): red "Live" with a beating
+   dot while frames come in, blue with the position while a recording plays */
+.feedBadge { position: absolute; top: 8px; right: 8px; z-index: 2; display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 9px 2px 8px; border-radius: 999px; font: 800 11.5px/1.55 'Cairo', sans-serif; color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35); pointer-events: none; font-variant-numeric: tabular-nums; }
+.feedLive { background: #e5383b; letter-spacing: 0.04em; }
+.feedLive i { width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: liveBeat 1.6s ease-in-out infinite; }
+.feedReplay { background: #3366d6; }
+
+@keyframes liveBeat { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+@media (prefers-reduced-motion: reduce) { .feedLive i { animation: none; } }
+
+/* ── the fall product's own ───────────────────────────────────────────────────── */
+
+/* The board: the camera wide, the side column beside it (barber's .liveGrid idiom). */
+.sideCol { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+@media (min-width: 901px) {
+  .sideCol { position: sticky; top: 10px; max-height: calc(100vh - 20px); }
+  .sideCol .eventsCard { flex: 1 1 auto; min-height: 96px; display: flex; flex-direction: column; overflow: hidden; }
+  .sideCol .eventList { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+}
+
+/* The camera tile is marked, never covered: the ring says which camera fell. */
+.feedRing { box-shadow: 0 0 0 3px var(--red-500); }
+.feedRingWarn { box-shadow: 0 0 0 3px var(--amber-600); }
+.feedWarn { background: var(--amber-600); }
+
+/* The quiet channel: a notice in the flow, not the house's fixed toast. The fall product
+   has no fixed overlay at all -- nothing may cover the camera's live view. */
+.notice { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px;
+  background: var(--green-50); color: var(--green-700); font-weight: 700; font-size: 12.5px; }
+.noticeCritical { background: var(--red-50); color: var(--red-500); }
+.noticeWarning { background: var(--amber-50); color: var(--amber-600); }
+
+/* The alarm card: in the page's flow, so the camera tile can never be covered. */
+.alarmCard { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); overflow: hidden; }
+.alarmBar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; color: #fff;
+  font-size: 13px; font-weight: 800; }
+.alarmCritical { background: var(--red-500); }
+.alarmWarning { background: var(--amber-600); }
+.alarmQueued { margin-inline-start: auto; background: rgba(0, 0, 0, 0.22); border-radius: 999px;
+  padding: 1px 9px; font-size: 11.5px; }
+.alarmBody { display: flex; gap: 10px; padding: 10px 12px; }
+.alarmFacts { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.alarmEval { font-weight: 800; color: var(--ink); font-size: 14px; }
+.alarmMeta { color: var(--ink-soft); font-size: 12px; }
+.alarmThumb { width: 96px; flex: none; border-radius: 8px; overflow: hidden; background: #101512; }
+.alarmThumb .feed { aspect-ratio: 4 / 3; border-radius: 0; }
+.alarmActions { display: flex; gap: 8px; padding: 0 12px 12px; }
+
+/* The event list in the side column. */
+.eventList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.eventRow { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; }
+.eventDot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--line-strong); }
+.eventDotCritical { background: var(--red-500); }
+.eventDotWarning { background: var(--amber-600); }
+.eventEval { font-weight: 700; color: var(--ink); }
+.eventScore { color: var(--ink-soft); font-variant-numeric: tabular-nums; margin-inline-start: auto; }
+
+/* ── The frame: the IRIS glow, not the house's green ───────────────────────────
+   2026-10-29 (user): the dark green frame and rail backdrop become the IRIS
+   surveillance product's own background -- its mesh over near-black, copied from
+   products/iris/styles/tokens.css (`--mesh` over `--bg-deep`). The house's html/body
+   block stays copied verbatim above; this later rule is the one the browser applies.
+   The page itself (.page) is still the house's pale ground. */
+html, body {
+  background-color: #050507;
+  background-image:
+    radial-gradient(at 8% 0%, rgba(249, 153, 108, 0.18), transparent 45%),
+    radial-gradient(at 92% 8%, rgba(249, 119, 68, 0.13), transparent 50%),
+    radial-gradient(at 50% 100%, rgba(120, 80, 200, 0.11), transparent 55%),
+    radial-gradient(at 0% 70%, rgba(249, 153, 108, 0.09), transparent 50%);
+  background-attachment: fixed;
+}
+
+/* The count badge cuts its ring out of the backdrop, and the backdrop is no longer green. */
+.railCount { border-color: #050507; }
+
+/* Concealment review additions */
+.pageHeadMain .subLine { margin: 0; }
+
+.liveGrid { grid-template-columns: minmax(0, 1fr) minmax(300px, 340px); gap: 12px; }
+@media (max-width: 900px) { .liveGrid { grid-template-columns: minmax(0, 1fr); } }
+
+@media (min-width: 901px) {
+  .sideCol {
+    position: sticky;
+    top: 10px;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    padding-inline-end: 2px;
+  }
+  .sideCol > * { flex: 0 0 auto; }
+  .sideCol .eventsCard { flex: 0 0 auto; min-height: 0; overflow: visible; }
+  .sideCol .eventList { max-height: 220px; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; }
+}
+
+.alarmCard, .notice { flex: 0 0 auto; }
+.page > .alarmCard { margin-bottom: 14px; }
+.alarmBar { flex-wrap: wrap; }
+.alarmEval, .alarmMeta { overflow-wrap: anywhere; }
+.alarmActions { flex-wrap: wrap; }
+
+.notice { justify-content: space-between; align-items: flex-start; }
+.noticeMain {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.noticeMain:hover { text-decoration: underline; text-underline-offset: 2px; }
+.noticeClose {
+  flex: none;
+  border: none;
+  background: none;
+  color: inherit;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.noticeClose:hover { opacity: 1; }
+
+.eventRow {
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  min-width: 0;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--line);
+}
+.eventRow:last-child { border-bottom: 0; padding-bottom: 0; }
+.eventDot { margin-top: 5px; }
+.eventEval { flex: 1 1 130px; min-width: 0; overflow-wrap: anywhere; line-height: 1.35; }
+.eventScore {
+  font-size: 11.5px;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: end;
+}
+
+.tableScroll { overflow: auto; max-height: calc(100vh - 200px); }
+.dataTable thead th { position: sticky; top: 0; z-index: 1; background: var(--green-800); }
+.dataTable td { white-space: normal; vertical-align: top; }
+.dataTable td.num { white-space: nowrap; }
+.timeCell { min-width: 88px; }
+.metaSub { display: block; color: var(--ink-soft); font-size: 11.5px; margin-top: 2px; }
+.stageChain { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11.5px; color: var(--ink); overflow-wrap: break-word; }
+.actionGroup { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; min-width: 210px; max-width: 280px; }
+.noteInput { flex: 1 1 100%; border: 1px solid var(--line-strong); border-radius: 8px; padding: 4px 8px; font-size: 12px; width: 100%; background: var(--card); color: var(--ink); }

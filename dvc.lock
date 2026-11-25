@@ -1,0 +1,52 @@
+schema: '2.0'
+stages:
+  golden_clips:
+    cmd: tools/make_golden_clips.sh
+    deps:
+    - path: data/uploads/barber/9Hwju1yZBAM.mp4
+      hash: md5
+      md5: c9e9ebfcd57d0cfda52adeb73ba9ffd3
+      size: 214109893
+    - path: data/uploads/fire/part1/bucketfire.mp4
+      hash: md5
+      md5: f7f051eac6d00b0a84afd1c066e8bcec
+      size: 150571655
+    - path: products/el-mohandes/videos/5-CH23-enter.mp4
+      hash: md5
+      md5: 108b90bbdc292fd28ee3b1b6b56e1ab1
+      size: 97606780
+    - path: tools/make_golden_clips.sh
+      hash: md5
+      md5: 13034c28c7ddf1e16dfbaaed3b413116
+      size: 2369
+      isexec: true
+    outs:
+    - path: data/uploads/golden/barber.mp4
+      hash: md5
+      md5: 3705ff1ea89865b35468bcce9c4ce68c
+      size: 10685589
+    - path: data/uploads/golden/fire.mp4
+      hash: md5
+      md5: 1977225cb9d476019ecd671abeefd637
+      size: 14258930
+    - path: data/uploads/golden/vehicles.mp4
+      hash: md5
+      md5: 2ca3b0d9eb7b05e84daf619524923daa
+      size: 55596222
+  golden_proximity_clip:
+    cmd: tools/make_golden_proximity_clip.sh
+    deps:
+    - path: data/uploads/proximity/procimity_placement_combined.mp4
+      hash: md5
+      md5: c44eedde48a9e7b053bc2ed2496424b0
+      size: 488764933
+    - path: tools/make_golden_proximity_clip.sh
+      hash: md5
+      md5: 78235428ae50a10d9d9d3839fa55d2d2
+      size: 754
+      isexec: true
+    outs:
+    - path: data/uploads/golden/proximity.mp4
+      hash: md5
+      md5: 08ee38a079eb5575ef23bc38eb30de87
+      size: 61002769

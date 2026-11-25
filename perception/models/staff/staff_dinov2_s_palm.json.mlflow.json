@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "staff_dinov2_s_palm.json",
+  "sha256": "2fb284cbc59fa6b27aec6a1875c2e559559b910af5ec5e71a2e8ab0426fc5084",
+  "size_bytes": 1221,
+  "created_at": "2026-11-05T09:11:10+00:00",
+  "run_id": "0a3ca770f86f45bbad206ad695958319",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "staff-classifier",
+  "version": "2"
+}

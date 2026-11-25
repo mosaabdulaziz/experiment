@@ -1,0 +1,39 @@
+[property]
+gpu-id=0
+net-scale-factor=0.0039215697906911373
+model-color-format=0
+# K-saif detect_product_empty_space.pt (YOLO11n, classes 0 = empty, 1 = product),
+# exported with ../DeepStream-Yolo-Fire/export_raw_anchor_onnx.py at --imgsz 1280:
+# far voids were only found at 1280 (README.md).
+onnx-file=detect_product_empty_space.onnx
+# NOTE: model-engine-file and engine-create-func-name are deliberately absent,
+# as in config_infer_ppe.txt: the shelf_void module sets the engine path from
+# gie_engine_path() (<onnx>_b<batch>_gpu0_<mode>.engine, beside this file).
+labelfile-path=labels_shelf.txt
+# Full frame, every frame of the mux batch (the module sets batch-size to the mux's).
+batch-size=1
+network-mode=2
+num-detected-classes=2
+interval=0
+# 1 = every pgie, 2 = face SGIE, 3 = fire and plate, 4 = PPE. 5 is free.
+gie-unique-id=5
+# On the full frame. The shelf_void module places this detector AFTER the
+# tracker (GieSpec role="secondary"), so nvtracker never deletes its
+# low-confidence boxes; with process-mode=1 it still sees the whole frame.
+process-mode=1
+network-type=0
+cluster-mode=2
+maintain-aspect-ratio=1
+symmetric-padding=1
+# product (1): dropped. Kept: empty (0). The module reads the label, never the id.
+filter-out-class-ids=1
+parse-bbox-func-name=NvDsInferParseYolo
+custom-lib-path=/opt/nvidia/deepstream/deepstream/custom_parsers/libnvdsinfer_custom_impl_Yolo.so
+
+[class-attrs-all]
+# The standalone pipeline's settings (shelf-monitoring: conf 0.02, iou 0.3):
+# the model is low-confidence on angled shelf views on purpose; the module's
+# heat map, not this floor, removes the noise.
+nms-iou-threshold=0.3
+pre-cluster-threshold=0.02
+topk=300

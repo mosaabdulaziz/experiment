@@ -1,0 +1,5 @@
+outs:
+- md5: 21498526aa23d7633c3da2832128efeb
+  size: 1498952
+  hash: md5
+  path: launcher.log

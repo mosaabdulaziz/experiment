@@ -1,0 +1,5 @@
+outs:
+- md5: 10399b366a4a352e188825f0487aa9fa
+  size: 351685709
+  hash: md5
+  path: vision_model.onnx

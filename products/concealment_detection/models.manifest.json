@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "product": "concealment_detection",
+  "site": null,
+  "generated_at": "2026-11-05T09:17:59+00:00",
+  "generated_from_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "models": [
+    {
+      "path": "perception/models/DeepStream-Yolo-Pose/labels.txt",
+      "registered_model": "pose-estimator",
+      "version": "1",
+      "alias": "production-concealment_detection",
+      "run_id": "c45759574c9d4752b764b6e2eb04ded2",
+      "sha256": "992cd4ab6acf6aaff208008dcdca6a449f1c1d4ff3e47aeb98be8343c4879782",
+      "size_bytes": 5,
+      "loaded_by": "modules.pose.config -> labelfile-path"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo-Pose/yolo26x-pose.onnx",
+      "registered_model": "pose-estimator",
+      "version": "1",
+      "alias": "production-concealment_detection",
+      "run_id": "c45759574c9d4752b764b6e2eb04ded2",
+      "sha256": "5ec4e798975864a89996387ddaa6550394d8706620816e85e5a684f0981a932f",
+      "size_bytes": 231857148,
+      "loaded_by": "modules.pose.config -> onnx-file"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo/labels.txt",
+      "registered_model": "object-detector",
+      "version": "1",
+      "alias": "production-concealment_detection",
+      "run_id": "2c8de240100742ffa0ca8a109546a151",
+      "sha256": "33c77761e124cc74911346865e3bc1219b87c2db7d0f106e3376bf5ef3785933",
+      "size_bytes": 624,
+      "loaded_by": "pgie_config -> labelfile-path"
+    },
+    {
+      "path": "perception/models/DeepStream-Yolo/yolo11x.onnx",
+      "registered_model": "object-detector",
+      "version": "1",
+      "alias": "production-concealment_detection",
+      "run_id": "2c8de240100742ffa0ca8a109546a151",
+      "sha256": "ee680c13ede47444f4bb2c64213661ad53194af1620bc99853d8c83433c7433c",
+      "size_bytes": 227924411,
+      "loaded_by": "pgie_config -> onnx-file"
+    }
+  ]
+}

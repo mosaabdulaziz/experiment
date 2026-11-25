@@ -1,0 +1,5 @@
+outs:
+- md5: a3613ef9eb3662b4ef88eb90db1fcf26
+  size: 5030888
+  hash: md5
+  path: 2d106det.onnx

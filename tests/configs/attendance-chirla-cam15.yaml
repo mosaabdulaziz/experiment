@@ -1,0 +1,8 @@
+# TEST CONFIG (not a product): attendance on ONE recorded CHIRLA clip, for checking the pipeline end to end on a
+# laptop. cam-15 is the seq_020 office clip the bundle's enrolled employees were enrolled from
+# (data/uploads/attendance/camera_4_2023-07-26-13-21-40_h264.mp4, published by `just up cam-15`).
+# Use:   SIDECAR_CONFIG=tests/configs/attendance-chirla-cam15.yaml IRIS_PRODUCT=attendance just up cam-15
+extends: attendance-chirla.yaml
+
+sources:
+  - {id: cam-15, uri: "rtsp://go2rtc:8554/raw-cam-15", roles: [attendance]}

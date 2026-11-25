@@ -1,0 +1,9 @@
+# Safety role "fire": the fire/smoke detector alone (no person detector), like attendance's fire role. Zones whose
+# `fire` block is on limit it to those zones; a camera with none covers the whole frame.
+extends: ../../../perception/pipeline/sidecar.yaml
+pgie_enabled: false
+relevant_classes: [fire, smoke]
+modules:
+  fire_alerts:
+    interval: 0
+    classes: [fire, smoke]

@@ -1,0 +1,6 @@
+outs:
+- md5: 7371b10e31c0964d765bb931d76498e2.dir
+  size: 3661967875
+  nfiles: 9020
+  hash: md5
+  path: plate_detection

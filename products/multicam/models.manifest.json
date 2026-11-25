@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "product": "multicam",
+  "site": null,
+  "generated_at": "2026-11-05T09:18:02+00:00",
+  "generated_from_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "models": [
+    {
+      "path": "mtmc/models/reid/resnet50-11ad3fa6.pth",
+      "registered_model": "vehicle-reid",
+      "version": "1",
+      "alias": "production-multicam",
+      "run_id": "15e0ef8c944b49578b2799e0853eea80",
+      "sha256": "11ad3fa62ca79e40addfd354a8ec4b7c75143b3038b8d2a807fbc68deab379ca",
+      "size_bytes": 102540417,
+      "loaded_by": "modules.mtmc.config.reid_enabled"
+    },
+    {
+      "path": "products/el-mohandes/models/plate_640/best.onnx",
+      "registered_model": "plate-detector",
+      "version": "1",
+      "alias": "production-multicam",
+      "run_id": "0942a5d7b95e469cbc44a301b8757dcb",
+      "sha256": "3474ad4689b4d5488a1e770c710f4da20d718e44a4379f023a692e7b7d16083f",
+      "size_bytes": 37901879,
+      "loaded_by": "modules.plates.config -> onnx-file"
+    },
+    {
+      "path": "products/el-mohandes/models/plate_640/labels.txt",
+      "registered_model": "plate-detector",
+      "version": "1",
+      "alias": "production-multicam",
+      "run_id": "0942a5d7b95e469cbc44a301b8757dcb",
+      "sha256": "676ccf99b119603309ef8560ad88dbbe8b79f747d4c91ce934b241eb3a94b877",
+      "size_bytes": 10,
+      "loaded_by": "modules.plates.config -> labelfile-path"
+    },
+    {
+      "path": "products/el-mohandes/models/v5_arabic_mobile-fine-tuned/inference/plate_rec.onnx",
+      "registered_model": "plate-ocr",
+      "version": "1",
+      "alias": "production-multicam",
+      "run_id": "7f0d048e8b914eb399c78ec8a2c35adb",
+      "sha256": "92ae41f35945278f32332f70df6924ae61cbec416e3cba4ed435d349dd542c34",
+      "size_bytes": 7652257,
+      "loaded_by": "modules.mtmc.plates.ocr_model"
+    },
+    {
+      "path": "products/el-mohandes/models/v5_arabic_mobile-fine-tuned/plate_dict.txt",
+      "registered_model": "plate-ocr",
+      "version": "1",
+      "alias": "production-multicam",
+      "run_id": "7f0d048e8b914eb399c78ec8a2c35adb",
+      "sha256": "64de5374090f598ac2021cd17ef1381d7379b1963ecd20cf216a8b372fe65ec6",
+      "size_bytes": 71,
+      "loaded_by": "modules.mtmc.plates.ocr_dict"
+    },
+    {
+      "path": "products/el-mohandes/models/vehicle_1280_1cls/best.onnx",
+      "registered_model": "vehicle-detector",
+      "version": "1",
+      "alias": "production-multicam",
+      "run_id": "56d352522cd94e83bf328af07a496ca2",
+      "sha256": "55a3c35eb8d6a3ba5bd03fca48009e9715494e7d35528a3e90099fffeb46bacc",
+      "size_bytes": 38182342,
+      "loaded_by": "pgie_config -> onnx-file"
+    },
+    {
+      "path": "products/el-mohandes/models/vehicle_1280_1cls/labels.txt",
+      "registered_model": "vehicle-detector",
+      "version": "1",
+      "alias": "production-multicam",
+      "run_id": "56d352522cd94e83bf328af07a496ca2",
+      "sha256": "e33569d496c6862713f7b450f579ef2d0b4ffc99789d8bed277242566d443119",
+      "size_bytes": 8,
+      "loaded_by": "pgie_config -> labelfile-path"
+    }
+  ]
+}

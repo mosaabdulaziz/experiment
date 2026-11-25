@@ -1,0 +1,15 @@
+# Attendance on RECORDED clips, with what the supervisor bundle ships:
+#   cam-15 / cam-18  the CHIRLA seq_020 office clips -- the footage the bundle's 13 enrolled employees were
+#                    enrolled from (data/uploads/attendance/camera_4_... and camera_3_..., unpacked by `just bootstrap`)
+#   cam-7            a fire sample, so fire/smoke alerting is exercised too (data/uploads/fire/)
+# Use:   SIDECAR_CONFIG=tests/configs/attendance-chirla.yaml IRIS_PRODUCT=attendance just up cam-15,cam-18,cam-7
+extends: ../../products/attendance/sidecar.yaml
+
+# The shared detector (yolo11x, FP32) saturates a laptop GPU with three cameras (measured: 7-10 fps instead of
+# the clips' 30). yolo11m FP16 keeps every camera at its native rate. On the server, delete this line.
+pgie_config: "/workspace/iris/perception/models/DeepStream-Yolo/config_infer_primary_yolo11_m.txt"
+
+sources:
+  - {id: cam-15, uri: "rtsp://go2rtc:8554/raw-cam-15", roles: [attendance]}
+  - {id: cam-18, uri: "rtsp://go2rtc:8554/raw-cam-18", roles: [attendance]}
+  - {id: cam-7,  uri: "rtsp://go2rtc:8554/raw-cam-7",  roles: [fire], label: "Fire cam", zone: "North yard"}

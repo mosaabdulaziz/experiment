@@ -1,0 +1,21 @@
+# Palm Hills, a run on recordings (2026-11-10, user): the shop's 6 Nov, 09:00-24:00 (camera clock), synced into one file
+# per camera (data/BekkyBarber/palm_hills/6nov-synced), played by test_streamer as ph-* (no ph-4; site.sh palm-hills-6nov).
+# The files are numbered differently from 16 Oct: cam1 = ph-1 wash, cam6 = ph-2 stations wide (25 fps), cam5 = ph-3
+# reception front, cam2 = ph-5 reception lounge, cam3 = ph-6 pedicure, cam4 = ph-7 VIP room (checked on frames).
+# Its own DB and crops; reports in the footage's time, saved at the lap's end. Its settings are Palm Hills' own
+# (barber.palm-hills.yaml); its zones are the tuned Palm Hills zones (zones.palm-hills.json).
+extends: barber.palm-hills.yaml
+
+data_dir: "data/palm-hills-6nov"
+crops_dir: "../../data/barber/crops-palm-hills-6nov"   # = sidecar.palm-hills-6nov.yaml's crops_dir
+footage_start: 2026-11-06T10:00:00                     # the files' first frame in real shop time: the camera clock
+                                                       # (OSD 09:00) runs 1 h behind (user, 2026-11-10), so reports show real time
+
+cameras:
+  - {id: ph-1, name: "Wash area", clip_duration_s: 53996, clear_on_loop: true}
+  - {id: ph-2, name: "Stations wide", clip_duration_s: 53996, clear_on_loop: true}
+  - {id: ph-3, name: "Reception front", clip_duration_s: 53996, clear_on_loop: true}
+  - {id: ph-5, name: "Reception lounge", clip_duration_s: 53996, clear_on_loop: true}
+  - {id: ph-6, name: "Pedicure", clip_duration_s: 53996, clear_on_loop: true}
+  - {id: ph-7, name: "VIP room", clip_duration_s: 53996, clear_on_loop: true}
+

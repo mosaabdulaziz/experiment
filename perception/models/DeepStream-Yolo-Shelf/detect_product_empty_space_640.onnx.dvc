@@ -1,0 +1,5 @@
+outs:
+- md5: 85e7b87c46c2f1416a1a2c05acfac6ea
+  size: 10439692
+  hash: md5
+  path: detect_product_empty_space_640.onnx

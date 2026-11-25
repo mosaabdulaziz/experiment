@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "file": "labels.txt",
+  "sha256": "33c77761e124cc74911346865e3bc1219b87c2db7d0f106e3376bf5ef3785933",
+  "size_bytes": 624,
+  "created_at": "2026-11-05T09:11:59+00:00",
+  "run_id": "2c8de240100742ffa0ca8a109546a151",
+  "experiment": "imported-models",
+  "experiment_id": "3",
+  "tracking_uri": "http://10.2.0.50:15050",
+  "tracking_mode": "server",
+  "artifact_path": "model",
+  "git_commit": "41410201d62936ad7629133eed5a6c76bedaae61",
+  "registered_model": "object-detector",
+  "version": "1"
+}

@@ -1,0 +1,5 @@
+outs:
+- md5: d78e38d5e3f73d54e0d2b54b73218291
+  size: 96398132
+  hash: md5
+  path: resnet50_market1501_aicity156.onnx

@@ -1,0 +1,70 @@
+:root {
+  /* ── Base palette ────────────────────────────── */
+  --bg:          #07070a;
+  --bg-deep:     #050507;
+  --surface:     #111114;
+  --surface2:    #161619;
+  --surface3:    #1c1c20;
+  --border:      rgba(255, 255, 255, 0.06);
+  --border2:     rgba(255, 255, 255, 0.1);
+  --text:        #ececec;
+  --text-soft:   #c9c0b8;
+  /* Both at least 4.5:1 on every surface (WCAG AA for small text): at #6a6a72 / #3a3a40 they were 3.2-3.8:1 and
+     1.5-1.8:1, and the small grey labels (an alert's time) were hard to read. */
+  --text-dim:    #a3a3ad;
+  --text-muted:  #8b8b96;
+
+  /* ── Accent ──────────────────────────────────── */
+  --accent:        #f9996c;
+  --accent-soft:   #ffb59a;
+  --accent-deep:   #c97048;
+  --accent-dim:    rgba(249, 153, 108, 0.12);
+  --accent-glow:   rgba(249, 153, 108, 0.28);
+  --accent-glow-2: rgba(249, 153, 108, 0.45);
+
+  --alert-color:  #ff5e62;
+  --alert-bg:     rgba(255, 94, 98, 0.08);
+  --alert-border: rgba(255, 94, 98, 0.28);
+  --alert-glow:   rgba(255, 94, 98, 0.35);
+
+  --green:  #6bf2a8;
+  --yellow: #ffd166;
+
+  /* ── Glass tokens ────────────────────────────── */
+  /* Glass: a little more see-through, with a crisper edge and a top that catches the light (--glass-highlight,
+     layered over a surface's background), so the panels read as glass over the page's glow. */
+  --glass-bg:        rgba(24, 24, 30, 0.5);
+  --glass-bg-strong: rgba(32, 32, 40, 0.66);
+  --glass-bg-soft:   rgba(24, 24, 30, 0.32);
+  --glass-border:    rgba(255, 255, 255, 0.09);
+  --glass-border-hi: rgba(255, 255, 255, 0.18);
+  --glass-highlight: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.02) 32%, rgba(255, 255, 255, 0) 60%);
+
+  --blur-sm: blur(10px) saturate(160%);
+  --blur:    blur(20px) saturate(180%);
+  --blur-lg: blur(36px) saturate(180%);
+
+  --elev-1: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --elev-2: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --elev-3: 0 24px 64px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  --elev-accent: 0 8px 32px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  /* ── Shape ──────────────────────────────────── */
+  --radius-sm: 8px;
+  --radius:    14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+
+  --header-h: 64px;
+  --prompt-h: 188px;
+
+  /* ── Mesh gradient (page background) ────────── */
+  --mesh:
+    radial-gradient(at 8% 0%, rgba(249, 153, 108, 0.18), transparent 45%),
+    radial-gradient(at 92% 8%, rgba(249, 119, 68, 0.13), transparent 50%),
+    radial-gradient(at 50% 100%, rgba(120, 80, 200, 0.11), transparent 55%),
+    radial-gradient(at 0% 70%, rgba(249, 153, 108, 0.09), transparent 50%);
+}
