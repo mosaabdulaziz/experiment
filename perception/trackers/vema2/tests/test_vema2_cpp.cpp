@@ -182,21 +182,35 @@ static void test_yaml_shadow_and_border_exit() {
     tracker.set_image_size(1080, 720);
     const double dt = 1.0 / 30.0;
 
-    // Track exits right border (x ~ 1060)
+    // Track exits right border (x ~ 1060): border shadow suppression keeps shadow_count == 0
     for (int f = 1; f <= 5; ++f) {
         auto outs = tracker.update({box_cxcywh(980.0 + 15.0 * f, 360.0, 60.0, 150.0)}, {0.9}, {0}, dt);
         assert(outs.size() == 1 && !outs[0].is_shadow);
     }
-    // Coast empty frames: emits shadow up to max_shadow_emit_lost, then border-exit evicts
-    int shadow_count = 0;
+    int border_shadow_count = 0;
     for (int f = 6; f <= 15; ++f) {
         auto outs = tracker.update({}, {}, {}, dt);
         for (const auto& o : outs) {
-            if (o.is_shadow) ++shadow_count;
+            if (o.is_shadow) ++border_shadow_count;
             assert(std::isfinite(o.bbox.x1));
         }
     }
-    assert(shadow_count >= 1 && shadow_count <= cfg.max_shadow_emit_lost);
+    assert(border_shadow_count == 0);
+
+    // Mid-frame lost track still emits shadow boxes up to max_shadow_emit_lost
+    tracker.reset(30.0);
+    for (int f = 1; f <= 4; ++f) {
+        auto outs = tracker.update({box_cxcywh(500.0 + 4.0 * f, 360.0, 60.0, 150.0)}, {0.9}, {0}, dt);
+        assert(outs.size() == 1 && !outs[0].is_shadow);
+    }
+    int mid_shadow_count = 0;
+    for (int f = 5; f <= 12; ++f) {
+        auto outs = tracker.update({}, {}, {}, dt);
+        for (const auto& o : outs) {
+            if (o.is_shadow) ++mid_shadow_count;
+        }
+    }
+    assert(mid_shadow_count == cfg.max_shadow_emit_lost);
 }
 
 static void test_python_parity_trace() {

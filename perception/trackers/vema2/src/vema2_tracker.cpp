@@ -990,7 +990,7 @@ std::vector<TrackOutput> PolarEMATracker::update(
                 continue;
             }
             const BBox out_box = trk.get_bbox();
-            if (cfg_.border_exit_lost > 0 && trk.k_lost > 2.0 && img_w > 0.0 && img_h > 0.0) {
+            if (cfg_.border_exit_lost > 0 && trk.k_lost >= 1.0 && img_w > 0.0 && img_h > 0.0) {
                 const double m = cfg_.border_exit_margin_px;
                 const bool at_border =
                     (out_box.x1 <= m) || (out_box.y1 <= m) ||
