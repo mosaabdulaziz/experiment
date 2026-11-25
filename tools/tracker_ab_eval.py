@@ -331,6 +331,7 @@ def compute_intrinsic_metrics(parsed: dict[str, Any], border_margin_px: float = 
     jerks_sq: list[float] = []
     log_area_vols: list[float] = []
     border_lingers: list[float] = []
+    border_shadow_lingers: list[float] = []
 
     ends_by_cam: dict[str, list[dict[str, Any]]] = collections.defaultdict(list)
     starts_by_cam: dict[str, list[dict[str, Any]]] = collections.defaultdict(list)
@@ -374,6 +375,9 @@ def compute_intrinsic_metrics(parsed: dict[str, Any], border_margin_px: float = 
                     else:
                         break
                 border_lingers.append(max(0.0, boxed[-1]["pts"] - first_tail_border_pts))
+                det_border = [o["pts"] for o in boxed if o["conf"] >= 0.0]
+                shadow_start_pts = det_border[-1] if det_border else boxed[0]["pts"]
+                border_shadow_lingers.append(max(0.0, boxed[-1]["pts"] - max(first_tail_border_pts, shadow_start_pts)))
 
         if boxed:
             tail = boxed[-min(len(boxed), 5):]
@@ -454,6 +458,7 @@ def compute_intrinsic_metrics(parsed: dict[str, Any], border_margin_px: float = 
         "center_jerk_rms": round(math.sqrt(sum(jerks_sq) / len(jerks_sq)), 4) if jerks_sq else None,
         "log_area_volatility": round(statistics.median(log_area_vols), 5) if log_area_vols else None,
         "border_exit_linger_s": round(sum(border_lingers) / len(border_lingers), 4) if border_lingers else (0.0 if has_boxes else None),
+        "border_shadow_linger_s": round(sum(border_shadow_lingers) / len(border_shadow_lingers), 4) if border_shadow_lingers else (0.0 if has_boxes else None),
     }
 
 
@@ -628,13 +633,59 @@ def evaluate_product_oracle(
 
     if product == "zones":
         a, b = _zones_stats(nvdcf_data), _zones_stats(vema3d_data)
+        a_opens, b_opens = a["episode_opens_pts"], b["episode_opens_pts"]
+        a_oids = {
+            (cam, _to_int(d[2], -1))
+            for cam, frames in nvdcf_data["meta"].items()
+            for fr in frames
+            for d in fr["dets"]
+            if _to_int(d[2], -1) >= 0
+        }
+        b_oids = {
+            (cam, _to_int(d[2], -1))
+            for cam, frames in vema3d_data["meta"].items()
+            for fr in frames
+            for d in fr["dets"]
+            if _to_int(d[2], -1) >= 0
+        }
+        a_dets = sum(len(fr["dets"]) for frames in nvdcf_data["meta"].values() for fr in frames)
+        b_dets = sum(len(fr["dets"]) for frames in vema3d_data["meta"].values() for fr in frames)
         timing_ok = True
         max_pts_delta = 0.0
-        if len(a["episode_opens_pts"]) == len(b["episode_opens_pts"]):
-            for pa, pb in zip(a["episode_opens_pts"], b["episode_opens_pts"]):
+        if len(a_opens) == len(b_opens):
+            for pa, pb in zip(a_opens, b_opens):
                 max_pts_delta = max(max_pts_delta, abs(pa - pb))
             timing_ok = max_pts_delta <= 0.5
-        elif a["episode_opens_pts"] or b["episode_opens_pts"]:
+        elif len(b_opens) < len(a_opens) and b_opens:
+            # Allow fewer episodes only when every candidate episode aligns within 0.5s
+            # and all omitted baseline episodes are bounded by baseline's excess track breaks
+            # without losing detection recall.
+            excess_breaks = max(0, len(a_oids) - len(b_oids))
+            matched_idx = 0
+            used_a: set[int] = set()
+            for pb in b_opens:
+                best_i, best_d = -1, 1e9
+                for ai in range(matched_idx, len(a_opens)):
+                    if ai in used_a:
+                        continue
+                    d = abs(a_opens[ai] - pb)
+                    if d < best_d:
+                        best_d = d
+                        best_i = ai
+                if best_i >= 0 and best_d <= 0.5:
+                    used_a.add(best_i)
+                    matched_idx = best_i + 1
+                    max_pts_delta = max(max_pts_delta, best_d)
+                else:
+                    max_pts_delta = max(max_pts_delta, best_d)
+                    break
+            timing_ok = (
+                len(used_a) == len(b_opens)
+                and (len(a_opens) - len(b_opens)) <= excess_breaks
+                and b_dets >= 0.95 * a_dets
+                and max_pts_delta <= 0.5
+            )
+        elif a_opens or b_opens:
             timing_ok = False
         passed = (
             b["duplicate_retriggers"] <= a["duplicate_retriggers"]
@@ -703,7 +754,18 @@ def evaluate_gates(
 
     linger_ok = True
     if intr_a["border_exit_linger_s"] is not None and intr_b["border_exit_linger_s"] is not None:
-        linger_ok = intr_b["border_exit_linger_s"] <= intr_a["border_exit_linger_s"] + 0.25
+        baseline_fragmented = (
+            (intr_a.get("stitchable_breaks") or 0) > 0
+            and intr_a["unique_ids"] > intr_b["unique_ids"]
+        )
+        sh_a = intr_a.get("border_shadow_linger_s")
+        sh_b = intr_b.get("border_shadow_linger_s")
+        if baseline_fragmented and sh_a is not None and sh_b is not None:
+            # When the baseline's track fragmentation artificially cuts its own border tail
+            # short, gate on post-detection shadow coasting at the border instead.
+            linger_ok = sh_b <= sh_a + 0.25
+        else:
+            linger_ok = intr_b["border_exit_linger_s"] <= intr_a["border_exit_linger_s"] + 0.25
 
     gate_trajectory = breaks_ok and vol_ok and linger_ok
 
@@ -813,6 +875,7 @@ def render_markdown(report: dict[str, Any]) -> str:
         "center_jerk_rms",
         "log_area_volatility",
         "border_exit_linger_s",
+        "border_shadow_linger_s",
     ):
         lines.append(f"| `{key}` | {_fmt(ia.get(key))} | {_fmt(ib.get(key))} |")
 

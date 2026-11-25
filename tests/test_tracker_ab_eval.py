@@ -165,3 +165,68 @@ def test_tier4_efficiency_gate_rejects_slower_tracker(tmp_path: Path):
     assert report["gates"]["efficiency_checked"] is True
     assert report["gates"]["efficiency_gate"] is False
     assert report["gates"]["overall_verdict"] == "NO_GO"
+
+
+def test_zones_oracle_allows_fewer_episodes_when_baseline_has_id_breaks(tmp_path: Path):
+    # Baseline fragments oid=1 -> oid=2 -> oid=3 (>3.5s gap creates extra episode at pts=10.0),
+    # while candidate keeps oid=1 unbroken and triggers only the true entry at pts=1.0.
+    nvdcf_z = _write_jsonl(tmp_path / "zb_a.jsonl", [
+        _meta_entry("cam-1", 1, 1.0, [["person", 0.9, 1, 300.0, 200.0, 60.0, 140.0]]),
+        {"key": "iris:zone_alert:cam-1", "fields": {"pts": "1.000", "object_id": 1, "zone": "z0"}},
+        _meta_entry("cam-1", 2, 5.0, [["person", 0.9, 2, 310.0, 200.0, 60.0, 140.0]]),
+        _meta_entry("cam-1", 3, 10.0, [["person", 0.9, 3, 320.0, 200.0, 60.0, 140.0]]),
+        {"key": "iris:zone_alert:cam-1", "fields": {"pts": "10.000", "object_id": 3, "zone": "z0"}},
+    ])
+    vema_ok = _write_jsonl(tmp_path / "zb_b.jsonl", [
+        _meta_entry("cam-1", 1, 1.0, [["person", 0.9, 1, 300.0, 200.0, 60.0, 140.0]]),
+        {"key": "iris:zone_alert:cam-1", "fields": {"pts": "1.000", "object_id": 1, "zone": "z0"}},
+        _meta_entry("cam-1", 2, 5.0, [["person", 0.9, 1, 310.0, 200.0, 60.0, 140.0]]),
+        _meta_entry("cam-1", 3, 10.0, [["person", 0.9, 1, 320.0, 200.0, 60.0, 140.0]]),
+    ])
+    rep_ok = evaluate_ab(nvdcf_z, vema_ok, "zones")
+    assert rep_ok["oracle"]["passed"] is True
+
+    # Negative: if candidate also has 3 unique IDs (same as baseline) yet missed an episode -> FAIL.
+    vema_miss = _write_jsonl(tmp_path / "zb_miss.jsonl", [
+        _meta_entry("cam-1", 1, 1.0, [["person", 0.9, 1, 300.0, 200.0, 60.0, 140.0]]),
+        {"key": "iris:zone_alert:cam-1", "fields": {"pts": "1.000", "object_id": 1, "zone": "z0"}},
+        _meta_entry("cam-1", 2, 5.0, [["person", 0.9, 2, 310.0, 200.0, 60.0, 140.0]]),
+        _meta_entry("cam-1", 3, 10.0, [["person", 0.9, 3, 320.0, 200.0, 60.0, 140.0]]),
+    ])
+    rep_miss = evaluate_ab(nvdcf_z, vema_miss, "zones")
+    assert rep_miss["oracle"]["passed"] is False
+
+
+def test_border_shadow_linger_gating_for_fragmented_baseline(tmp_path: Path):
+    # Baseline has a stitchable break mid-exit at border (oid=1 -> oid=2), cutting oid=1 border tail to 0.5s.
+    # Unbroken candidate stays detected at border for 1.5s with 0.0s shadow linger -> PASS.
+    # Candidate with 2.0s post-detection shadow (-0.1) linger -> FAIL.
+    a_rows = [
+        _meta_entry("cam-1", 1, 0.0, [["person", 0.9, 1, 400.0, 400.0, 80.0, 140.0]]),
+        _meta_entry("cam-1", 2, 0.5, [["person", 0.9, 1, 400.0, 580.0, 80.0, 140.0]]),
+        _meta_entry("cam-1", 3, 1.0, [["person", 0.9, 1, 400.0, 580.0, 80.0, 140.0]]),
+        _meta_entry("cam-1", 4, 1.5, [["person", 0.9, 2, 400.0, 580.0, 80.0, 140.0]]),
+        _meta_entry("cam-1", 5, 2.0, [["person", 0.9, 2, 400.0, 580.0, 80.0, 140.0]]),
+    ]
+    b_det = [
+        _meta_entry("cam-1", 1, 0.0, [["person", 0.9, 1, 400.0, 400.0, 80.0, 140.0]]),
+        _meta_entry("cam-1", 2, 0.5, [["person", 0.9, 1, 400.0, 580.0, 80.0, 140.0]]),
+        _meta_entry("cam-1", 3, 1.0, [["person", 0.9, 1, 400.0, 580.0, 80.0, 140.0]]),
+        _meta_entry("cam-1", 4, 1.5, [["person", 0.9, 1, 400.0, 580.0, 80.0, 140.0]]),
+        _meta_entry("cam-1", 5, 2.0, [["person", 0.9, 1, 400.0, 580.0, 80.0, 140.0]]),
+    ]
+    b_ghost = b_det + [
+        _meta_entry("cam-1", 6, 3.0, [["person", -0.1, 1, 400.0, 580.0, 80.0, 140.0]]),
+        _meta_entry("cam-1", 7, 4.0, [["person", -0.1, 1, 400.0, 580.0, 80.0, 140.0]]),
+    ]
+    pa = _write_jsonl(tmp_path / "bl_a.jsonl", a_rows)
+    pb_det = _write_jsonl(tmp_path / "bl_b_det.jsonl", b_det)
+    pb_ghost = _write_jsonl(tmp_path / "bl_b_ghost.jsonl", b_ghost)
+
+    rep_det = evaluate_ab(pa, pb_det, "attendance")
+    assert rep_det["intrinsic"]["vema3d"]["border_shadow_linger_s"] == 0.0
+    assert rep_det["gates"]["trajectory_quality_gate"] is True
+
+    rep_ghost = evaluate_ab(pa, pb_ghost, "attendance")
+    assert rep_ghost["intrinsic"]["vema3d"]["border_shadow_linger_s"] == 2.0
+    assert rep_ghost["gates"]["trajectory_quality_gate"] is False
