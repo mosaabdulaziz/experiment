@@ -235,6 +235,17 @@ perception/models/DeepStream-Yolo/**
 # ...and the licence-plate detector run as a secondary GIE on vehicle crops (640 export of
 # products/el-mohandes/models/finetuned/best.pt; the weights stay where they are).
 !perception/models/DeepStream-Yolo/config_sgie_plate.txt
+!perception/models/DeepStream-Yolo/config_infer_primary_*.txt
+!perception/models/DeepStream-Yolo/labels.txt
+!perception/models/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/
+!perception/models/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/**
+perception/models/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/*.o
+perception/models/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/*.so
+!perception/models/DeepStream-Yolo/tools/
+!perception/models/DeepStream-Yolo/tools/**
+!perception/models/DeepStream-Yolo/calib/
+!perception/models/DeepStream-Yolo/calib/**
+!perception/models/DeepStream-Yolo-Face/labels.txt
 
 # TensorRT engine binaries (engine-files/): GPU/TRT-version/batch-specific, not
 # portable artifacts — never commit them; rebuilt from the committed ONNX +

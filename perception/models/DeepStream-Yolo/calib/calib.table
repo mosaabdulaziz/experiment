@@ -1,0 +1,432 @@
+TRT-101401-EntropyCalibration2
+input: 3c010a16
+conv2d: 3e402236
+val_2: 3c010a14
+silu: 3dd3dece
+conv2d_1: 3e9404e4
+val_3: 3c010a14
+silu_1: 3e04f72c
+conv2d_2: 3e350780
+val_4: 3c00b973
+silu_2: 3d678d2a
+silu_63: 3d27c3e3
+val_132: 3c017845
+conv2d_70: 3eadf058
+val_107: 3c0759e6
+cat_18: 3e29a7e6
+silu_58: 3d12ba5e
+split_with_sizes_1_split_0: 3d90d9dc
+val_92: 3c029a79
+conv2d_87: 3dc91a06
+split_with_sizes_1_split_1: 3d270604
+conv2d_3: 3d4ad607
+val_7: 3c0085c6
+silu_3: 3d3edb34
+conv2d_4: 3da165cb
+val_8: 3c1a4485
+silu_4: 3d95b5e7
+add_90: 3dbc8421
+cat: 3d8a31fa
+conv2d_5: 3dfb3b6c
+val_10: 3c07bf71
+silu_5: 3d140125
+conv2d_6: 3da7f298
+val_11: 3c050c5f
+silu_6: 3cb1310c
+conv2d_7: 3d8dc053
+val_12: 3c09b3bb
+silu_7: 3cb0f58a
+val_91: 3c05fd07
+cat_15: 3dba19c6
+val_126: 3c021419
+silu_55: 3d45aef2
+cat_16: 3ce9cd8a
+conv2d_59: 3deff902
+split_with_sizes_4_split_0: 3cb0f58a
+val_88: 3c02bd97
+conv2d_58: 3d981730
+silu_76: 3dc9b8d2
+split_with_sizes_4_split_1: 3c9a32ce
+conv2d_8: 3d019819
+val_14: 3bf9c452
+silu_8: 3c9a2a6e
+conv2d_9: 3d5b573a
+val_15: 3c0228f7
+silu_9: 3d0f7c04
+add_191: 3d4f3e3d
+cat_1: 3d0fd327
+conv2d_10: 3d88d3ff
+val_16: 3bfeb1ae
+silu_10: 3c74fefc
+conv2d_11: 3d8460cf
+val_17: 3c013ea7
+silu_11: 3c746642
+conv2d_12: 3d9b0b82
+val_18: 3c00c08d
+silu_12: 3cb22de9
+conv2d_71: 3dccccd2
+conv2d_62: 3d9a9259
+conv2d_86: 3e246ab7
+add_1211: 3d622713
+val_86: 3c01aa2e
+split_split_1: 3de8b46a
+split_with_sizes_7_split_0: 3c9089a3
+val_87: 3c03535d
+conv2d_57: 3d77edf7
+conv2d_82: 3d3675cb
+split_with_sizes_7_split_1: 3cb22de9
+conv2d_13: 3d073ab9
+conv2d_18: 3d7f61e0
+val_20: 3c01b6c1
+val_25: 3c010580
+silu_13: 3c9a2f00
+silu_18: 3cea996a
+conv2d_14: 3d565f4e
+val_21: 3c0262b9
+silu_14: 3c7852ee
+conv2d_15: 3d4093a9
+val_22: 3c02bfbd
+silu_15: 3cd609d7
+add_308: 3d0fd3ea
+conv2d_16: 3d473bac
+val_23: 3c01686a
+silu_16: 3c514846
+conv2d_17: 3d84a987
+val_24: 3c03ebad
+silu_17: 3d243978
+add_346: 3d94540d
+cat_2: 3d710a4c
+conv2d_19: 3d72ab96
+val_26: 3c009ff9
+silu_19: 3cb2ad4c
+cat_3: 3cb22de9
+conv2d_20: 3d600872
+val_27: 3c005e06
+silu_20: 3c9bbf74
+conv2d_21: 3d650aac
+val_28: 3c00c7b4
+silu_21: 3c90302f
+conv2d_22: 3d8d55a8
+val_29: 3c00e7a2
+silu_22: 3cea3860
+silu_56: 3d26118b
+val_90: 3c02eab2
+silu_72: 3dd5cb99
+conv2d_60: 3d450714
+conv2d_81: 3e3b550f
+view_3: 3ddc16e1
+split_with_sizes_10_split_0: 3ce9b62a
+val_125: 3c082ec1
+silu_71: 3d117cd6
+conv2d_80: 3e42817e
+split_with_sizes_10_split_1: 3c9a8b0e
+conv2d_23: 3d6d6796
+conv2d_28: 3d4f6789
+val_31: 3c01a88e
+val_36: 3c00b997
+silu_23: 3cb2dbe1
+silu_28: 3d01804d
+conv2d_24: 3d8ba4d4
+val_32: 3c01153f
+silu_24: 3c9b59e2
+conv2d_25: 3d7e1a29
+val_33: 3c00e587
+silu_25: 3cd3c193
+add_500: 3d7f443e
+conv2d_26: 3d8d2b75
+val_34: 3c013b8e
+silu_26: 3cd3db44
+conv2d_27: 3dbbbb0e
+val_35: 3c050444
+silu_27: 3d25010e
+add_538: 3dbebcee
+cat_4: 3d6a60cb
+conv2d_29: 3d8860b1
+val_37: 3c04105d
+silu_29: 3cd303b5
+cat_5: 3ce9b62a
+conv2d_30: 3d7e5c93
+val_38: 3c00b1de
+silu_30: 3cc08847
+conv2d_31: 3d5d2353
+val_39: 3c00cb74
+silu_31: 3d68fe04
+max_pool2d: 3d68fe04
+max_pool2d_1: 3d68fe04
+max_pool2d_2: 3d68fe04
+cat_6: 3d689138
+conv2d_32: 3daf4c13
+val_43: 3bfde2f6
+silu_32: 3c726ca6
+conv2d_33: 3d84ce43
+val_44: 3c00e0b4
+silu_33: 3d10d0b6
+silu_73: 3ce6d98d
+conv2d_69: 3da02cb0
+silu_57: 3ce92c6d
+conv2d_61: 3db09ce1
+val_135: 3c031623
+add_1249: 3dbc8163
+split_with_sizes_13_split_0: 3d10d0b6
+val_89: 3c01cdeb
+silu_53: 3d02ce1f
+silu_54: 3c9b6e9d
+split_with_sizes_13_split_1: 3d006cb6
+conv2d_34: 3d483359
+view: 3d483359
+softmax_1: 3bdefc1b
+silu_74: 3cd17aa7
+getitem_59: 3a824a36
+silu_52: 3c8842f3
+val_133: 3c02f5fa
+split_with_sizes_14_split_0: 3d32695d
+sigmoid: 3a824a36
+conv2d_55: 3d0ff6c5
+cat_17: 3e04ca29
+split_with_sizes_14_split_1: 3d44bc14
+node_softmax_1_output: 3bdefc1b
+split_split_0: 3dcdbd8c
+silu_64: 3e1cd25b
+split_with_sizes_14_split_2: 3d5a2655
+val_53_output: 3ab67d3d
+ONNXTRT_Broadcast_output: 3ab67d3d
+mul_640: 3bfc4fe3
+_unsafe_view: 3d5a2655
+transpose: 3bfc4fe3
+conv2d_35: 3d2a3db4
+matmul: 3dedee61
+node_softmax_output: 3a64dbc8
+softmax: 3a64dbc8
+conv2d_83: 3d81cdd1
+split_with_sizes_26_split_0: 3c9bb69d
+transpose_1: 3a64dbc8
+matmul_1: 3d368971
+view_1: 3d368971
+add_755: 3ce7c717
+conv2d_36: 3cf5a607
+add_766: 3d6d3005
+conv2d_37: 3d64434f
+val_66: 3bffdddc
+silu_34: 3cb110e3
+conv2d_38: 3d62bb58
+add_793: 3d5c9fe7
+cat_7: 3d10d0b6
+conv2d_39: 3d7e1c79
+val_67: 3c00072b
+silu_35: 3c5bb6c1
+upsample_nearest2d: 3c5bb6c1
+cat_8: 3c9bbf74
+conv2d_40: 3d537a85
+val_69: 3bffaeaa
+silu_36: 3c5b0abd
+ONNXTRT_Broadcast_182_output: 3e810a14
+mul_1521: 40b2eef3
+transpose_3_output: 3e810a14
+cat_22: 40b2eef3
+cat_21: 3f22352f
+transpose_5: 40b2eef3
+split_with_sizes_17_split_0: 3c5b0abd
+slice_2: 40b2eef3
+slice_4: 3a824a36
+val_85: 3bf89156
+split_with_sizes_17_split_1: 3c52959f
+conv2d_41: 3d66e604
+val_70: 3c03f7fc
+silu_37: 3c9016f6
+conv2d_42: 3d5e16cb
+val_71: 3c009525
+silu_38: 3cb162f5
+add_888: 3d16f5a6
+cat_9: 3c9963eb
+conv2d_43: 3d47f672
+val_72: 3bfee2de
+silu_39: 3c5129da
+upsample_nearest2d_1: 3c5129da
+cat_10: 3c74fefc
+conv2d_44: 3d240864
+val_74: 3bf1ffba
+silu_40: 3c533fd9
+output: 40c7cbab
+view_18: 3dc91a06
+val_108: 3c010a14
+view_6: 3e3b550f
+view_17: 3e04ca29
+split_with_sizes_20_split_0: 3c813166
+silu_51: 3c51e155
+add_1705: 3f22352f
+val_134: 3c02094f
+split_with_sizes_20_split_1: 3c19e242
+conv2d_45: 3d1a4711
+val_75: 3bfc8b7f
+silu_41: 3cb20de1
+conv2d_46: 3d4ff850
+val_76: 3c0182a7
+silu_42: 3c9abadf
+add_983: 3d06469c
+cat_11: 3c90702e
+conv2d_47: 3d490259
+val_77: 3bfd5350
+silu_43: 3c9ab08f
+conv2d_48: 3d5efcc3
+conv2d_63: 3da5445b
+conv2d_72: 3d2ce1b7
+val_78: 3c056877
+val_93: 3c016f2a
+val_114: 3c0084f8
+silu_44: 3c5323c6
+silu_59: 3cd5575d
+silu_65: 3d259f5c
+cat_12: 3c5323c6
+conv2d_64: 3e65ec9f
+conv2d_73: 3d41feda
+conv2d_49: 3d48ba4b
+val_94: 3c010a14
+val_115: 3c00bbf6
+val_79: 3bfd83e0
+silu_60: 3dbd313b
+silu_66: 3cb186c9
+silu_45: 3cb45d28
+conv2d_65: 3de7e4bd
+conv2d_74: 3d1d199e
+conv2d_56: 3d7c230e
+node_max_1__1_output: 3f78458b
+transpose_4: 3e04ca29
+split_with_sizes_26_split_1: 3c905744
+_to_copy: 3f78458b
+view_7: 3e246ab7
+split_with_sizes_23_split_0: 3cea4df4
+silu_75: 3d021177
+unsqueeze_output: 3f204a85
+conv2d_84: 3d7641cf
+split_with_sizes_23_split_1: 3bf9a7f6
+view_2: 3de7e4bd
+val_116: 3c158df4
+conv2d_50: 3d728bd2
+silu_67: 3cb1de36
+val_80: 3c016ff3
+conv2d_75: 3e124f13
+silu_46: 3c887ca3
+val_117: 3c021427
+conv2d_51: 3daea657
+silu_68: 3d6727b6
+val_81: 3c0503b6
+conv2d_76: 3e1e5506
+silu_47: 3cb16a87
+view_5: 3e1e5506
+add_1089: 3d61468e
+cat_13: 3caa418b
+conv2d_52: 3d9a8e12
+val_82: 3c00e97d
+silu_48: 3c7fad9c
+conv2d_53: 3d637b0a
+conv2d_66: 3dc87dfc
+conv2d_77: 3d393b5b
+val_83: 3c02c281
+val_100: 3c04fafe
+val_123: 3c0ad9e3
+silu_49: 3c916f3a
+silu_61: 3d019045
+silu_69: 3d017033
+cat_14: 3c5bb6c1
+conv2d_67: 3e68d8e9
+conv2d_78: 3d6b5116
+conv2d_54: 3d59fc68
+val_101: 3c010a14
+val_124: 3c030f6e
+val_84: 3c00fa19
+silu_62: 3dc9f3cd
+silu_70: 3cd1b7e8
+silu_50: 3c905744
+conv2d_68: 3ddc16e1
+conv2d_79: 3d4406a9
+conv2d_85: 3e2bc700
+sub_323: 3f1f8ccf
+view_4: 3dccccd2
+node_conv2d expanded_const_filter: 3f800000
+node_conv2d_1 expanded_const_filter: 3f800000
+node_conv2d_2 expanded_const_filter: 3f800000
+node_conv2d_3 expanded_const_filter: 3f800000
+node_conv2d_4 expanded_const_filter: 3f800000
+node_conv2d_5 expanded_const_filter: 3f800000
+node_conv2d_6 expanded_const_filter: 3f800000
+node_conv2d_7 expanded_const_filter: 3f800000
+node_conv2d_8 expanded_const_filter: 3f800000
+node_conv2d_9 expanded_const_filter: 3f800000
+node_conv2d_10 expanded_const_filter: 3f800000
+node_conv2d_11 expanded_const_filter: 3f800000
+node_conv2d_12 expanded_const_filter: 3f800000
+node_conv2d_13 expanded_const_filter: 3f800000
+node_conv2d_18 expanded_const_filter: 3f800000
+node_conv2d_14 expanded_const_filter: 3f800000
+node_conv2d_15 expanded_const_filter: 3f800000
+node_conv2d_16 expanded_const_filter: 3f800000
+node_conv2d_17 expanded_const_filter: 3f800000
+node_conv2d_19 expanded_const_filter: 3f800000
+node_conv2d_20 expanded_const_filter: 3f800000
+node_conv2d_21 expanded_const_filter: 3f800000
+node_conv2d_22 expanded_const_filter: 3f800000
+node_conv2d_23 expanded_const_filter: 3f800000
+node_conv2d_28 expanded_const_filter: 3f800000
+node_conv2d_24 expanded_const_filter: 3f800000
+node_conv2d_25 expanded_const_filter: 3f800000
+node_conv2d_26 expanded_const_filter: 3f800000
+node_conv2d_27 expanded_const_filter: 3f800000
+node_conv2d_29 expanded_const_filter: 3f800000
+node_conv2d_30 expanded_const_filter: 3f800000
+node_conv2d_31 expanded_const_filter: 3f800000
+node_conv2d_32 expanded_const_filter: 3f800000
+node_conv2d_33 expanded_const_filter: 3f800000
+node_conv2d_34 expanded_const_filter: 3f800000
+node_conv2d_35 expanded_const_filter: 3f800000
+node_conv2d_36 expanded_const_filter: 3f800000
+node_conv2d_37 expanded_const_filter: 3f800000
+node_conv2d_38 expanded_const_filter: 3f800000
+node_conv2d_39 expanded_const_filter: 3f800000
+node_conv2d_40 expanded_const_filter: 3f800000
+node_conv2d_41 expanded_const_filter: 3f800000
+node_conv2d_42 expanded_const_filter: 3f800000
+node_conv2d_43 expanded_const_filter: 3f800000
+node_conv2d_44 expanded_const_filter: 3f800000
+node_conv2d_45 expanded_const_filter: 3f800000
+node_conv2d_46 expanded_const_filter: 3f800000
+node_conv2d_47 expanded_const_filter: 3f800000
+node_conv2d_48 expanded_const_filter: 3f800000
+node_conv2d_63 expanded_const_filter: 3f800000
+node_conv2d_72 expanded_const_filter: 3f800000
+node_conv2d_64 expanded_const_filter: 3f800000
+node_conv2d_73 expanded_const_filter: 3f800000
+node_conv2d_49 expanded_const_filter: 3f800000
+node_conv2d_65 expanded_const_filter: 3f800000
+node_conv2d_74 expanded_const_filter: 3f800000
+node_conv2d_75 expanded_const_filter: 3f800000
+node_conv2d_50 expanded_const_filter: 3f800000
+node_conv2d_76 expanded_const_filter: 3f800000
+node_conv2d_51 expanded_const_filter: 3f800000
+node_conv2d_52 expanded_const_filter: 3f800000
+node_conv2d_53 expanded_const_filter: 3f800000
+node_conv2d_66 expanded_const_filter: 3f800000
+node_conv2d_77 expanded_const_filter: 3f800000
+node_conv2d_67 expanded_const_filter: 3f800000
+node_conv2d_78 expanded_const_filter: 3f800000
+node_conv2d_54 expanded_const_filter: 3f800000
+node_conv2d_68 expanded_const_filter: 3f800000
+node_conv2d_79 expanded_const_filter: 3f800000
+node_conv2d_80 expanded_const_filter: 3f800000
+node_conv2d_55 expanded_const_filter: 3f800000
+node_conv2d_60 expanded_const_filter: 3f800000
+node_conv2d_81 expanded_const_filter: 3f800000
+node_conv2d_56 expanded_const_filter: 3f800000
+node_conv2d_57 expanded_const_filter: 3f800000
+node_conv2d_58 expanded_const_filter: 3f800000
+node_conv2d_59 expanded_const_filter: 3f800000
+node_conv2d_61 expanded_const_filter: 3f800000
+node_conv2d_62 expanded_const_filter: 3f800000
+node_conv2d_69 expanded_const_filter: 3f800000
+node_conv2d_82 expanded_const_filter: 3f800000
+node_conv2d_70 expanded_const_filter: 3f800000
+node_conv2d_83 expanded_const_filter: 3f800000
+node_conv2d_71 expanded_const_filter: 3f800000
+node_conv2d_84 expanded_const_filter: 3f800000
+node_conv2d_85 expanded_const_filter: 3f800000
+node_conv2d_86 expanded_const_filter: 3f800000
+node_Conv_401 expanded_const_filter: 3f800000

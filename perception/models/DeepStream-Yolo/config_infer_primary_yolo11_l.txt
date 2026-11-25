@@ -1,0 +1,36 @@
+[property]
+gpu-id=0
+net-scale-factor=0.0039215697906911373
+model-color-format=0
+onnx-file=yolo11l.onnx
+model-engine-file=yolo11l_b1_gpu0_fp32.engine
+# Only consulted when network-mode=1 (INT8) below. Generate it first with:
+#   python3 perception/models/DeepStream-Yolo/tools/gen_int8_calib_table.py --video <src> \
+#       --config perception/models/DeepStream-Yolo/config_infer_primary_yolo11_l.txt
+# Own calib file per tier -- not interchangeable with yolo11s's calib/calib.table
+# or the m/x tiers' own tables.
+int8-calib-file=calib/calib_yolo11_l.table
+labelfile-path=labels.txt
+batch-size=1
+# FP16 by default (demo/comparison tier, not the deployed model) -- same precision
+# convention as the DAMO-YOLO configs. Flip to INT8 (1) only after calibrating above.
+network-mode=0
+num-detected-classes=80
+interval=0
+gie-unique-id=1
+process-mode=1
+network-type=0
+cluster-mode=2
+maintain-aspect-ratio=1
+symmetric-padding=1
+#workspace-size=2000
+parse-bbox-func-name=NvDsInferParseYolo
+#parse-bbox-func-name=NvDsInferParseYoloCuda
+#custom-lib-path=nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
+custom-lib-path=/opt/nvidia/deepstream/deepstream/custom_parsers/libnvdsinfer_custom_impl_Yolo.so
+engine-create-func-name=NvDsInferYoloCudaEngineGet
+
+[class-attrs-all]
+nms-iou-threshold=0.45
+pre-cluster-threshold=0.25
+topk=300

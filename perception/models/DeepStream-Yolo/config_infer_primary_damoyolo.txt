@@ -1,0 +1,48 @@
+[property]
+gpu-id=0
+# 1, not 1/255: DAMO-YOLO's own test-time transform (tinyvision/DAMO-YOLO
+# damo/dataset/transforms/{transforms,augmentations}.py) feeds raw 0-255 pixels straight
+# into the network -- image_mean=[0,0,0], image_std=[1,1,1], no /255 in its ToTensor.
+# Confirmed by direct source read AND confirmed in production (the earlier zero-detection
+# issue this was chasing was this exact misconfiguration -- fixed, not open anymore).
+net-scale-factor=1
+model-color-format=0
+onnx-file=damoyolo_s.onnx
+model-engine-file=damoyolo_s_b1_gpu0_fp16.engine
+# Only consulted when network-mode=1 (INT8) below. Generate it first with:
+#   python3 perception/models/DeepStream-Yolo/tools/gen_int8_calib_table.py --video <src> \
+#       --config perception/models/DeepStream-Yolo/config_infer_primary_damoyolo.txt
+# A DAMO-YOLO-M calibration table is NOT interchangeable with this one -- different
+# backbone/graph, own file (see config_infer_primary_damoyolo_m.txt).
+int8-calib-file=calib/calib_damoyolo_s.table
+# VERIFY class-id order against labelfile-path before activating -- see the runbook.
+labelfile-path=labels.txt
+batch-size=1
+# FP16 (yolo11's config uses network-mode=0/FP32). DAMO-YOLO-S's published benchmark
+# (upstream README, T4 TensorRT: 47.7 mAP @ 3.83ms) is an FP16 number. Verify accuracy is
+# acceptable at this precision before shipping (drop to network-mode=0 if not).
+network-mode=2
+# 81, not 80 (COCO): the released checkpoint's classification head is genuinely 81-wide
+# (tinyvision/DAMO-YOLO#105 -- checkpoint/config version mismatch upstream). labels.txt
+# stays at 80 lines; a class_id=80 hit just fails the name lookup harmlessly. See the
+# runbook's DAMO-YOLO-S step 4 before changing this.
+num-detected-classes=81
+interval=0
+gie-unique-id=1
+process-mode=1
+network-type=0
+cluster-mode=2
+# DAMO-YOLO does not resize the input with padding (upstream docs/DAMOYOLO.md) -- unlike
+# YOLO11's maintain-aspect-ratio=1 + symmetric-padding=1, this MUST stay 0.
+maintain-aspect-ratio=0
+#workspace-size=2000
+parse-bbox-func-name=NvDsInferParseYolo
+#parse-bbox-func-name=NvDsInferParseYoloCuda
+#custom-lib-path=nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
+custom-lib-path=/opt/nvidia/deepstream/deepstream/custom_parsers/libnvdsinfer_custom_impl_Yolo.so
+engine-create-func-name=NvDsInferYoloCudaEngineGet
+
+[class-attrs-all]
+nms-iou-threshold=0.45
+pre-cluster-threshold=0.25
+topk=300
