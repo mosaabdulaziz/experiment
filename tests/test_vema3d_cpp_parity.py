@@ -243,6 +243,14 @@ def test_border_exit_eviction_and_shadow_cap_parity(tmp_path: Path):
         # Interior track 2 reappears after shadow stopped emitting -> must still keep ID 2!
         reappear = step_both(np.array([[602.0, 320.0, 702.0, 420.0]], dtype=np.float64), sc, cls_arr)
         assert len(reappear) == 1 and reappear[0][0] == 2 and reappear[0][4] is False
+
+        # Regime II un-occlusion recovery: track shrinks under occlusion, then un-occludes at conf=0.57
+        # followed by high-conf=0.75 full box -> must keep ID 2 (never trap pole_h tiny).
+        for y2 in (400.0, 396.0, 392.0):
+            step_both(np.array([[602.0, 320.0, 660.0, y2]], dtype=np.float64), np.array([0.45]), cls_arr)
+        step_both(np.array([[602.0, 320.0, 662.0, 542.0]], dtype=np.float64), np.array([0.57]), cls_arr)
+        recovered = step_both(np.array([[604.0, 322.0, 665.0, 545.0]], dtype=np.float64), np.array([0.75]), cls_arr)
+        assert len(recovered) == 1 and recovered[0][0] == 2 and recovered[0][4] is False
     finally:
         if lib is not None and handle is not None:
             lib.vema3d_test_destroy(handle)

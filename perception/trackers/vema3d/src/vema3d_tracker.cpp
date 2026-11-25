@@ -894,9 +894,14 @@ void VEMA3DTrack::update(const BBox& obs_box, double obs_conf, int64_t new_cls_i
             k_degraded += 1;
         }
 
-        if (!cfg_->enable_size_lock) {
-            pole_h = std::max(alpha_eff * pole_h + (1.0 - alpha_eff) * obs_pole_h, 0.05);
-            pole_w = std::max(alpha_eff * pole_w + (1.0 - alpha_eff) * obs_pole_w, 0.02);
+        const bool expanding = (beta > 0.0 && obs_pole_h > pole_h);
+        if (!cfg_->enable_size_lock || expanding) {
+            double size_alpha = expanding ? std::min(alpha_eff, 0.55) : alpha_eff;
+            pole_h = std::max(size_alpha * pole_h + (1.0 - size_alpha) * obs_pole_h, 0.05);
+            pole_w = std::max(size_alpha * pole_w + (1.0 - size_alpha) * obs_pole_w, 0.02);
+            if (expanding) {
+                base_elev = size_alpha * base_elev + (1.0 - size_alpha) * obs_elev;
+            }
         }
         if (state == TrackState::Lost) {
             state = TrackState::Confirmed;
@@ -1427,8 +1432,17 @@ std::vector<TrackOutput> VEMA3DTracker::update(
         } else if (cfg_.emit_shadow_tracks && trk.state == TrackState::Lost) {
             if (cfg_.max_shadow_emit_lost <= 0 ||
                 trk.k_lost <= static_cast<double>(cfg_.max_shadow_emit_lost)) {
+                BBox out_box = trk.get_bbox(false);
+                if (cfg_.border_exit_lost > 0 && img_w > 0.0 && img_h > 0.0) {
+                    const double m = cfg_.border_exit_margin_px;
+                    const bool at_border = (out_box.x1 <= m) || (out_box.y1 <= m) ||
+                                           (out_box.x2 >= img_w - m) || (out_box.y2 >= img_h - m);
+                    if (at_border) {
+                        continue;
+                    }
+                }
                 outputs.push_back(TrackOutput{
-                    trk.id, trk.get_bbox(false), trk.conf, trk.cls_id, true, trk.age, -1});
+                    trk.id, out_box, trk.conf, trk.cls_id, true, trk.age, -1});
             }
         }
     }

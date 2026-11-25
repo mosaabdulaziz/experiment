@@ -301,7 +301,7 @@ class VEMA3DTrack:
                 return
 
             # Sub-case 2B: Non-leg-occlusion degraded detection -> Foot projection + truncation gate
-            obs_3d, obs_pole_h, obs_pole_w, cov_obs, _ = self.camera.bbox_to_pole_elev(obs_box, cov_2d=c2d)
+            obs_3d, obs_pole_h, obs_pole_w, cov_obs, obs_elev = self.camera.bbox_to_pole_elev(obs_box, cov_2d=c2d)
             area_ratio = (obs_w * obs_h) / max(pred_w * pred_h, 1e-6)
             v_obs_raw = (obs_3d - self.last_obs_3d) / elapsed
             norm_obs_raw = float(np.linalg.norm(v_obs_raw))
@@ -353,9 +353,13 @@ class VEMA3DTrack:
                     self.base_elev = self._pre_predict_elev
                 self.k_degraded += 1
 
-            if not cfg.enable_size_lock:
-                self.pole_h = max(alpha_eff * self.pole_h + (1.0 - alpha_eff) * obs_pole_h, 0.05)
-                self.pole_w = max(alpha_eff * self.pole_w + (1.0 - alpha_eff) * obs_pole_w, 0.02)
+            expanding = beta > 0.0 and obs_pole_h > self.pole_h
+            if not cfg.enable_size_lock or expanding:
+                size_alpha = min(alpha_eff, 0.55) if expanding else alpha_eff
+                self.pole_h = max(size_alpha * self.pole_h + (1.0 - size_alpha) * obs_pole_h, 0.05)
+                self.pole_w = max(size_alpha * self.pole_w + (1.0 - size_alpha) * obs_pole_w, 0.02)
+                if expanding:
+                    self.base_elev = size_alpha * self.base_elev + (1.0 - size_alpha) * obs_elev
 
             if self.state == "lost":
                 self.state = "confirmed"
@@ -809,5 +813,10 @@ class VEMA3DTracker:
                 outputs.append((trk.id, trk.get_bbox(buffered=False), trk.conf, trk.cls_id, False))
             elif cfg.emit_shadow_tracks and trk.state == "lost":
                 if cfg.max_shadow_emit_lost <= 0 or trk.k_lost <= cfg.max_shadow_emit_lost:
-                    outputs.append((trk.id, trk.get_bbox(buffered=False), trk.conf, trk.cls_id, True))
+                    out_box = trk.get_bbox(buffered=False)
+                    if cfg.border_exit_lost > 0 and img_w > 0.0 and img_h > 0.0:
+                        m = cfg.border_exit_margin_px
+                        if out_box[0] <= m or out_box[1] <= m or out_box[2] >= (img_w - m) or out_box[3] >= (img_h - m):
+                            continue
+                    outputs.append((trk.id, out_box, trk.conf, trk.cls_id, True))
         return outputs
