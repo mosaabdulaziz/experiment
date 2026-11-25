@@ -51,6 +51,7 @@ x-sidecar-shard: &sidecar-shard
     - RTSP_USER=${RTSP_USER:-}
     - RTSP_PASS=${RTSP_PASS:-}
     - IRIS_SHARD_ID=0
+    - IRIS_TELEMETRY=${IRIS_TELEMETRY:-}
     # Default 1 = single process (today's behavior). The shards profile is
     # only coherent when IRIS_SHARD_COUNT is exported (2 or 3) — replicas with
     # an invalid shard id exit loudly at boot (sidecar validation), so you can
@@ -323,6 +324,7 @@ services:
       - RTSP_PASS=${RTSP_PASS:-}
       - IRIS_SIDECAR_ROLE=fire
       - IRIS_SHARD_ID=0
+      - IRIS_TELEMETRY=${IRIS_TELEMETRY:-}
       - IRIS_SHARD_COUNT=1
 
   deepstream-sidecar-attendance:
@@ -344,6 +346,7 @@ services:
       - RTSP_PASS=${RTSP_PASS:-}
       - IRIS_SIDECAR_ROLE=attendance
       - IRIS_SHARD_ID=0
+      - IRIS_TELEMETRY=${IRIS_TELEMETRY:-}
       - IRIS_SHARD_COUNT=1
 
   # ── Barber shop monitoring (its own deployment) ─────────────────────────
@@ -380,6 +383,7 @@ services:
       # nvinfer's TensorRT engine build for the seg model crashes when GStreamer has loaded libunwind first.
       - LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgcc_s.so.1
       - IRIS_SHARD_ID=0
+      - IRIS_TELEMETRY=${IRIS_TELEMETRY:-}
       - IRIS_SHARD_COUNT=1
 
   # ── Fall detection (its own deployment) ─────────────────────────────────
@@ -417,6 +421,7 @@ services:
       - RTSP_PASS=${RTSP_PASS:-}
       - IRIS_SIDECAR_ROLE=fall_detection
       - IRIS_SHARD_ID=0
+      - IRIS_TELEMETRY=${IRIS_TELEMETRY:-}
       - IRIS_SHARD_COUNT=1
 
   # ── Concealment detection (its own deployment) ──────────────────────────
@@ -454,6 +459,7 @@ services:
       - RTSP_PASS=${RTSP_PASS:-}
       - IRIS_SIDECAR_ROLE=concealment_detection
       - IRIS_SHARD_ID=0
+      - IRIS_TELEMETRY=${IRIS_TELEMETRY:-}
       - IRIS_SHARD_COUNT=1
 
   # Pedestrian-vehicle proximity (products/proximity): YOLO26l-seg + the proximity module on the multicam sites'
@@ -482,6 +488,7 @@ services:
       # nvinfer's TensorRT engine build for the seg model crashes when GStreamer has loaded libunwind first.
       - LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libgcc_s.so.1
       - IRIS_SHARD_ID=0
+      - IRIS_TELEMETRY=${IRIS_TELEMETRY:-}
       - IRIS_SHARD_COUNT=1
 
   # ── Multi-camera vehicle tracking (its own deployment) ──────────────────
@@ -519,6 +526,7 @@ services:
       - RTSP_USER=${RTSP_USER:-}
       - RTSP_PASS=${RTSP_PASS:-}
       - IRIS_SHARD_ID=0
+      - IRIS_TELEMETRY=${IRIS_TELEMETRY:-}
       - IRIS_SHARD_COUNT=1
 
 volumes:
