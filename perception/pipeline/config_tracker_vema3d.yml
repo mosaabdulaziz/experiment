@@ -23,15 +23,15 @@ min_speed_ratio: 0.05
 # Association & Stage 3 ground-plane relocation
 iou_thresh_high: 0.25
 iou_thresh_low: 0.15
-relocation_cost_thresh: 1.60
+relocation_cost_thresh: 2.20
 biou_rate: 0.05
 biou_max_expansion: 2.0
 lambda_biou: 1.0
-lambda_pos: 0.35
+lambda_pos: 0.15
 lambda_dir: 0.25
 sigma_par_scale: 1.5
 sigma_perp_scale: 0.6
-base_pos_sigma_ratio: 0.25
+base_pos_sigma_ratio: 0.45
 
 # Track lifecycle (600 frames = ~20s at 30fps for seated attendance dropouts;
 # cap shadow emission and border-exit linger so exited people don't ghost)
@@ -41,10 +41,10 @@ early_term_lost: 2
 min_iou_diff_new: 0.70
 check_class_match: true
 emit_shadow_tracks: true
-border_exit_lost: 10
+border_exit_lost: 8
 border_exit_margin_px: 24.0
 min_visible_frac: 0.25
-max_shadow_emit_lost: 20
+max_shadow_emit_lost: 12
 
 # 3D pinhole ground-plane model (optional per-deployment cam_height / cam_pitch_deg overrides)
 auto_pitch: true
@@ -53,7 +53,7 @@ cam_pitch_deg: 8.0
 min_ray_y: 0.02
 max_depth: 80.0
 pos_3d_process_std: 0.22
-lambda_mmd: 0.45
-mmd_gate: 12.0
+lambda_mmd: 0.25
+mmd_gate: 25.0
 img_width: 1080
 img_height: 720
