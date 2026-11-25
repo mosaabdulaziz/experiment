@@ -178,3 +178,71 @@ def test_cpp_multistream_isolation_and_removal(tmp_path: Path):
         assert len(out1_next) == 1 and out1_next[0][0] == 1
     finally:
         lib.vema3d_test_destroy(handle)
+
+
+def test_border_exit_eviction_and_shadow_cap_parity(tmp_path: Path):
+    """Border-exit eviction and max_shadow_emit_lost must clear edge ghosts while keeping interior ID recovery."""
+    cfg = VEMAConfig(
+        probation_frames=1,
+        max_lost_frames=50,
+        emit_shadow_tracks=True,
+        border_exit_lost=4,
+        border_exit_margin_px=16.0,
+        min_visible_frac=0.25,
+        max_shadow_emit_lost=6,
+    )
+    yaml_path = tmp_path / "vema3d_border.yml"
+    cfg.to_yaml(yaml_path)
+
+    py_tracker = VEMA3DTracker(config=cfg, img_size=(1280, 720))
+    lib_path = _find_tracker_lib()
+    lib = _load_harness(lib_path) if lib_path is not None else None
+    handle = lib.vema3d_test_create(str(yaml_path).encode("utf-8"), 1280, 720) if lib else None
+
+    try:
+        empty_b = np.empty((0, 4), dtype=np.float64)
+        empty_s = np.empty(0, dtype=np.float64)
+        empty_c = np.empty(0, dtype=np.int64)
+        sc = np.array([0.9], dtype=np.float64)
+        cls_arr = np.array([2], dtype=np.int64)
+
+        def step_both(dets: np.ndarray, scores: np.ndarray, clss: np.ndarray):
+            py_out = py_tracker.update(dets, scores, clss, dt=1.0 / 30.0)
+            if lib is not None and handle is not None:
+                cpp_out = _step_cpp(lib, handle, 1, dets, scores, clss, 1.0 / 30.0)
+                assert len(cpp_out) == len(py_out)
+                for (cid, cbox, _cconf, _ccls, csh), (pid, pbox, _pconf, _pcls, psh) in zip(cpp_out, py_out):
+                    assert cid == pid and csh is psh
+                    assert np.allclose(cbox, pbox, atol=0.1)
+            return py_out
+
+        # Track 1 drives to the left border; Track 2 stays in interior and is temporarily occluded
+        for f in range(5):
+            dets = np.array([
+                [40.0 - 9.0 * f, 300.0, 140.0 - 9.0 * f, 400.0],
+                [600.0, 320.0, 700.0, 420.0],
+            ], dtype=np.float64)
+            out = step_both(dets, np.array([0.9, 0.9]), np.array([2, 2], dtype=np.int64))
+            assert len(out) == 2
+
+        # Both lose detections for 8 frames:
+        # - Border track (ID 1) must be evicted cleanly once k_lost > border_exit_lost (4).
+        # - Interior track (ID 2) emits shadow up to k_lost <= 6, then hides shadow while staying in memory.
+        saw_id1_evicted = False
+        saw_id2_shadow_hidden = False
+        for _ in range(8):
+            out = step_both(empty_b, empty_s, empty_c)
+            ids = {r[0] for r in out}
+            if 1 not in ids:
+                saw_id1_evicted = True
+            if 2 not in ids:
+                saw_id2_shadow_hidden = True
+        assert saw_id1_evicted
+        assert saw_id2_shadow_hidden
+
+        # Interior track 2 reappears after shadow stopped emitting -> must still keep ID 2!
+        reappear = step_both(np.array([[602.0, 320.0, 702.0, 420.0]], dtype=np.float64), sc, cls_arr)
+        assert len(reappear) == 1 and reappear[0][0] == 2 and reappear[0][4] is False
+    finally:
+        if lib is not None and handle is not None:
+            lib.vema3d_test_destroy(handle)

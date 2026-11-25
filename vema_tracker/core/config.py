@@ -53,6 +53,10 @@ class VEMAConfig:
     min_iou_diff_new: float = 0.70        # Suppress new track if IoU with active track > this
     check_class_match: bool = True        # Gate association on matching class id
     emit_shadow_tracks: bool = False      # Emit coasting tracks (useful for live preview, False for MOT eval)
+    border_exit_lost: int = 0             # Evict Lost tracks lingering at image borders (>0 enables)
+    border_exit_margin_px: float = 16.0   # Border margin (px) for edge-exit eviction
+    min_visible_frac: float = 0.25        # Evict Lost tracks once < this fraction stays in frame
+    max_shadow_emit_lost: int = 0         # Max k_lost steps to emit shadow boxes (0 = up to max_lost_frames)
 
     # --- Ablation toggles (all True in full VEMA) ---
     enable_truncation_gate: bool = True

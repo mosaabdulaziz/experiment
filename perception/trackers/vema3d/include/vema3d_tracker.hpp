@@ -50,6 +50,10 @@ struct Config {
     double min_iou_diff_new = 0.70;
     bool check_class_match = true;
     bool emit_shadow_tracks = false;
+    int border_exit_lost = 0;
+    double border_exit_margin_px = 16.0;
+    double min_visible_frac = 0.25;
+    int max_shadow_emit_lost = 0;
 
     bool enable_truncation_gate = true;
     bool enable_size_lock = true;

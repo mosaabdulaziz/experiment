@@ -167,6 +167,10 @@ Config Config::from_yaml_string(const std::string& content) {
         else if (key == "min_iou_diff_new") cfg.min_iou_diff_new = parse_double_val(val, cfg.min_iou_diff_new);
         else if (key == "check_class_match") cfg.check_class_match = parse_bool_val(val, cfg.check_class_match);
         else if (key == "emit_shadow_tracks") cfg.emit_shadow_tracks = parse_bool_val(val, cfg.emit_shadow_tracks);
+        else if (key == "border_exit_lost") cfg.border_exit_lost = parse_int_val(val, cfg.border_exit_lost);
+        else if (key == "border_exit_margin_px") cfg.border_exit_margin_px = parse_double_val(val, cfg.border_exit_margin_px);
+        else if (key == "min_visible_frac") cfg.min_visible_frac = parse_double_val(val, cfg.min_visible_frac);
+        else if (key == "max_shadow_emit_lost") cfg.max_shadow_emit_lost = parse_int_val(val, cfg.max_shadow_emit_lost);
         else if (key == "enable_truncation_gate") cfg.enable_truncation_gate = parse_bool_val(val, cfg.enable_truncation_gate);
         else if (key == "enable_size_lock") cfg.enable_size_lock = parse_bool_val(val, cfg.enable_size_lock);
         else if (key == "enable_velocity_blending") cfg.enable_velocity_blending = parse_bool_val(val, cfg.enable_velocity_blending);
@@ -1362,12 +1366,28 @@ std::vector<TrackOutput> VEMA3DTracker::update(
 
     std::vector<VEMA3DTrack> kept_tracks;
     kept_tracks.reserve(tracks_.size());
+    const double img_w = static_cast<double>(cfg_.img_width);
+    const double img_h = static_cast<double>(cfg_.img_height);
     for (auto& trk : tracks_) {
         if (trk.state == TrackState::Tentative && trk.k_lost > static_cast<double>(cfg_.early_term_lost)) {
             continue;
         }
         if (trk.k_lost > static_cast<double>(cfg_.max_lost_frames)) {
             continue;
+        }
+        if (trk.state == TrackState::Lost && cfg_.border_exit_lost > 0 && img_w > 0.0 && img_h > 0.0) {
+            const BBox pbox = trk.get_bbox(false);
+            const double area = std::max(pbox.x2 - pbox.x1, 0.0) * std::max(pbox.y2 - pbox.y1, 0.0);
+            const double vis_w = std::max(0.0, std::min(pbox.x2, img_w) - std::max(pbox.x1, 0.0));
+            const double vis_h = std::max(0.0, std::min(pbox.y2, img_h) - std::max(pbox.y1, 0.0));
+            const double vis_frac = (area > 1e-6) ? ((vis_w * vis_h) / area) : 0.0;
+            const bool mostly_offscreen = (vis_frac < cfg_.min_visible_frac) && (trk.k_lost > 1.0);
+            const double m = cfg_.border_exit_margin_px;
+            const bool at_border =
+                (pbox.x1 <= m) || (pbox.y1 <= m) || (pbox.x2 >= img_w - m) || (pbox.y2 >= img_h - m);
+            if (mostly_offscreen || (at_border && trk.k_lost > static_cast<double>(cfg_.border_exit_lost))) {
+                continue;
+            }
         }
         kept_tracks.push_back(std::move(trk));
     }
@@ -1405,8 +1425,11 @@ std::vector<TrackOutput> VEMA3DTracker::update(
             outputs.push_back(TrackOutput{
                 trk.id, trk.get_bbox(false), trk.conf, trk.cls_id, false, trk.age, trk.associated_det_idx});
         } else if (cfg_.emit_shadow_tracks && trk.state == TrackState::Lost) {
-            outputs.push_back(TrackOutput{
-                trk.id, trk.get_bbox(false), trk.conf, trk.cls_id, true, trk.age, -1});
+            if (cfg_.max_shadow_emit_lost <= 0 ||
+                trk.k_lost <= static_cast<double>(cfg_.max_shadow_emit_lost)) {
+                outputs.push_back(TrackOutput{
+                    trk.id, trk.get_bbox(false), trk.conf, trk.cls_id, true, trk.age, -1});
+            }
         }
     }
     return outputs;

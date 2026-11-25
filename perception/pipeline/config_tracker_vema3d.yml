@@ -33,13 +33,18 @@ sigma_par_scale: 1.5
 sigma_perp_scale: 0.6
 base_pos_sigma_ratio: 0.25
 
-# Track lifecycle (600 frames = ~20s at 30fps for seated attendance dropouts)
+# Track lifecycle (600 frames = ~20s at 30fps for seated attendance dropouts;
+# cap shadow emission and border-exit linger so exited people don't ghost)
 probation_frames: 2
 max_lost_frames: 600
 early_term_lost: 2
 min_iou_diff_new: 0.70
 check_class_match: true
 emit_shadow_tracks: true
+border_exit_lost: 15
+border_exit_margin_px: 16.0
+min_visible_frac: 0.25
+max_shadow_emit_lost: 60
 
 # 3D pinhole ground-plane model (optional per-deployment cam_height / cam_pitch_deg overrides)
 auto_pitch: true

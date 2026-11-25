@@ -39,6 +39,10 @@ early_term_lost: 6
 min_iou_diff_new: 0.70
 check_class_match: false
 emit_shadow_tracks: true
+border_exit_lost: 15
+border_exit_margin_px: 16.0
+min_visible_frac: 0.25
+max_shadow_emit_lost: 45
 
 # 3D pinhole ground-plane model (optional per-camera cam_height / cam_pitch_deg overrides)
 auto_pitch: true

@@ -762,11 +762,25 @@ class VEMA3DTracker:
                 trk.mark_missed(dt_steps)
 
         kept_tracks: list[VEMA3DTrack] = []
+        img_w, img_h = float(self.img_size[0]), float(self.img_size[1])
         for trk in self.tracks:
             if trk.state == "tentative" and trk.k_lost > cfg.early_term_lost:
                 continue
             if trk.k_lost > cfg.max_lost_frames:
                 continue
+            if trk.state == "lost" and cfg.border_exit_lost > 0 and img_w > 0.0 and img_h > 0.0:
+                pbox = trk.get_bbox(buffered=False)
+                area = max(float(pbox[2] - pbox[0]), 0.0) * max(float(pbox[3] - pbox[1]), 0.0)
+                vis_w = max(0.0, min(float(pbox[2]), img_w) - max(float(pbox[0]), 0.0))
+                vis_h = max(0.0, min(float(pbox[3]), img_h) - max(float(pbox[1]), 0.0))
+                vis_frac = (vis_w * vis_h) / area if area > 1e-6 else 0.0
+                mostly_offscreen = (vis_frac < cfg.min_visible_frac) and (trk.k_lost > 1.0)
+                m = cfg.border_exit_margin_px
+                at_border = (
+                    pbox[0] <= m or pbox[1] <= m or pbox[2] >= (img_w - m) or pbox[3] >= (img_h - m)
+                )
+                if mostly_offscreen or (at_border and trk.k_lost > cfg.border_exit_lost):
+                    continue
             kept_tracks.append(trk)
         self.tracks = kept_tracks
 
@@ -794,5 +808,6 @@ class VEMA3DTracker:
             if trk.state == "confirmed":
                 outputs.append((trk.id, trk.get_bbox(buffered=False), trk.conf, trk.cls_id, False))
             elif cfg.emit_shadow_tracks and trk.state == "lost":
-                outputs.append((trk.id, trk.get_bbox(buffered=False), trk.conf, trk.cls_id, True))
+                if cfg.max_shadow_emit_lost <= 0 or trk.k_lost <= cfg.max_shadow_emit_lost:
+                    outputs.append((trk.id, trk.get_bbox(buffered=False), trk.conf, trk.cls_id, True))
         return outputs

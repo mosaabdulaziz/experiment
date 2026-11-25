@@ -33,13 +33,18 @@ sigma_par_scale: 1.5
 sigma_perp_scale: 0.6
 base_pos_sigma_ratio: 0.25
 
-# Track lifecycle (500 frames aligns with mtmc.max_unmatched_frames)
+# Track lifecycle (500 frames aligns with mtmc.max_unmatched_frames; fast border-exit
+# eviction matches NvDCF so exiting vehicles don't linger as ghost shadow boxes)
 probation_frames: 1
 max_lost_frames: 500
 early_term_lost: 30
 min_iou_diff_new: 0.70
 check_class_match: true
 emit_shadow_tracks: true
+border_exit_lost: 12
+border_exit_margin_px: 16.0
+min_visible_frac: 0.25
+max_shadow_emit_lost: 45
 
 # 3D pinhole ground-plane model (optional per-camera cam_height / cam_pitch_deg overrides)
 auto_pitch: true
