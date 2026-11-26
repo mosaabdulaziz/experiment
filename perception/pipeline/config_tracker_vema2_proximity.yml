@@ -13,14 +13,14 @@ tau_mem: 0.15
 
 probation_frames: 2
 max_lost_frames: 600
-early_term_lost: 6
+early_term_lost: 20
 min_iou_diff_new: 0.70
 check_class_match: false
 emit_shadow_tracks: true
 border_exit_lost: 8
 border_exit_margin_px: 24.0
 min_visible_frac: 0.25
-max_shadow_emit_lost: 15
+max_shadow_emit_lost: 7
 max_targets_per_stream: 120
 img_width: 1280
 img_height: 720

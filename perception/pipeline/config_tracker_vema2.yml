@@ -23,7 +23,7 @@ emit_shadow_tracks: true
 border_exit_lost: 4
 border_exit_margin_px: 24.0
 min_visible_frac: 0.25
-max_shadow_emit_lost: 4
+max_shadow_emit_lost: 1
 max_targets_per_stream: 120
 img_width: 1080
 img_height: 720

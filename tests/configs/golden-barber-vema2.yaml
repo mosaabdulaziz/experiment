@@ -1,0 +1,5 @@
+# TEST CONFIG (A/B VEMA v2 arm): barber golden replay using libnvds_vema2_tracker.so.
+extends: golden-barber.yaml
+
+tracker_lib: "/opt/nvidia/deepstream/deepstream/custom_trackers/libnvds_vema2_tracker.so"
+tracker_config: "perception/pipeline/config_tracker_vema2_barber.yml"

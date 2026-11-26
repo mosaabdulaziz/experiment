@@ -171,7 +171,7 @@ static void test_yaml_shadow_and_border_exit() {
     assert(std::abs(cfg.tau_mem - 0.15) < 1e-6);
     assert(cfg.max_lost_frames == 600);
     assert(cfg.emit_shadow_tracks == true);
-    assert(cfg.max_shadow_emit_lost == 4);
+    assert(cfg.max_shadow_emit_lost == 1);
     assert(cfg.max_targets_per_stream == 120);
 
     // Ensure invalid tau_low == tau_high does not produce NaN
