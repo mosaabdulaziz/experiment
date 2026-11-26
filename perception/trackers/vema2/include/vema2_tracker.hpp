@@ -43,6 +43,9 @@ struct Config {
     // Single intrinsic physical parameter (seconds)
     double tau_mem = 0.15;
 
+    // Optional track-creation confidence floor (0 = fall back to tau_high)
+    double new_track_thresh = 0.0;
+
     // DeepStream production lifecycle controls
     int border_exit_lost = 0;
     double border_exit_margin_px = 16.0;
@@ -51,6 +54,10 @@ struct Config {
     int max_targets_per_stream = 120;
     int img_width = 1920;
     int img_height = 1080;
+
+    double effective_new_track_thresh() const {
+        return (new_track_thresh > tau_high) ? new_track_thresh : tau_high;
+    }
 
     void validate();
     static Config from_yaml_string(const std::string& content);

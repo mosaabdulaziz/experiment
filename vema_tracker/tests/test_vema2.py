@@ -140,3 +140,48 @@ def test_crossing_and_overtaking_zero_idsw():
         d = metrics.to_dict()
         assert d["IDSW"] == 0, f"{seq.name} had {d['IDSW']} IDSW: {d}"
         assert d["IDF1"] >= 95.0, f"{seq.name} had low IDF1: {d}"
+
+
+def test_new_track_thresh_recovers_low_conf_seated_customer_while_blocking_mirror_ghost():
+    # Confirmed seated customer starts at conf=0.80, vanishes for 4 frames behind barber,
+    # then re-emerges heavily caped at conf=0.31 (< new_track_thresh=0.43, >= tau_high=0.25).
+    # Simultaneously a mirror reflection persists at conf=0.31 and must never spawn a track.
+    cfg = VEMA2Config(
+        tau_high=0.25,
+        tau_low=0.15,
+        new_track_thresh=0.43,
+        probation_frames=3,
+        max_lost_frames=600,
+    )
+    tracker = PolarEMATracker(cfg)
+    dt = 1.0 / 15.0
+
+    seated = np.array([200.0, 500.0, 320.0, 620.0], dtype=np.float64)
+    mirror = np.array([20.0, 260.0, 75.0, 360.0], dtype=np.float64)
+
+    ids_seen: set[int] = set()
+    initial_id = None
+    recovered = False
+
+    for f in range(1, 20):
+        boxes = [mirror]
+        scores = [0.31]
+        if f <= 5:
+            boxes.append(seated)
+            scores.append(0.80)
+        elif f >= 10:
+            boxes.append(seated + np.array([2.0, -1.0, 2.0, -1.0]))
+            scores.append(0.31)
+
+        outs = tracker.update(np.stack(boxes), np.array(scores), np.zeros(len(boxes), dtype=np.int64), dt=dt)
+        for tid, _b, _c, _cid, _sh in outs:
+            ids_seen.add(tid)
+        if f == 5:
+            assert len(outs) == 1
+            initial_id = outs[0][0]
+        if f >= 12 and any(o[0] == initial_id for o in outs):
+            recovered = True
+
+    assert initial_id is not None
+    assert recovered is True
+    assert ids_seen == {initial_id}

@@ -2,8 +2,9 @@
 # VEMA v2 tracker config for barber shop monitoring (products/barber/sidecar.yaml).
 # Matches products/barber/tracker.yml lifecycle with max_targets_per_stream=150.
 
-tau_high: 0.43
+tau_high: 0.25
 tau_low: 0.15
+new_track_thresh: 0.43
 iou_thresh_high: 0.25
 iou_thresh_low: 0.15
 ref_fps: 30.0

@@ -32,11 +32,16 @@ class VEMA2Config:
     # --- Single Intrinsic Physical Parameter ---
     tau_mem: float = 0.15  # Kinematic memory time constant (seconds)
 
+    # --- Optional Track Spawn Confidence Floor (0 = fall back to tau_high) ---
+    new_track_thresh: float = 0.0
+
     def __post_init__(self) -> None:
         if not (0.0 <= self.tau_low < self.tau_high <= 1.0):
             raise ValueError(
                 f"Expected 0 <= tau_low < tau_high <= 1, got tau_low={self.tau_low}, tau_high={self.tau_high}"
             )
+        if not (0.0 <= self.new_track_thresh <= 1.0):
+            raise ValueError(f"Expected 0 <= new_track_thresh <= 1, got {self.new_track_thresh}")
         if self.tau_mem <= 0.0:
             raise ValueError(f"tau_mem must be > 0, got {self.tau_mem}")
         if self.ref_fps <= 0.0:
@@ -45,6 +50,11 @@ class VEMA2Config:
             raise ValueError(f"probation_frames must be >= 1, got {self.probation_frames}")
         if self.max_lost_frames < 1:
             raise ValueError(f"max_lost_frames must be >= 1, got {self.max_lost_frames}")
+
+    @property
+    def effective_new_track_thresh(self) -> float:
+        """Minimum confidence required to spawn a new track (at least tau_high)."""
+        return float(max(self.tau_high, self.new_track_thresh))
 
     @classmethod
     def from_vema_config(cls, cfg: VEMAConfig) -> "VEMA2Config":
@@ -62,6 +72,7 @@ class VEMA2Config:
             emit_shadow_tracks=cfg.emit_shadow_tracks,
             ref_fps=cfg.ref_fps,
             dt_aware=cfg.dt_aware,
+            new_track_thresh=float(getattr(cfg, "new_track_thresh", 0.0)),
         )
 
     def to_dict(self) -> dict[str, Any]:

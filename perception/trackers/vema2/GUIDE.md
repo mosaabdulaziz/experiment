@@ -39,8 +39,9 @@ Config files live in `perception/pipeline/config_tracker_vema2*.yml` and are par
 
 | Parameter | Default | Typical Range | What It Controls & How to Tune It |
 | :--- | :---: | :---: | :--- |
-| `tau_high` | `0.60` | `0.40 – 0.65` | **High-confidence split**. Detections $\ge \tau_{\text{high}}$ run in Stage 1/3/4 and can spawn new tracks. Detections in $[\tau_{\text{low}}, \tau_{\text{high}})$ only rescue active tracks in Stage 2.<br>**Rule**: Match your detector's `pre-cluster-threshold` and downstream module `min_confidence`. *Too high* drops real occluded people/vehicles (`correctness_gate` recall fail); *too low* lets false positives spawn short-lived IDs (`flicker_rate_pct` spike). |
-| `tau_low` | `0.15` | `0.10 – 0.25` | **Low-confidence rescue floor**. Keeps an already-active track alive through brief partial occlusions or confidence dips without ever spawning a new ID. Raise only if heavy background clutter (`0.15–0.25`) steals active tracks from nearby people. |
+| `tau_high` | `0.60` | `0.25 – 0.65` | **Stage 1 / 3 / 4 association split**. Detections $\ge \tau_{\text{high}}$ run in Stage 1 (active), Stage 3 (lost re-association), and Stage 4 (tentative), while $[\tau_{\text{low}}, \tau_{\text{high}})$ only rescue active (`k_lost == 0`) tracks in Stage 2.<br>**Rule**: Match your detector's `pre-cluster-threshold` (`0.25` for `YOLO26l-seg`) when lost occluded people need to re-attach at low confidence, and raise `new_track_thresh` to control spawns. |
+| `new_track_thresh` | `0.0` (=`tau_high`) | `0.40 – 0.65` | **Track-creation confidence floor**. An unmatched detection in Step 7 can only spawn a new track if $\text{conf} \ge \max(\tau_{\text{high}}, \text{new\_track\_thresh})$. Decoupling this from `tau_high` (e.g., `tau_high: 0.25, new_track_thresh: 0.43` in `barber`) lets **confirmed** seated/caped customers re-attach at `0.25–0.42` after barber crossings while continuing to block `< 0.43` mirror reflections and background clutter from spawning new IDs. |
+| `tau_low` | `0.15` | `0.10 – 0.25` | **Low-confidence rescue floor**. Keeps an already-active (`k_lost == 0`) track alive through brief partial occlusions or confidence dips without ever spawning a new ID. Raise only if heavy background clutter (`0.15–0.25`) steals active tracks from nearby people. |
 | `iou_thresh_high` | `0.25` | `0.15 – 0.35` | Minimum IoU for Stage 1 & Stage 4, and weight factor on Stage 1 kinematic cost `(1 - IoU) + iou_thresh_high * rho * c_kin`. Lower (`0.20`) when cameras run low effective FPS (`process_fps` skip) so fast objects bridge wider inter-frame jumps. |
 | `iou_thresh_low` | `0.15` | `0.10 – 0.25` | Minimum IoU for Stage 2 low-confidence rescue. Slightly looser than `iou_thresh_high` because occluded boxes shrink or shift slightly. |
 | `check_class_match` | `true` | `true \| false` | Require identical detector `classId` between track and detection. Set **`false`** on multi-class vehicle products (`proximity`, where forklifts flicker between `car` and `truck`); keep **`true`** everywhere else. |
@@ -86,13 +87,12 @@ When a product sets `process_fps` lower than `stream_fps` (e.g., `proximity`: `5
   - `probation_frames` should stay `1–2` (counting confirmed detections, not raw frames).
   - `max_shadow_emit_lost` (`10–16`) bridges short detector skips cleanly without holding ghosts for seconds.
 
-### Pitfall B: Detector Floor vs Tracker `tau_high`
+### Pitfall B: Detector Floor vs `tau_high` vs `new_track_thresh`
 Never set `tau_high` blindly high or blindly low without checking both the PGIE config and the product module:
 - `YOLO11x` (`attendance`, `zones`): Person detections sit cleanly at `>= 0.60` (`tau_high: 0.60`).
-- `YOLO26l-seg` (`barber`, `proximity`): PGIE `pre-cluster-threshold = 0.25`, while `modules.proximity.min_confidence = 0.40` (and `barber` `ce_conf_min` reads seated/caped customers in the `0.40–0.60` band).
-  - Setting `tau_high: 0.60` on `YOLO26l-seg` drops valid seated customers (`barber`) and delayed `proximity` episode onset.
-  - Setting `tau_high: 0.30` below `modules.proximity.min_confidence: 0.40` floods the tracker with sub-`0.40` noise that the proximity module refuses to use anyway.
-  - Matching **`tau_high: 0.42–0.43`** hits the exact sweet spot confirmed across both A/B suites.
+- `YOLO26l-seg` (`barber`, `proximity`): PGIE `pre-cluster-threshold = 0.25`.
+  - On **`barber`**, heavily caped or barber-occluded seated customers frequently re-emerge at `0.25–0.42`, while mirror reflections also fire around `0.25–0.32`. Setting **`tau_high: 0.25`** with **`new_track_thresh: 0.43`** allows **confirmed** customers to re-attach cleanly across `[0.25, 1.0]` while keeping new track creation strict (`>= 0.43`) so mirror ghosts do not spawn.
+  - On **`proximity`**, `modules.proximity.min_confidence = 0.40` drops sub-`0.40` evidence downstream anyway, so **`tau_high: 0.42`** aligns directly with the safety module.
 
 ### Pitfall C: NvDCF `probationAge` Off-by-One Semantics
 DeepStream's `TargetManagement.probationAge: 2` confirms only when `age > 2` (i.e. **3 detections**). VEMA v2 confirms at `hits >= probation_frames`. To match NvDCF's flicker filter (`barber`), set `probation_frames: 3`, not `2`.
@@ -104,7 +104,8 @@ DeepStream's `TargetManagement.probationAge: 2` confirms only when `age > 2` (i.
 | Knob | [Base / Attendance / Zones](../../pipeline/config_tracker_vema2.yml) | [Barber](../../pipeline/config_tracker_vema2_barber.yml) | [Proximity](../../pipeline/config_tracker_vema2_proximity.yml) | [Vehicle / Multicam](../../pipeline/config_tracker_vema2_vehicle.yml) |
 | :--- | :---: | :---: | :---: | :---: |
 | **PGIE Model** | `YOLO11x` (1080x720) | `YOLO26l-seg` (r384) | `YOLO26l-seg` (1280) | `vehicle_1cls` (1280x720) |
-| **`tau_high` / `tau_low`** | `0.60 / 0.15` | `0.43 / 0.15` | `0.42 / 0.15` | `0.65 / 0.15` |
+| **`tau_high` / `tau_low`** | `0.60 / 0.15` | `0.25 / 0.15` | `0.42 / 0.15` | `0.65 / 0.15` |
+| **`new_track_thresh`** | `0.0` (=`0.60`) | `0.43` | `0.0` (=`0.42`) | `0.0` (=`0.65`) |
 | **`iou_thresh_high` / `low`** | `0.25 / 0.15` | `0.25 / 0.15` | `0.25 / 0.15` | `0.20 / 0.10` |
 | **`probation_frames`** | `2` | `3` | `2` | `1` |
 | **`early_term_lost`** | `2` | `2` | `20` | `30` |
@@ -120,10 +121,10 @@ DeepStream's `TargetManagement.probationAge: 2` confirms only when `age > 2` (i.
 
 | Observed Problem | Root Cause | Fix (in Priority Order) |
 | :--- | :--- | :--- |
-| **Low total detections (`total_detections` < 95% of NvDCF)** | `tau_high` too strict for detector, or `probation_frames` too high on short visits | Lower `tau_high` (`0.60 -> 0.43`); verify `probation_frames` vs `pgie interval` |
-| **High `flicker_rate_pct` / short `< 1 s` IDs** | Spurious detections / mirror reflections / duplicate boxes spawning | Raise `probation_frames` (`2 -> 3`), lower `min_iou_diff_new` (`0.70 -> 0.37`), or raise `tau_high` slightly |
+| **Low total detections (`total_detections` < 95% of NvDCF)** | `tau_high` too strict for re-acquiring lost low-conf targets, or `probation_frames` too high | Lower `tau_high` (`0.43 -> 0.25`) while keeping `new_track_thresh: 0.43` to guard spawns; verify `probation_frames` vs `pgie interval` |
+| **High `flicker_rate_pct` / short `< 1 s` IDs** | Spurious detections / mirror reflections / duplicate boxes spawning | Raise `new_track_thresh` (e.g. `0.43 -> 0.50`), raise `probation_frames` (`2 -> 3`), or lower `min_iou_diff_new` (`0.70 -> 0.37`) |
 | **ID switches when barber leans over / people cross** | Low-IoU threshold too loose or insufficient lost memory | Raise `iou_thresh_high` (`0.25 -> 0.30`) slightly or verify `dt_aware: true` |
-| **Standing customer / occluded track fails to re-ID after 5–15 s** | `max_lost_frames` too short or `tau_high` drops re-appearing box | Raise `max_lost_frames` (`30 -> 600` at `ref_fps: 30.0`) |
+| **Standing customer / occluded track fails to re-ID after 5–15 s** | `max_lost_frames` too short or `tau_high` drops re-appearing box | Raise `max_lost_frames` (`30 -> 600` at `ref_fps: 30.0`) and keep `tau_high` at detector floor |
 | **Ghost boxes linger at exits/doors (`border_shadow_linger_s > 0.25 s`)** | `max_shadow_emit_lost` too large near borders | Keep `max_shadow_emit_lost` small (`1–3` on 25–30 fps) and `border_exit_margin_px >= 24.0` |
 | **Forklift / car ID splits mid-turn (`proximity`)** | Class flips `car <-> truck` | Confirm `check_class_match: false` |
 | **Two side-by-side walkers merge onto one ID** | `min_iou_diff_new` too small in dense crowd | Raise `min_iou_diff_new` (`0.37 -> 0.60–0.70`) |
@@ -133,12 +134,14 @@ DeepStream's `TargetManagement.probationAge: 2` confirms only when `age > 2` (i.
 
 ## 6. Build, Test, Score & Visually Approve Side-by-Side Videos
 
-### Step A — Rebuild `.so` & Run C++/Python Parity Tests (when C++ changes)
+### Step A — Rebuild Sidecar `.so` & Run C++/Python Parity Tests (when C++ changes)
+`libnvds_vema2_tracker.so` is compiled into the `deepstream-sidecar` Docker image (`perception/pipeline/Dockerfile`). Whenever `perception/trackers/vema2/*.{hpp,cpp}` changes, rebuild the sidecar image before running DeepStream benchmarks:
 ```bash
-cd perception/trackers/vema2
-make clean && make && make test
-sudo cp libnvds_vema2_tracker.so /opt/nvidia/deepstream/deepstream/custom_trackers/   # or inside container mount
-cd ../../..
+# On the DeepStream server after `git pull`:
+docker compose build deepstream-sidecar
+
+# Optional standalone C++ unit verification (inside container or with DeepStream headers):
+cd perception/trackers/vema2 && g++ -O3 -std=c++17 -Wall -Wextra -Werror -Iinclude -I/opt/nvidia/deepstream/deepstream/sources/includes src/vema2_tracker.cpp tests/test_vema2_cpp.cpp -o /tmp/test_vema2 && /tmp/test_vema2 && cd ../../..
 pytest vema_tracker/tests/ tests/test_tracker_ab_eval.py tests/test_render_tracker_ab.py -q
 ```
 

@@ -213,6 +213,52 @@ static void test_yaml_shadow_and_border_exit() {
     assert(mid_shadow_count == cfg.max_shadow_emit_lost);
 }
 
+static void test_new_track_thresh_barber_recovery_and_mirror_block() {
+    Config cfg = Config::from_yaml_file("perception/pipeline/config_tracker_vema2_barber.yml");
+    assert(std::abs(cfg.tau_high - 0.25) < 1e-6);
+    assert(std::abs(cfg.new_track_thresh - 0.43) < 1e-6);
+    assert(cfg.probation_frames == 3);
+
+    PolarEMATracker tracker(cfg);
+    const double dt = 1.0 / 15.0;
+    const BBox seated{200.0, 500.0, 320.0, 620.0};
+    const BBox mirror{20.0, 260.0, 75.0, 360.0};
+
+    std::set<uint64_t> ids_seen;
+    uint64_t initial_id = 0;
+    bool recovered = false;
+
+    for (int f = 1; f <= 20; ++f) {
+        std::vector<BBox> dets = {mirror};
+        std::vector<double> scores = {0.31};
+        std::vector<int64_t> clss = {0};
+        if (f <= 5) {
+            dets.push_back(seated);
+            scores.push_back(0.80);
+            clss.push_back(0);
+        } else if (f >= 10) {
+            dets.push_back(BBox{seated.x1 + 2.0, seated.y1 - 1.0, seated.x2 + 2.0, seated.y2 - 1.0});
+            scores.push_back(0.31);
+            clss.push_back(0);
+        }
+
+        auto outs = tracker.update(dets, scores, clss, dt);
+        for (const auto& o : outs) {
+            ids_seen.insert(o.track_id);
+            if (f >= 12 && !o.is_shadow && o.track_id == initial_id) {
+                recovered = true;
+            }
+        }
+        if (f == 5) {
+            assert(outs.size() == 1 && !outs[0].is_shadow);
+            initial_id = outs[0].track_id;
+        }
+    }
+    assert(initial_id != 0);
+    assert(recovered);
+    assert(ids_seen.size() == 1 && *ids_seen.begin() == initial_id);
+}
+
 static void test_python_parity_trace() {
     Config cfg;
     PolarEMATracker tracker(cfg);
@@ -243,6 +289,7 @@ int main() {
     test_overtaking_same_direction();
     test_standing_to_seated();
     test_yaml_shadow_and_border_exit();
+    test_new_track_thresh_barber_recovery_and_mirror_block();
     test_python_parity_trace();
     std::printf("ALL C++ VEMA2 TESTS PASSED\n");
     return 0;

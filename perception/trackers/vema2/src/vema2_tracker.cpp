@@ -353,6 +353,7 @@ std::vector<double> relocation_polar_cost_matrix(
 void Config::validate() {
     tau_low = clamp_val(tau_low, 0.0, 0.99);
     tau_high = clamp_val(tau_high, 0.01, 1.0);
+    new_track_thresh = clamp_val(new_track_thresh, 0.0, 1.0);
     if (tau_low >= tau_high) {
         std::fprintf(
             stderr,
@@ -406,6 +407,7 @@ Config Config::from_yaml_string(const std::string& content) {
         else if (key == "ref_fps") cfg.ref_fps = parse_double_val(val, cfg.ref_fps);
         else if (key == "dt_aware") cfg.dt_aware = parse_bool_val(val, cfg.dt_aware);
         else if (key == "tau_mem") cfg.tau_mem = parse_double_val(val, cfg.tau_mem);
+        else if (key == "new_track_thresh") cfg.new_track_thresh = parse_double_val(val, cfg.new_track_thresh);
         else if (key == "border_exit_lost") cfg.border_exit_lost = parse_int_val(val, cfg.border_exit_lost);
         else if (key == "border_exit_margin_px") cfg.border_exit_margin_px = parse_double_val(val, cfg.border_exit_margin_px);
         else if (key == "min_visible_frac") cfg.min_visible_frac = parse_double_val(val, cfg.min_visible_frac);
@@ -490,7 +492,7 @@ PolarEMATrack::PolarEMATrack(
     box_to_cxcywh(bbox, pos_x, pos_y, d_w, d_h);
     p_anchor_x = pos_x;
     p_anchor_y = pos_y;
-    const double denom = std::max(cfg.tau_high - cfg.tau_low, 1e-6);
+    const double denom = std::max(cfg.effective_new_track_thresh() - cfg.tau_low, 1e-6);
     health = clamp_val((conf_in - cfg.tau_low) / denom, 0.0, 1.0);
     const double s0 = 0.05 * std::min(d_w, d_h);
     p_var = s0 * s0;
@@ -561,7 +563,7 @@ void PolarEMATrack::update(
     double obs_cx = 0.0, obs_cy = 0.0, obs_w = 1.0, obs_h = 1.0;
     box_to_cxcywh(obs_box, obs_cx, obs_cy, obs_w, obs_h);
 
-    const double denom = std::max(cfg.tau_high - cfg.tau_low, 1e-6);
+    const double denom = std::max(cfg.effective_new_track_thresh() - cfg.tau_low, 1e-6);
     const double w_conf = clamp_val((obs_conf - cfg.tau_low) / denom, 0.0, 1.0);
     const double w_occ = clamp_val(1.0 - max_other_iou, 0.0, 1.0);
     const double area_ratio = (obs_w * obs_h) / (d_w * d_h + 1e-6);
@@ -947,9 +949,11 @@ std::vector<TrackOutput> PolarEMATracker::update(
     tracks_ = std::move(kept_tracks);
 
     // 7. Spawn new tentative tracks from remaining high-conf detections (live suppression)
+    const double spawn_thresh = cfg_.effective_new_track_thresh();
     for (int g_di : rem_high_idx) {
         const BBox& det_box = dets[static_cast<size_t>(g_di)];
         const double det_conf = scores[static_cast<size_t>(g_di)];
+        if (det_conf < spawn_thresh) continue;
         const int64_t det_cls = clss[static_cast<size_t>(g_di)];
 
         bool suppress = false;

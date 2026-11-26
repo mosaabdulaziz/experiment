@@ -47,7 +47,7 @@ class PolarEMATrack:
         self.t_anchor: float = float(t_sec)
 
         # Continuous visibility/health score H_t in [0, 1] and reference-frame lost counter
-        denom = max(cfg.tau_high - cfg.tau_low, 1e-6)
+        denom = max(cfg.effective_new_track_thresh - cfg.tau_low, 1e-6)
         self.health: float = float(np.clip((conf - cfg.tau_low) / denom, 0.0, 1.0))
         self.k_lost: float = 0.0
 
@@ -134,7 +134,7 @@ class PolarEMATrack:
         cfg = self.cfg
         obs_pos, obs_d = _xyxy_to_cxcywh(obs_xyxy)
 
-        denom = max(cfg.tau_high - cfg.tau_low, 1e-6)
+        denom = max(cfg.effective_new_track_thresh - cfg.tau_low, 1e-6)
         w_conf = float(np.clip((obs_conf - cfg.tau_low) / denom, 0.0, 1.0))
         w_occ = float(np.clip(1.0 - max_other_iou, 0.0, 1.0))
         area_ratio = (obs_d[0] * obs_d[1]) / (self.d_ema[0] * self.d_ema[1] + 1e-6)

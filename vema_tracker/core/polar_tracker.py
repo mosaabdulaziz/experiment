@@ -37,6 +37,7 @@ class PolarEMATracker:
                 ref_fps=float(fps),
                 dt_aware=self.cfg.dt_aware,
                 tau_mem=self.cfg.tau_mem,
+                new_track_thresh=self.cfg.new_track_thresh,
             )
         self.tracks = []
         self._next_id = 1
@@ -243,9 +244,12 @@ class PolarEMATracker:
         self.tracks = kept_tracks
 
         # 7. Spawn new tentative tracks from remaining high-conf detections (live suppression)
+        spawn_thresh = cfg.effective_new_track_thresh
         for g_di in rem_high_idx:
             det_box = dets[g_di]
             det_conf = float(confs[g_di])
+            if det_conf < spawn_thresh:
+                continue
             det_cls = int(clss[g_di])
 
             suppress = False
