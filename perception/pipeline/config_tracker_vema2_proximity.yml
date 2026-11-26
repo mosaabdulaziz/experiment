@@ -1,8 +1,9 @@
 %YAML:1.0
 # VEMA v2 tracker config for pedestrian-vehicle proximity monitoring.
 # check_class_match is false so forklifts flipping between car and truck keep one track ID.
+# Matches proximity min_confidence (0.40) and NvDCF lifecycle parity (probation 2, minIouDiff4NewTarget 0.37).
 
-tau_high: 0.60
+tau_high: 0.42
 tau_low: 0.15
 iou_thresh_high: 0.25
 iou_thresh_low: 0.15
@@ -14,13 +15,13 @@ tau_mem: 0.15
 probation_frames: 2
 max_lost_frames: 600
 early_term_lost: 20
-min_iou_diff_new: 0.70
+min_iou_diff_new: 0.37
 check_class_match: false
 emit_shadow_tracks: true
 border_exit_lost: 8
 border_exit_margin_px: 24.0
 min_visible_frac: 0.25
-max_shadow_emit_lost: 7
+max_shadow_emit_lost: 16
 max_targets_per_stream: 120
 img_width: 1280
 img_height: 720

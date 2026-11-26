@@ -230,3 +230,37 @@ def test_border_shadow_linger_gating_for_fragmented_baseline(tmp_path: Path):
     rep_ghost = evaluate_ab(pa, pb_ghost, "attendance")
     assert rep_ghost["intrinsic"]["vema3d"]["border_shadow_linger_s"] == 2.0
     assert rep_ghost["gates"]["trajectory_quality_gate"] is False
+
+
+def test_tier4_efficiency_gate_allows_minor_pacing_jitter_and_rejects_regression(tmp_path: Path):
+    rows = _write_jsonl(tmp_path / "prox.jsonl", [
+        _meta_entry("cam-1", f, f / 20.0, [["vehicle", 0.9, 1, 200.0 + f, 200.0, 120.0, 90.0]])
+        for f in range(30)
+    ])
+    base_log = tmp_path / "base.log"
+    jitter_log = tmp_path / "jitter.log"
+    regress_log = tmp_path / "regress.log"
+    base_log.write_text(
+        "[cam-1] 20.0 fps\n"
+        "[telemetry] gpu.tracker n=100 total=4686.0ms busy=93.1% avg=46.86ms max=61.21ms thread=gpu window=5.0s\n"
+        "[telemetry] gpu.tracker n=100 total=4686.0ms busy=93.1% avg=46.86ms max=61.21ms thread=gpu window=5.0s\n",
+        encoding="utf-8",
+    )
+    jitter_log.write_text(
+        "[cam-1] 20.0 fps\n"
+        "[telemetry] gpu.tracker n=100 total=4691.0ms busy=93.8% avg=46.91ms max=49.72ms thread=gpu window=5.0s\n"
+        "[telemetry] gpu.tracker n=100 total=4691.0ms busy=93.8% avg=46.91ms max=49.72ms thread=gpu window=5.0s\n",
+        encoding="utf-8",
+    )
+    regress_log.write_text(
+        "[cam-1] 20.0 fps\n"
+        "[telemetry] gpu.tracker n=100 total=4850.0ms busy=97.0% avg=48.50ms max=52.00ms thread=gpu window=5.0s\n"
+        "[telemetry] gpu.tracker n=100 total=4850.0ms busy=97.0% avg=48.50ms max=52.00ms thread=gpu window=5.0s\n",
+        encoding="utf-8",
+    )
+
+    rep_jitter = evaluate_ab(rows, rows, "attendance", log_nvdcf_path=base_log, log_vema3d_path=jitter_log)
+    assert rep_jitter["gates"]["efficiency_gate"] is True
+
+    rep_regress = evaluate_ab(rows, rows, "attendance", log_nvdcf_path=base_log, log_vema3d_path=regress_log)
+    assert rep_regress["gates"]["efficiency_gate"] is False

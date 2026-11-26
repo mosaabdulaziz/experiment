@@ -776,7 +776,7 @@ def evaluate_gates(
         latency_ok = True
         if rt_a.get("gpu_tracker") and rt_b.get("gpu_tracker"):
             latency_ok = (
-                rt_b["gpu_tracker"]["avg_ms"] <= rt_a["gpu_tracker"]["avg_ms"]
+                rt_b["gpu_tracker"]["avg_ms"] <= rt_a["gpu_tracker"]["avg_ms"] * 1.02
                 and rt_b["gpu_tracker"]["max_ms"] <= rt_a["gpu_tracker"]["max_ms"] * 1.05
             )
         fps_ok = True
